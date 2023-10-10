@@ -5,6 +5,9 @@
     <RootNamespace>DeepDungeon</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Objects\Items" />
+    <Compile Remove="Objects\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Objects\**" />
   </ItemGroup>
 </Project>

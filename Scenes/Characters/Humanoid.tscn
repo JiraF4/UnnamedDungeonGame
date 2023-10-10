@@ -13,7 +13,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cmy6jucg8qtpo" path="res://Models/Characters/Goblin/GoblinLL.vox" id="11_dc7i7"]
 [ext_resource type="ArrayMesh" uid="uid://drysav07mu4fy" path="res://Models/Characters/Goblin/GoblinLR.vox" id="12_2ajt2"]
 [ext_resource type="PackedScene" uid="uid://w1ulq8p6qvng" path="res://Scenes/Inventory/InventoryRect.tscn" id="13_63tmf"]
-[ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Scripts/Objects/Items/Potion/HealPotion.png" id="14_1eqpk"]
+[ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Bitmaps/Items/HealPotion.png" id="14_1eqpk"]
 
 [sub_resource type="Animation" id="Animation_27lq3"]
 resource_name = "CombatAttack"

@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://tombd0dug25c" path="res://Bitmaps/Dungeon/BlockTexturesCorridor.png" id="6_5jobs"]
 [ext_resource type="Script" path="res://Scripts/Dungeon/Generation/TunnelGenerator/TunnelGenerator.cs" id="7_r18gm"]
 [ext_resource type="Script" path="res://Scripts/Dungeon/MapMeshBaker.cs" id="8_w2sye"]
-[ext_resource type="PackedScene" uid="uid://dvrbqc15ce0ia" path="res://Scripts/Objects/Items/Weapon/Dagger/Dagger.tscn" id="9_s2bgh"]
-[ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scripts/Objects/Items/Potion/Potion.tscn" id="10_se5vu"]
+[ext_resource type="PackedScene" uid="uid://dvrbqc15ce0ia" path="res://Scenes/Items/Dagger.tscn" id="9_kajuk"]
+[ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scenes/Items/Potion.tscn" id="10_se5vu"]
 [ext_resource type="PackedScene" uid="uid://t4dhjm8j2122" path="res://Scenes/Furniture/Chest.tscn" id="11_a81gi"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_gkjlw"]
@@ -77,8 +77,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1523, 0, 41.5594)
 
 [node name="RightArmItem" type="Node" parent="Character"]
 
-[node name="Dagger" parent="Character/RightArmItem" instance=ExtResource("9_s2bgh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.511, 0, 42.1438)
+[node name="Item" parent="Character/RightArmItem" instance=ExtResource("9_kajuk")]
 
 [node name="Item" parent="." instance=ExtResource("10_se5vu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.459, -1.19209e-07, 39.4477)
@@ -109,6 +108,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.9862, -1.19209e-07, 38.828
 
 [node name="Furniture" parent="." instance=ExtResource("11_a81gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.3868, 0, 39.1083)
-
-[node name="Dagger" parent="." instance=ExtResource("9_s2bgh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1509, 0, 38.9859)
