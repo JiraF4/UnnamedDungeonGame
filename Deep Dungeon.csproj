@@ -6,8 +6,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Objects\**" />
+    <Compile Remove="Scripts\Objects\Items\Weapon\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Objects\**" />
+    <EmbeddedResource Remove="Scripts\Objects\Items\Weapon\**" />
   </ItemGroup>
 </Project>
