@@ -13,7 +13,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cmy6jucg8qtpo" path="res://Models/Characters/Goblin/GoblinLL.vox" id="11_dc7i7"]
 [ext_resource type="ArrayMesh" uid="uid://drysav07mu4fy" path="res://Models/Characters/Goblin/GoblinLR.vox" id="12_2ajt2"]
 [ext_resource type="PackedScene" uid="uid://w1ulq8p6qvng" path="res://Scenes/Inventory/InventoryRect.tscn" id="13_63tmf"]
-[ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Bitmaps/Items/HealPotion.png" id="14_1eqpk"]
+[ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Bitmaps/Items/Usable/HealPotion.png" id="14_4pee4"]
 
 [sub_resource type="Animation" id="Animation_27lq3"]
 resource_name = "CombatAttack"
@@ -183,14 +183,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 0, 0)
 mesh = ExtResource("12_2ajt2")
 
 [node name="WeaponLeftRect" parent="." index="7" instance=ExtResource("13_63tmf")]
-offset_top = 598.0
-offset_bottom = 720.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -122.0
+offset_right = 122.0
+offset_bottom = 0.0
+grow_vertical = 0
 
 [node name="WeaponRightRect" parent="." index="8" instance=ExtResource("13_63tmf")]
-offset_left = 50.0
-offset_top = 598.0
-offset_right = 100.0
-offset_bottom = 720.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -122.0
+offset_top = -122.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="TextureRect" type="TextureRect" parent="." index="9"]
 anchors_preset = 8
@@ -210,4 +222,4 @@ texture = SubResource("CanvasTexture_g6lxf")
 visible = false
 offset_right = 2.0
 offset_bottom = 2.0
-texture = ExtResource("14_1eqpk")
+texture = ExtResource("14_4pee4")

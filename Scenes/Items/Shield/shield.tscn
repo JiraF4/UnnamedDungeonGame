@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://rpq0m35ewjn4"]
+
+[ext_resource type="PackedScene" uid="uid://bp02stuhmowll" path="res://Scenes/Items/item.tscn" id="1_hdxj0"]
+[ext_resource type="ArrayMesh" uid="uid://d107b5b7e2bes" path="res://Models/Items/Shield.vox" id="2_p6xwt"]
+[ext_resource type="Texture2D" uid="uid://b84bl8cxxnyk" path="res://Bitmaps/Items/Shields/Shield.png" id="2_ulhuh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7yx46"]
+size = Vector3(0.379022, 0.38706, 0.111702)
+
+[node name="Shield" instance=ExtResource("1_hdxj0")]
+
+[node name="ItemRect" parent="." index="0"]
+offset_right = 48.0
+offset_bottom = 48.0
+texture = ExtResource("2_ulhuh")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0517869)
+shape = SubResource("BoxShape3D_7yx46")
+
+[node name="Shield" type="MeshInstance3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00993073, -0.189862, 0.0483707)
+mesh = ExtResource("2_p6xwt")
