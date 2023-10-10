@@ -1,0 +1,114 @@
+[gd_scene load_steps=15 format=3 uid="uid://5e2v27lnoo8d"]
+
+[ext_resource type="PackedScene" uid="uid://bnpka4m4iqnd5" path="res://Scenes/Characters/Humanoid.tscn" id="1_xkyd3"]
+[ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="2_w508y"]
+[ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="3_uuy7c"]
+[ext_resource type="Script" path="res://Scripts/Dungeon/MapHolder.cs" id="4_nnltw"]
+[ext_resource type="Shader" path="res://Shaders/Dungeon/World.gdshader" id="5_ap1dm"]
+[ext_resource type="Texture2D" uid="uid://tombd0dug25c" path="res://Bitmaps/Dungeon/BlockTexturesCorridor.png" id="6_5jobs"]
+[ext_resource type="Script" path="res://Scripts/Dungeon/Generation/TunnelGenerator/TunnelGenerator.cs" id="7_r18gm"]
+[ext_resource type="Script" path="res://Scripts/Dungeon/MapMeshBaker.cs" id="8_w2sye"]
+[ext_resource type="PackedScene" uid="uid://dvrbqc15ce0ia" path="res://Scripts/Objects/Items/Weapon/Dagger/Dagger.tscn" id="9_s2bgh"]
+[ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scripts/Objects/Items/Potion/Potion.tscn" id="10_se5vu"]
+[ext_resource type="PackedScene" uid="uid://t4dhjm8j2122" path="res://Scenes/Furniture/Chest.tscn" id="11_a81gi"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_gkjlw"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hekjq"]
+plane = Plane(0, -1, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_af4ex"]
+render_priority = 0
+shader = ExtResource("5_ap1dm")
+shader_parameter/albedo_texture = ExtResource("6_5jobs")
+
+[node name="World" type="Node3D"]
+
+[node name="Character2" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.2092, 0, 41.6167)
+
+[node name="MapRect" type="TextureRect" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(256, 256)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_bottom = 256.0
+grow_horizontal = 0
+expand_mode = 5
+
+[node name="Debug info" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("2_w508y")
+
+[node name="DownBorder" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DownBorder"]
+shape = SubResource("WorldBoundaryShape3D_gkjlw")
+
+[node name="UpBorder" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="UpBorder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("WorldBoundaryShape3D_hekjq")
+
+[node name="PlayerController" type="Node" parent="." node_paths=PackedStringArray("_character", "MapRect")]
+script = ExtResource("3_uuy7c")
+_character = NodePath("../Character")
+MapRect = NodePath("../MapRect")
+
+[node name="MapHolder" type="Node" parent="." node_paths=PackedStringArray("MapGenerator", "MapMeshBaker")]
+script = ExtResource("4_nnltw")
+MapGenerator = NodePath("MapGenerator")
+MapMeshBaker = NodePath("MapMeshBaker")
+TestMaterial = SubResource("ShaderMaterial_af4ex")
+
+[node name="MapGenerator" type="Node" parent="MapHolder" node_paths=PackedStringArray("DebugTextureRect")]
+script = ExtResource("7_r18gm")
+DebugTextureRect = NodePath("../../MapRect")
+
+[node name="MapMeshBaker" type="Node" parent="MapHolder"]
+script = ExtResource("8_w2sye")
+
+[node name="Character" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1523, 0, 41.5594)
+
+[node name="RightArmItem" type="Node" parent="Character"]
+
+[node name="Dagger" parent="Character/RightArmItem" instance=ExtResource("9_s2bgh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.511, 0, 42.1438)
+
+[node name="Item" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.459, -1.19209e-07, 39.4477)
+
+[node name="Item2" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.2225, -1.19209e-07, 39.4477)
+
+[node name="Item3" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.9862, -1.19209e-07, 39.4477)
+
+[node name="Item4" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.459, -1.19209e-07, 39.1459)
+
+[node name="Item5" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.2225, -1.19209e-07, 39.1459)
+
+[node name="Item6" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.9862, -1.19209e-07, 39.1459)
+
+[node name="Item7" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.459, -1.19209e-07, 38.8287)
+
+[node name="Item8" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.2225, -1.19209e-07, 38.8287)
+
+[node name="Item9" parent="." instance=ExtResource("10_se5vu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.9862, -1.19209e-07, 38.8287)
+
+[node name="Furniture" parent="." instance=ExtResource("11_a81gi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.3868, 0, 39.1083)
+
+[node name="Dagger" parent="." instance=ExtResource("9_s2bgh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1509, 0, 38.9859)

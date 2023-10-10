@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://cshg5vun327t5"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterControllerInputs.cs" id="1_onl0d"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterController.cs" id="2_vxywl"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterCharacteristics.cs" id="3_4w52f"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0r38w"]
+radius = 0.25
+height = 1.6
+
+[node name="Character" type="RigidBody3D"]
+collision_layer = 5
+collision_mask = 5
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 90.0
+
+[node name="CharacterControllerInputs" type="Node" parent="."]
+script = ExtResource("1_onl0d")
+
+[node name="CharacterController" type="Node" parent="." node_paths=PackedStringArray("_characterControllerInputs")]
+script = ExtResource("2_vxywl")
+_characterControllerInputs = NodePath("../CharacterControllerInputs")
+
+[node name="CharacterCharacteristics" type="Node" parent="."]
+script = ExtResource("3_4w52f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_0r38w")
