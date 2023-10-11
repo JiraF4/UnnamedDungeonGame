@@ -53,6 +53,7 @@ public partial class Slot : Storage
 
 	public override bool InsertItem(Vector2I inventoryPosition, Item item)
 	{
+		if (item == null) return false;
 		if (Item != null) return false;
 		
 		item.Store(this, Vector2I.Zero);
@@ -65,6 +66,12 @@ public partial class Slot : Storage
 	{
 		if (Item != item) return;
 		Item.Extract(GetTree().Root);
+		Item = null;
+	}
+
+	public void DropItem()
+	{
+		Item?.Extract(GetTree().Root);
 		Item = null;
 	}
 }

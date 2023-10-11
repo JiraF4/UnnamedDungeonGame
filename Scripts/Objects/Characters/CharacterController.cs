@@ -6,8 +6,8 @@ public partial class CharacterController : Node
 	[Export] public Vector2 RotationSpeed = new(1f, 0.03f);
 	[Export] public float MoveForce = 1350.0f;
 	[Export] public float MoveMaxSpeed = 5.0f;
-	
-	[Export] protected CharacterControllerInputs _characterControllerInputs;
+
+	[Export] public CharacterControllerInputs CharacterControllerInputs { get; protected set; }
 	protected RigidBody3D CharacterBody;
 
 	protected Vector3 RotateInput;
@@ -22,22 +22,23 @@ public partial class CharacterController : Node
 	public override void _Ready()
 	{
 		CharacterBody = GetParent<RigidBody3D>();
+		CharacterControllerInputs = GetNode<CharacterControllerInputs>("CharacterControllerInputs");
 		base._Ready();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		RotateInput = _characterControllerInputs.RotateInput;
-		MoveInput = _characterControllerInputs.MoveInput;
+		RotateInput = CharacterControllerInputs.RotateInput;
+		MoveInput = CharacterControllerInputs.MoveInput;
 		UpdateState(delta);
 		base._PhysicsProcess(delta);
-		_characterControllerInputs.PrimaryActionJustPressed = false;
-		_characterControllerInputs.PrimaryActionJustReleased = false;
+		CharacterControllerInputs.PrimaryActionJustPressed = false;
+		CharacterControllerInputs.PrimaryActionJustReleased = false;
 	}
 
 	public virtual void UpdateState(double delta)
 	{
-		CharacterBody.AngularVelocity = new Vector3(0.0f, _characterControllerInputs.RotateInput.Y * RotationSpeed.Y, 0.0f);
+		CharacterBody.AngularVelocity = new Vector3(0.0f, CharacterControllerInputs.RotateInput.Y * RotationSpeed.Y, 0.0f);
 		UpdateMoveSpeed(delta);
 	}
 

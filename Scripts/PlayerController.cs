@@ -65,9 +65,11 @@ public partial class PlayerController : Node
 		_characterControllerInputs = (CharacterControllerInputs) _character.FindChild("CharacterControllerInputs");
 		((Camera3D)_character.FindChild("Camera3D")).Current = true;
 		
-		_character.GetNode<Node3D>("Body/Head").Visible = false;
+		_character.GetNode<Node3D>("BodyAnimation/Body/Neck/HeadAnimation/Head").Visible = false;
 		_characterControllerInputs.UIControl = true;
-
+		
+		Input.MouseMode = Input.MouseModeEnum.Captured;
+		
 		base._Ready();
 	}
 	public override void _Process(double delta)
@@ -89,19 +91,15 @@ public partial class PlayerController : Node
 		
 		_characterControllerInputs.MoveInput = _moveVector;
 		_characterControllerInputs.InteractMode = Input.IsActionPressed("InteractMode");
-		if (Input.IsActionPressed("InteractMode"))
-		{
-			_characterControllerInputs.RotateInput = Vector3.Zero;
-			Input.MouseMode = Input.MouseModeEnum.Visible;
-		}
-		else
-		{
-			_characterControllerInputs.RotateInput = new Vector3(-_mouseMove.Y * 10.0f, -_mouseMove.X * 10.0f, 0);
-			Input.MouseMode = Input.MouseModeEnum.Captured;
-		}
+		_characterControllerInputs.RotateInput = new Vector3(-_mouseMove.Y * 10.0f, -_mouseMove.X * 10.0f, 0);
+		
 		_characterControllerInputs.PrimaryAction = Input.IsActionPressed("PrimaryAction");
 		if (Input.IsActionJustPressed("PrimaryAction")) _characterControllerInputs.PrimaryActionJustPressed = true;
 		if (Input.IsActionJustReleased("PrimaryAction")) _characterControllerInputs.PrimaryActionJustReleased = true;
+		
+		_characterControllerInputs.SecondAction = Input.IsActionPressed("SecondAction");
+		if (Input.IsActionJustPressed("SecondAction")) _characterControllerInputs.SecondActionJustPressed = true;
+		if (Input.IsActionJustReleased("SecondAction")) _characterControllerInputs.SecondActionJustReleased = true;
 		
 		GetViewport().DebugDraw = Input.IsActionPressed("Wireframe") ? Viewport.DebugDrawEnum.Wireframe : Viewport.DebugDrawEnum.Disabled;
 		GetTree().DebugCollisionsHint = Input.IsActionPressed("DebugCollisionsHint") ? true : false;
@@ -155,6 +153,7 @@ public partial class PlayerController : Node
 			_characterControllerInputs.TargetNode = null;
 		}
 
-		if (Input.IsActionPressed("OpenMenu")) GetTree().Quit();
+		//if (Input.IsActionPressed("OpenMenu")) GetTree().Quit();
+		if (Input.IsActionPressed("OpenMenu")) Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 }

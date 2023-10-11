@@ -45,20 +45,6 @@ public partial class Item : RigidBody3D
     {
         Storage.ExtractItem(this);
     }
-    
-    /*
-    public void Hold(Vector3 position, Vector3 rotation)
-    {
-        if (Storage != null) ExtractFromInventory();
-        
-        GlobalRotation = rotation;
-        GlobalPosition = position;
-        LinearVelocity = Vector3.Zero;
-        AngularVelocity = Vector3.Zero;
-        
-        _itemVisible = true;
-    }
-    */
 
     public void SetRectPosition(Vector2 position)
     {
@@ -77,7 +63,7 @@ public partial class Item : RigidBody3D
     {
         GetParent().RemoveChild(this);
         storage.AddChild(this);
-        FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
+        FreezeMode = FreezeModeEnum.Kinematic;
         Freeze = true;
         GlobalPosition = new Vector3(0.0f, -100.0f, 0.0f);
         CollisionLayer = 0;

@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://cshg5vun327t5"]
 
-[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterControllerInputs.cs" id="1_onl0d"]
-[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterController.cs" id="2_vxywl"]
-[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterCharacteristics.cs" id="3_4w52f"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterController.cs" id="1_iq0oo"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterControllerInputs.cs" id="2_buxug"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterCharacteristics.cs" id="3_e7i10"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0r38w"]
 radius = 0.25
@@ -15,15 +15,14 @@ axis_lock_angular_x = true
 axis_lock_angular_z = true
 mass = 90.0
 
-[node name="CharacterControllerInputs" type="Node" parent="."]
-script = ExtResource("1_onl0d")
+[node name="CharacterController" type="Node" parent="."]
+script = ExtResource("1_iq0oo")
 
-[node name="CharacterController" type="Node" parent="." node_paths=PackedStringArray("_characterControllerInputs")]
-script = ExtResource("2_vxywl")
-_characterControllerInputs = NodePath("../CharacterControllerInputs")
+[node name="CharacterControllerInputs" type="Node" parent="CharacterController"]
+script = ExtResource("2_buxug")
 
 [node name="CharacterCharacteristics" type="Node" parent="."]
-script = ExtResource("3_4w52f")
+script = ExtResource("3_e7i10")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)

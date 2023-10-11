@@ -1,188 +1,436 @@
-[gd_scene load_steps=20 format=3 uid="uid://bnpka4m4iqnd5"]
+[gd_scene load_steps=59 format=3 uid="uid://bnpka4m4iqnd5"]
 
 [ext_resource type="PackedScene" uid="uid://cshg5vun327t5" path="res://Scenes/Characters/Character.tscn" id="1_4114j"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidController.cs" id="1_hv5ql"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidDoll.cs" id="2_tvrxj"]
+[ext_resource type="Animation" uid="uid://uv0els8uk8yl" path="res://Animations/Character/Humanoid/CombatAttack.res" id="2_wgk2h"]
 [ext_resource type="ArrayMesh" uid="uid://dfcitsgm26aee" path="res://Models/Characters/Goblin/GoblinBody.vox" id="3_1ux3v"]
+[ext_resource type="Animation" uid="uid://uq6sgsurvgwo" path="res://Animations/Character/Humanoid/CombatIdle.res" id="3_7lg77"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidArm.cs" id="4_2geo0"]
 [ext_resource type="ArrayMesh" uid="uid://6sw7emybsawy" path="res://Models/Characters/Goblin/GoblinHead.vox" id="4_w3hy4"]
+[ext_resource type="Animation" uid="uid://bhwhstm51e3tw" path="res://Animations/Character/Humanoid/CombatStun.res" id="5_b0s8w"]
 [ext_resource type="ArrayMesh" uid="uid://c0x0mjs3tk6hl" path="res://Models/Characters/Goblin/GoblinAL.vox" id="6_ekled"]
 [ext_resource type="Script" path="res://Scripts/Inventory/Slot.cs" id="7_6h1r1"]
+[ext_resource type="Animation" uid="uid://cs4w63ccxjart" path="res://Animations/Character/Humanoid/InteractionIdle.res" id="7_w32x3"]
+[ext_resource type="Animation" uid="uid://brgtstu4ehvn" path="res://Animations/Character/Humanoid/InteractionGrabbing.res" id="8_hp0hr"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidAnimationController.cs" id="8_mcoms"]
 [ext_resource type="ArrayMesh" uid="uid://d107b5b7e2bes" path="res://Models/Items/Shield.vox" id="8_y6oyg"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidItemManipulationController.cs" id="9_ciu6x"]
 [ext_resource type="ArrayMesh" uid="uid://3ow2fjp63g4x" path="res://Models/Characters/Goblin/GoblinAR.vox" id="9_dombv"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidStateController.cs" id="10_b8hiu"]
 [ext_resource type="ArrayMesh" uid="uid://dhkf15pbxgipd" path="res://Models/Items/Dagger.vox" id="10_sofcg"]
 [ext_resource type="ArrayMesh" uid="uid://cmy6jucg8qtpo" path="res://Models/Characters/Goblin/GoblinLL.vox" id="11_dc7i7"]
 [ext_resource type="ArrayMesh" uid="uid://drysav07mu4fy" path="res://Models/Characters/Goblin/GoblinLR.vox" id="12_2ajt2"]
 [ext_resource type="PackedScene" uid="uid://w1ulq8p6qvng" path="res://Scenes/Inventory/InventoryRect.tscn" id="13_63tmf"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidUIController.cs" id="13_ow5ua"]
 [ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Bitmaps/Items/Usable/HealPotion.png" id="14_4pee4"]
 
-[sub_resource type="Animation" id="Animation_27lq3"]
-resource_name = "CombatAttack"
-length = 0.6
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tk18y"]
+animation = &"CombatAttack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8gg0j"]
+animation = &"CombatBlock"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r6mcl"]
+animation = &"CombatIdle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gs7mn"]
+animation = &"StunnedCombat"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x8vnd"]
+animation = &"InteractionDrop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3ey2q"]
+animation = &"InteractionGrabbing"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cvkx6"]
+animation = &"InteractionIdle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3hs0a"]
+animation = &"InteractionPrepareGrabbing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ig76l"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l38fb"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"PrimaryAction"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_inljc"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"Stunned"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5xbnr"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"Stunned"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_asc3x"]
+xfade_time = 0.1
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yubee"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"SecondAction"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lra2q"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"Stunned"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j0t4k"]
+xfade_time = 0.05
+advance_mode = 2
+advance_condition = &"NotSecondAction"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4r48g"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"Interaction"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mp7ri"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"Combat"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sltah"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"HasTargetItem"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lid5n"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"NotHasTargetItem"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ptqc1"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"Combat"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yxjxi"]
+advance_mode = 2
+advance_condition = &"GrabItem"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fjsus"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_72dqb"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c5qyw"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sv3cv"]
+advance_mode = 2
+advance_condition = &"DropItem"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_w73e3"]
+states/CombatAttack/node = SubResource("AnimationNodeAnimation_tk18y")
+states/CombatAttack/position = Vector2(562, 46)
+states/CombatBlock/node = SubResource("AnimationNodeAnimation_8gg0j")
+states/CombatBlock/position = Vector2(562, 155)
+states/CombatIdle/node = SubResource("AnimationNodeAnimation_r6mcl")
+states/CombatIdle/position = Vector2(386, 46)
+states/CombatStun/node = SubResource("AnimationNodeAnimation_gs7mn")
+states/CombatStun/position = Vector2(386, 155)
+states/End/position = Vector2(746, 46)
+states/InteractionDrop/node = SubResource("AnimationNodeAnimation_x8vnd")
+states/InteractionDrop/position = Vector2(386, -240)
+states/InteractionGrabbing/node = SubResource("AnimationNodeAnimation_3ey2q")
+states/InteractionGrabbing/position = Vector2(631, -156)
+states/InteractionIdle/node = SubResource("AnimationNodeAnimation_cvkx6")
+states/InteractionIdle/position = Vector2(386, -51)
+states/InteractionPrepareGrabbing/node = SubResource("AnimationNodeAnimation_3hs0a")
+states/InteractionPrepareGrabbing/position = Vector2(386, -156)
+states/Start/position = Vector2(172, 46)
+transitions = ["CombatAttack", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_ig76l"), "CombatIdle", "CombatAttack", SubResource("AnimationNodeStateMachineTransition_l38fb"), "CombatIdle", "CombatStun", SubResource("AnimationNodeStateMachineTransition_inljc"), "CombatAttack", "CombatStun", SubResource("AnimationNodeStateMachineTransition_5xbnr"), "CombatStun", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_asc3x"), "CombatIdle", "CombatBlock", SubResource("AnimationNodeStateMachineTransition_yubee"), "CombatBlock", "CombatStun", SubResource("AnimationNodeStateMachineTransition_lra2q"), "CombatBlock", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_j0t4k"), "CombatIdle", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_4r48g"), "InteractionIdle", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_mp7ri"), "InteractionIdle", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_sltah"), "InteractionPrepareGrabbing", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_lid5n"), "InteractionPrepareGrabbing", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_ptqc1"), "InteractionPrepareGrabbing", "InteractionGrabbing", SubResource("AnimationNodeStateMachineTransition_yxjxi"), "InteractionGrabbing", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_fjsus"), "Start", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_72dqb"), "InteractionDrop", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_c5qyw"), "InteractionPrepareGrabbing", "InteractionDrop", SubResource("AnimationNodeStateMachineTransition_sv3cv")]
+graph_offset = Vector2(96, -220)
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_5p3sf"]
+
+[sub_resource type="Animation" id="Animation_cxxt8"]
+resource_name = "CombatRepost"
+
+[sub_resource type="Animation" id="Animation_y1o6t"]
+resource_name = "InteractionGrabbing"
+length = 0.2
 step = 0.01
 tracks/0/type = "position_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body/LeftArm")
+tracks/0/path = NodePath("BodyAnimation/Body/LeftShoulder/LeftArm")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0.11789, 0.53953, 0.509035, 0.21, 1, 0.288054, 0.430985, 0.29515, 0.26, 1, 0.278938, 0.4368, 0.306608, 0.31, 1, 0.269822, 0.442614, 0.318066, 0.6, 1, 0.11789, 0.53953, 0.509035)
+tracks/0/keys = PackedFloat32Array(0, 1, 0.307881, -0.117, 0.50222, 0.05, 1, 0.524884, -0.117, 0.411473, 0.1, 1, 0.58914, -0.117, 0.571548, 0.15, 1, 0.226152, -0.117, 0.717532, 0.2, 1, 0.307881, -0.117, 0.50222)
 tracks/1/type = "position_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Body/RightArm")
+tracks/1/path = NodePath("BodyAnimation/Body/RightShoulder/RightArm")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, -0.490452, 0.358702, -0.0156537, 0.05, 1, -0.469926, 0.742175, -0.284068, 0.09, 1, -0.394, 0.962, -0.056, 0.13, 1, -0.302325, 0.774361, 0.335731, 0.16, 1, -0.226333, 0.687351, 0.574923, 0.19, 1, -0.189576, 0.432597, 0.610372, 0.22, 1, -0.185641, 0.214191, 0.595578, 0.26, 1, -0.18433, 0.141389, 0.590647, 0.32, 1, -0.185761, 0.220809, 0.596026, 0.39, 1, -0.257453, 0.253255, 0.452102, 0.45, 1, -0.373952, 0.305978, 0.218224, 0.51, 1, -0.490452, 0.391852, -0.0893191, 0.6, 1, -0.490452, 0.358702, -0.0156537)
+tracks/1/keys = PackedFloat32Array(0, 1, -0.645224, -0.144302, 0.179816, 0.05, 1, -0.692571, -0.144668, 0.0693419, 0.1, 1, -0.730335, -0.151399, -0.0450781, 0.15, 1, -0.710607, -0.154817, -0.13977, 0.2, 1, -0.645224, -0.144302, 0.179816)
 tracks/2/type = "rotation_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Body/LeftArm")
+tracks/2/path = NodePath("BodyAnimation/Body/LeftShoulder/LeftArm")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, 0.0699083, 0.283615, -0.0165592, 0.956243, 0.23, 1, 0.0910103, 0.307324, -0.0142458, 0.947136, 0.6, 1, 0, 0, 0, 1)
+tracks/2/keys = PackedFloat32Array(0, 1, 0, -0.15302, 0, 0.988223, 0.05, 1, 0, -0.0320387, 0, 0.999487, 0.1, 1, 0, 0.0392461, 0, 0.99923, 0.15, 1, 0, -0.307253, 0, 0.951628, 0.2, 1, 0, -0.15302, 0, 0.988223)
 tracks/3/type = "rotation_3d"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Body/RightArm")
+tracks/3/path = NodePath("BodyAnimation/Body/RightShoulder/RightArm")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, 0, -0.439414, 0, 0.898285, 0.05, 1, -0.250444, -0.421991, 0.12251, 0.862666, 0.08, 1, -0.35928, -0.0127217, 0.00445662, 0.933132, 0.12, 1, -0.076147, 0.0439172, 0.187403, 0.978342, 0.2, 1, 0.591989, 0.0535492, 0.180198, 0.783715, 0.22, 1, 0.711134, 0.0520776, 0.165694, 0.681265, 0.25, 1, 0.754067, 0.0550372, 0.171046, 0.631741, 0.32, 1, 0.758909, 0.109344, 0.176825, 0.617117, 0.39, 1, 0.658201, -0.00389141, 0.15336, 0.737046, 0.45, 1, 0.360823, -0.243018, 0.0840716, 0.896482, 0.51, 1, -0.039836, -0.524922, 0.014845, 0.850088, 0.6, 1, 0, -0.439414, 0, 0.898285)
+tracks/3/keys = PackedFloat32Array(0, 1, 0.04852, -0.40277, 0.0213867, 0.913764, 0.05, 1, 0.067397, -0.506985, 0.0667661, 0.856718, 0.1, 1, 0.0294251, -0.563715, 0.113516, 0.817602, 0.15, 1, 0.0329117, -0.529309, 0.101668, 0.841672, 0.2, 1, 0.04852, -0.40277, 0.0213867, 0.913764)
 tracks/4/type = "rotation_3d"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Body/BodyMesh")
-tracks/4/interp = 2
+tracks/4/path = NodePath("BodyAnimation/Body/BodyMesh")
+tracks/4/interp = 1
 tracks/4/loop_wrap = true
-tracks/4/keys = PackedFloat32Array(0, 1, 0, -0.382684, 0, 0.92388, 0.05, 1, 1.3072e-09, -0.394062, 4.1459e-09, 0.919084, 0.2, 1, 2.0775e-10, 0.351878, 2.73611e-10, 0.936046, 0.3, 1, 3.28829e-10, 0.282842, 6.87867e-10, 0.959167, 0.37, 1, 0, 0.0999327, 0, 0.994994, 0.39, 1, 0, 0.00769988, 0, 0.99997, 0.45, 1, 0, -0.191313, 0, 0.981529, 0.51, 1, 0, -0.442766, 0, 0.896637, 0.6, 1, 0, -0.382683, 0, 0.92388)
+tracks/4/keys = PackedFloat32Array(0, 1, 0, -0.382684, 0, 0.92388, 0.05, 1, 0, -0.279637, 0, 0.960106, 0.1, 1, 0, -0.38861, 0, 0.921402, 0.15, 1, 0, -0.462066, 0, 0.886845, 0.2, 1, 0, -0.382684, 0, 0.92388)
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CharacterController/ItemManipulationController")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"GrabItem"
+}]
+}
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BodyAnimation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0.0136655, 0, 0, 0.999907, 0.2, 1, 0, 0, 0, 1)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, -0.0139622, 0, 0, 0.999903, 0.2, 1, 0, 0, 0, 1)
 
-[sub_resource type="Animation" id="Animation_hbbxg"]
-resource_name = "CombatIdle"
-length = 1.5
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_dtd7r"]
+resource_name = "CombatBlock"
+
+[sub_resource type="Animation" id="Animation_jgc0d"]
+resource_name = "InteractionDrop"
+length = 0.2
+step = 0.01
 tracks/0/type = "position_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body/LeftArm")
+tracks/0/path = NodePath("BodyAnimation/Body/LeftShoulder/LeftArm")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0.11789, 0.53953, 0.509035, 0.4, 1, 0.118088, 0.53953, 0.509035, 0.9, 1, 0.118206, 0.540731, 0.509035, 1.5, 1, 0.11789, 0.53953, 0.509035)
-tracks/1/type = "rotation_3d"
+tracks/0/keys = PackedFloat32Array(0, 1, 0.307881, -0.117, 0.50222, 0.05, 1, 0.352, -0.007, 0.556, 0.1, 1, 0.193, 0.155, 0.62, 0.15, 1, 0.208, -0.088, 0.61, 0.2, 1, 0.307881, -0.117, 0.50222)
+tracks/1/type = "position_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Body/LeftArm")
+tracks/1/path = NodePath("BodyAnimation/Body/RightShoulder/RightArm")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.5, 1, -4.51285e-07, 0.000240528, 0.00187623, 0.999998, 0.9, 1, 0, 9.51212e-05, 0, 1, 1.5, 1, 0, 0, 0, 1)
-tracks/2/type = "position_3d"
+tracks/1/keys = PackedFloat32Array(0, 1, -0.645224, -0.144302, 0.179816, 0.05, 1, -0.692571, -0.144668, 0.0693419, 0.1, 1, -0.730335, -0.151399, -0.0450781, 0.15, 1, -0.710607, -0.154817, -0.13977, 0.2, 1, -0.645224, -0.144302, 0.179816)
+tracks/2/type = "rotation_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Body/RightArm")
+tracks/2/path = NodePath("BodyAnimation/Body/LeftShoulder/LeftArm")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array(0, 1, -0.490452, 0.358702, -0.0156537, 0.3, 1, -0.489478, 0.359724, -0.0156537, 0.7, 1, -0.488715, 0.360426, -0.015433, 1.2, 1, -0.48784, 0.361316, -0.0151541, 1.5, 1, -0.490452, 0.358702, -0.0156537)
+tracks/2/keys = PackedFloat32Array(0, 1, 0, -0.15302, 0, 0.988223, 0.05, 1, -0.170393, -0.149932, -0.0589406, 0.972118, 0.1, 1, -0.0831725, -0.152675, -0.034651, 0.984161, 0.15, 1, -0.000712364, -0.0178158, 0.0101379, 0.99979, 0.2, 1, 0, -0.15302, 0, 0.988223)
 tracks/3/type = "rotation_3d"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Body/RightArm")
+tracks/3/path = NodePath("BodyAnimation/Body/RightShoulder/RightArm")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, 0, -0.439414, 0, 0.898284, 0.3, 1, 0.00112151, -0.436738, 0.00224176, 0.899585, 0.8, 1, 0.00105618, -0.43406, 0.00207545, 0.900881, 1.1, 1, 0.00182689, -0.433722, 0.00367627, 0.901037, 1.5, 1, 0, -0.439414, 0, 0.898284)
+tracks/3/keys = PackedFloat32Array(0, 1, 0.04852, -0.40277, 0.0213867, 0.913764, 0.05, 1, 0.067397, -0.506985, 0.0667661, 0.856718, 0.1, 1, 0.0294251, -0.563715, 0.113516, 0.817602, 0.15, 1, 0.0329117, -0.529309, 0.101668, 0.841672, 0.2, 1, 0.04852, -0.40277, 0.0213867, 0.913764)
 tracks/4/type = "rotation_3d"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Body/BodyMesh")
+tracks/4/path = NodePath("BodyAnimation/Body/BodyMesh")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
-tracks/4/keys = PackedFloat32Array(0, 1, 0, -0.382683, 0, 0.92388, 0.4, 1, 0, -0.380496, 0, 0.924783, 0.7, 1, 0, -0.383132, 0, 0.923693, 1.1, 1, 0, -0.383339, 0, 0.923608, 1.5, 1, 0, -0.382683, 0, 0.92388)
-
-[sub_resource type="Animation" id="Animation_fj1da"]
-length = 0.001
+tracks/4/keys = PackedFloat32Array(0, 1, 0, -0.382684, 0, 0.92388, 0.05, 1, 0, -0.279637, 0, 0.960106, 0.1, 1, 0, -0.38861, 0, 0.921402, 0.15, 1, 0, -0.462066, 0, 0.886845, 0.2, 1, 0, -0.382684, 0, 0.92388)
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CharacterController/ItemManipulationController")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"DropItem"
+}]
+}
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BodyAnimation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0.0136655, 0, 0, 0.999907, 0.2, 1, 0, 0, 0, 1)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, -0.0139622, 0, 0, 0.999903, 0.2, 1, 0, 0, 0, 1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ju6my"]
 _data = {
-"CombatAttack": SubResource("Animation_27lq3"),
-"CombatIdle": SubResource("Animation_hbbxg"),
-"RESET": SubResource("Animation_fj1da")
+"CombatAttack": ExtResource("2_wgk2h"),
+"CombatBlock": SubResource("Animation_dtd7r"),
+"CombatIdle": ExtResource("3_7lg77"),
+"CombatRepost": SubResource("Animation_cxxt8"),
+"InteractionDrop": SubResource("Animation_jgc0d"),
+"InteractionGrabbing": SubResource("Animation_y1o6t"),
+"InteractionIdle": ExtResource("7_w32x3"),
+"InteractionPrepareGrabbing": ExtResource("8_hp0hr"),
+"StunnedCombat": ExtResource("5_b0s8w")
 }
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_g6lxf"]
 
 [node name="Character" instance=ExtResource("1_4114j")]
+script = ExtResource("2_tvrxj")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="0"]
-autoplay = "CombatIdle"
+[node name="AnimationTree" type="AnimationTree" parent="." index="0"]
+tree_root = SubResource("AnimationNodeStateMachine_w73e3")
+anim_player = NodePath("../AnimationPlayer")
+parameters/playback = SubResource("AnimationNodeStateMachinePlayback_5p3sf")
+parameters/conditions/Combat = false
+parameters/conditions/DropItem = false
+parameters/conditions/GrabItem = false
+parameters/conditions/HasTargetItem = false
+parameters/conditions/Interaction = false
+parameters/conditions/NotHasTargetItem = false
+parameters/conditions/NotSecondAction = false
+parameters/conditions/PrimaryAction = false
+parameters/conditions/SecondAction = false
+parameters/conditions/Stunned = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
 libraries = {
 "": SubResource("AnimationLibrary_ju6my")
 }
+next/CombatAttack = &"CombatIdle"
+blend_times = [&"CombatAttack", &"CombatAttack", 0.1, &"CombatAttack", &"CombatIdle", 0.1, &"CombatAttack", &"StunnedCombat", 0.1, &"CombatAttack", &"CombatRepost", 0.1]
 
 [node name="CharacterController" parent="." index="2"]
 script = ExtResource("1_hv5ql")
 RotationSpeed = Vector2(1.3, 0.03)
 
-[node name="Body" type="Node3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.475148, 0)
+[node name="StateController" type="Node" parent="CharacterController" index="0"]
+script = ExtResource("10_b8hiu")
 
-[node name="BodyMesh" type="MeshInstance3D" parent="Body" index="0"]
+[node name="ItemManipulationController" type="Node" parent="CharacterController" index="1"]
+script = ExtResource("9_ciu6x")
+
+[node name="AnimationController" type="Node" parent="CharacterController" index="3"]
+script = ExtResource("8_mcoms")
+
+[node name="UIController" type="Node" parent="CharacterController" index="4"]
+script = ExtResource("13_ow5ua")
+
+[node name="BodyAnimation" type="Node3D" parent="." index="4"]
+
+[node name="Body" type="Node3D" parent="BodyAnimation" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.479416, 0)
+
+[node name="BodyMesh" type="MeshInstance3D" parent="BodyAnimation/Body" index="0"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
 mesh = ExtResource("3_1ux3v")
 
-[node name="Head" type="MeshInstance3D" parent="Body" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.685263, 0)
-mesh = ExtResource("4_w3hy4")
-skeleton = NodePath("../..")
+[node name="LeftShoulder" type="Node3D" parent="BodyAnimation/Body" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.231567, 0.41743, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Body/Head" index="0"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.238865, 0.0679201)
-
-[node name="LeftArm" type="Node3D" parent="Body" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11789, 0.53953, 0.509035)
+[node name="LeftArm" type="Node3D" parent="BodyAnimation/Body/LeftShoulder" index="0"]
+transform = Transform3D(0.953169, 0, -0.302437, 0, 1, 0, 0.302436, 0, 0.95317, 0.307881, -0.117, 0.50222)
 script = ExtResource("4_2geo0")
 
-[node name="ArmMesh" type="MeshInstance3D" parent="Body/LeftArm" index="0"]
-transform = Transform3D(-1.98616e-08, 1, 4.37114e-08, -1.50996e-07, -4.37114e-08, 1, 1, 1.98616e-08, 1.50996e-07, -0.086696, -0.0117978, -0.00429021)
+[node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="0"]
+transform = Transform3D(0.5, 0.866026, 3.78552e-08, 0, -4.37114e-08, 1, 0.866026, -0.5, -2.18557e-08, -0.0807939, 0, 0.0445577)
 mesh = ExtResource("6_ekled")
-skeleton = NodePath("../../..")
+skeleton = NodePath("../../../../..")
 
-[node name="ArmSlot" type="Node3D" parent="Body/LeftArm" index="1" node_paths=PackedStringArray("SlotRect")]
+[node name="ArmSlot" type="Node3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="1" node_paths=PackedStringArray("SlotRect")]
 transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0.012, 0)
 script = ExtResource("7_6h1r1")
-SlotRect = NodePath("../../../WeaponLeftRect")
+SlotRect = NodePath("../../../../../WeaponLeftRect")
 
-[node name="Shield" type="MeshInstance3D" parent="Body/LeftArm/ArmSlot" index="0"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0230512, -0.196876, 0.0564265)
+[node name="Shield" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm/ArmSlot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -3.38813e-21, 0, 1, 0.0146261, -0.20823, 0.0332574)
 visible = false
 mesh = ExtResource("8_y6oyg")
-skeleton = NodePath("../../../..")
+skeleton = NodePath("../../../../../..")
 
-[node name="RightArm" type="Node3D" parent="Body" index="3"]
-transform = Transform3D(0.61383, 0, -0.789437, 0, 0.999999, 0, 0.789438, 0, 0.61383, -0.490452, 0.358702, -0.0156537)
+[node name="RightShoulder" type="Node3D" parent="BodyAnimation/Body" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.232, 0.417, 0)
+
+[node name="RightArm" type="Node3D" parent="BodyAnimation/Body/RightShoulder" index="0"]
+transform = Transform3D(0.674637, -0.0781696, -0.733998, -1.49012e-08, 0.994376, -0.105899, 0.738149, 0.0714437, 0.670843, -0.645224, -0.144302, 0.179816)
 script = ExtResource("4_2geo0")
 
-[node name="ArmMesh" type="MeshInstance3D" parent="Body/RightArm" index="0"]
-transform = Transform3D(-2.18557e-07, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 2.18557e-07, 9.55343e-15, 0.087, -0.012, -0.004)
+[node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="0"]
+transform = Transform3D(0.5, -0.866026, -3.78552e-08, 0, -4.37114e-08, 1, -0.866026, -0.5, -2.18557e-08, 0.081, 0, 0.045)
 mesh = ExtResource("9_dombv")
-skeleton = NodePath("../../..")
+skeleton = NodePath("../../../../..")
 
-[node name="ArmSlot" type="Node3D" parent="Body/RightArm" index="1" node_paths=PackedStringArray("SlotRect")]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0.0117928, 0)
+[node name="ArmSlot" type="Node3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="1" node_paths=PackedStringArray("SlotRect")]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, -2.98023e-08, 1, -3.72529e-09, 0, -3.72529e-09, 1, -4.47035e-08, 0.0117928, 5.96046e-08)
 script = ExtResource("7_6h1r1")
-SlotRect = NodePath("../../../WeaponRightRect")
+SlotRect = NodePath("../../../../../WeaponRightRect")
 
-[node name="Dagger" type="MeshInstance3D" parent="Body/RightArm/ArmSlot" index="0"]
+[node name="Dagger" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm/ArmSlot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0120574, -0.104212, -0.0234121)
 visible = false
 mesh = ExtResource("10_sofcg")
-skeleton = NodePath("../../../..")
+skeleton = NodePath("../../../../../..")
 
-[node name="LeftLeg" type="MeshInstance3D" parent="." index="5"]
+[node name="Neck" type="Node3D" parent="BodyAnimation/Body" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.708, 0)
+
+[node name="HeadAnimation" type="Node3D" parent="BodyAnimation/Body/Neck" index="0"]
+
+[node name="Head" type="MeshInstance3D" parent="BodyAnimation/Body/Neck/HeadAnimation" index="0"]
+mesh = ExtResource("4_w3hy4")
+skeleton = NodePath("../../../../..")
+
+[node name="Camera3D" type="Camera3D" parent="BodyAnimation/Body/Neck/HeadAnimation/Head" index="0"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.238865, 0.0679201)
+
+[node name="LeftLeg" type="MeshInstance3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0, 0)
 mesh = ExtResource("11_dc7i7")
 
-[node name="RightLeg" type="MeshInstance3D" parent="." index="6"]
+[node name="RightLeg" type="MeshInstance3D" parent="." index="7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 0, 0)
 mesh = ExtResource("12_2ajt2")
 
-[node name="WeaponLeftRect" parent="." index="7" instance=ExtResource("13_63tmf")]
+[node name="WeaponLeftRect" parent="." index="8" instance=ExtResource("13_63tmf")]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -191,7 +439,7 @@ offset_right = 122.0
 offset_bottom = 0.0
 grow_vertical = 0
 
-[node name="WeaponRightRect" parent="." index="8" instance=ExtResource("13_63tmf")]
+[node name="WeaponRightRect" parent="." index="9" instance=ExtResource("13_63tmf")]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -204,7 +452,7 @@ offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="." index="9"]
+[node name="TextureRect" type="TextureRect" parent="." index="10"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -218,8 +466,9 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("CanvasTexture_g6lxf")
 
-[node name="GrabbedItemTextureRect" type="TextureRect" parent="." index="10"]
+[node name="GrabbedItemTextureRect" type="TextureRect" parent="." index="11"]
 visible = false
+modulate = Color(1, 1, 1, 0.501961)
 offset_right = 2.0
 offset_bottom = 2.0
 texture = ExtResource("14_4pee4")
