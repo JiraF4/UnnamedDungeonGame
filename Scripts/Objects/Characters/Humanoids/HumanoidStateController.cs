@@ -3,6 +3,7 @@ using System;
 
 public enum HumanoidState
 {
+	Idle,
 	Combat,
 	Interact,
 	Stunned,
@@ -20,6 +21,7 @@ public partial class HumanoidStateController : Node
 	public HumanoidDoll Doll { get; protected set; }
 	public CharacterControllerInputs CharacterControllerInputs { get; protected set; }
 	public HumanoidAnimationController AnimationController { get; protected set; }
+	public HumanoidCombatController CombatController { get; protected set; }
 	
 	public HumanoidState State { get; protected set; }
 	public HumanoidAction Action { get; protected set; }
@@ -30,6 +32,7 @@ public partial class HumanoidStateController : Node
 		Doll = Controller.GetParent<HumanoidDoll>();
 		CharacterControllerInputs = Controller.GetNode<CharacterControllerInputs>("CharacterControllerInputs");
 		AnimationController = Controller.GetNode<HumanoidAnimationController>("AnimationController");
+		CombatController = Controller.GetNode<HumanoidCombatController>("CombatController");
 		
 		base._Ready();
 	}
@@ -39,6 +42,10 @@ public partial class HumanoidStateController : Node
 		var animation = AnimationController.GetAnimation();
 		
 		// TODO: get rid of strings
+		if (animation.StartsWith("Idle"))
+		{
+			State = HumanoidState.Idle;
+		}
 		if (animation.StartsWith("Stunned"))
 		{
 			State = HumanoidState.Stunned;

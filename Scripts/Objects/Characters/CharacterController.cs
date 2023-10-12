@@ -1,18 +1,24 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using Dungeon.Tools;
 
 public partial class CharacterController : Node
 {
-	[Export] public Vector2 RotationSpeed = new(1f, 0.03f);
+	public static readonly List<CharacterController> CharacterControllers = new();
+	
+	[Export] public Vector2 RotationSpeed = new(1f, 1f);
 	[Export] public float MoveForce = 1350.0f;
 	[Export] public float MoveMaxSpeed = 5.0f;
-
+	
 	[Export] public CharacterControllerInputs CharacterControllerInputs { get; protected set; }
 	protected RigidBody3D CharacterBody;
 
 	protected Vector3 RotateInput;
 	protected Vector3 MoveInput;
 
+	public Node3D Target;
+	
 	public override void _Process(double delta)
 	{
 		DebugInfo.AddLine("MoveSpeed: " + CharacterBody.LinearVelocity.Length().ToString());
@@ -21,7 +27,9 @@ public partial class CharacterController : Node
 
 	public override void _Ready()
 	{
+		CharacterControllers.Add(this);
 		CharacterBody = GetParent<RigidBody3D>();
+		Target = CharacterBody.GetNode<Node3D>("Target");
 		CharacterControllerInputs = GetNode<CharacterControllerInputs>("CharacterControllerInputs");
 		base._Ready();
 	}
@@ -36,9 +44,10 @@ public partial class CharacterController : Node
 		CharacterControllerInputs.PrimaryActionJustReleased = false;
 	}
 
+
 	public virtual void UpdateState(double delta)
 	{
-		CharacterBody.AngularVelocity = new Vector3(0.0f, CharacterControllerInputs.RotateInput.Y * RotationSpeed.Y, 0.0f);
+		CharacterBody.AngularVelocity = new Vector3(0.0f, RotateInput.Y * RotationSpeed.Y, 0.0f);
 		UpdateMoveSpeed(delta);
 	}
 
@@ -64,5 +73,10 @@ public partial class CharacterController : Node
 
 		CharacterBody.ApplyCentralForce(horizontalMoveSpeed);
 		//_characterBody.LinearVelocity += horizontalMoveSpeed * (float) delta;
+	}
+
+	public virtual void HitReceive()
+	{
+		
 	}
 }

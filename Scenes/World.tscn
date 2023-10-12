@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://5e2v27lnoo8d"]
+[gd_scene load_steps=11 format=3 uid="uid://5e2v27lnoo8d"]
 
+[ext_resource type="Script" path="res://Scripts/Services/CharactersService.cs" id="1_gl1fr"]
 [ext_resource type="PackedScene" uid="uid://bnpka4m4iqnd5" path="res://Scenes/Characters/Humanoid.tscn" id="1_xkyd3"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="2_w508y"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="3_uuy7c"]
@@ -15,8 +16,17 @@ plane = Plane(0, -1, 0, 0)
 
 [node name="World" type="Node3D"]
 
+[node name="CharactersService" type="Node" parent="."]
+script = ExtResource("1_gl1fr")
+
 [node name="Character2" parent="." instance=ExtResource("1_xkyd3")]
 transform = Transform3D(-0.955726, 0, 0.294257, 0, 1, 0, -0.294257, 0, -0.955726, 29.2092, 0, 41.6167)
+
+[node name="Character3" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(0.269138, 0, 0.963101, 0, 1, 0, -0.963101, 0, 0.269138, 28.9229, 9.53674e-07, 36.2067)
+
+[node name="Character4" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(0.789288, 0, -0.614023, 0, 1, 0, 0.614023, 0, 0.789288, 33.7156, 9.53674e-07, 36.7431)
 
 [node name="MapRect" type="TextureRect" parent="."]
 clip_contents = true

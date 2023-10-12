@@ -15,5 +15,6 @@ public partial class CharacterControllerInputs : Node
 	public bool SecondActionJustReleased { get; set; }
 	public bool UIControl { get; set; }
 	public Vector2 ScreenPosition { get; set; }
+	public Vector2 ScreenPositionMove { get; set; }
 	public bool InteractMode { get; set; }
 }
