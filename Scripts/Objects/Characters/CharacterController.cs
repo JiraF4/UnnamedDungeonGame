@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Dungeon.Tools;
+using Godot.Collections;
 
 public partial class CharacterController : Node
 {
@@ -13,7 +14,7 @@ public partial class CharacterController : Node
 	
 	public CharacterControllerInputs ControllerInputs { get; protected set; }
 	public CharacterCharacteristics Characteristics { get; protected set; }
-	protected RigidBody3D CharacterBody;
+	protected CharacterDoll CharacterDoll;
 	public StanceIndicator StanceIndicator;
 	public InfoBar3D InfoBar { get; protected set; }
 	
@@ -33,19 +34,20 @@ public partial class CharacterController : Node
 	public override void _Ready()
 	{
 		CharacterControllers.Add(this);
-		CharacterBody = GetParent<RigidBody3D>();
-		Target = CharacterBody.GetNode<Node3D>("Target");
-		StanceIndicator = CharacterBody.GetNode<StanceIndicator>("StanceIndicator");
+		CharacterDoll = GetParent<CharacterDoll>();
+		Target = CharacterDoll.GetNode<Node3D>("Target");
+		StanceIndicator = CharacterDoll.GetNode<StanceIndicator>("StanceIndicator");
 		ControllerInputs = GetNode<CharacterControllerInputs>("ControllerInputs");
 		CharacterInfo = GetNode<CharacterInfo>("CharacterInfo");
 		Characteristics = GetNode<CharacterCharacteristics>("Characteristics");
-		InfoBar = CharacterBody.GetNode<InfoBar3D>("InfoBar3D");
+		InfoBar = CharacterDoll.GetNode<InfoBar3D>("InfoBar3D");
 		
 		base._Ready();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority()) return;
 		RotateInput = ControllerInputs.RotateInput;
 		MoveInput = ControllerInputs.MoveInput;
 		UpdateState(delta);
@@ -57,7 +59,7 @@ public partial class CharacterController : Node
 
 	public virtual void UpdateState(double delta)
 	{
-		CharacterBody.AngularVelocity = new Vector3(0.0f, RotateInput.Y * RotationSpeed.Y, 0.0f);
+		CharacterDoll.AngularVelocity = new Vector3(0.0f, RotateInput.Y * RotationSpeed.Y, 0.0f);
 		UpdateMoveSpeed(delta);
 	}
 
@@ -65,28 +67,41 @@ public partial class CharacterController : Node
 	{
 		var horizontalMoveSpeed = MoveInput * MoveForce;
 		horizontalMoveSpeed.Y = 0.0f;
-		horizontalMoveSpeed = horizontalMoveSpeed.Rotated(Vector3.Up, CharacterBody.Rotation.Y);
+		horizontalMoveSpeed = horizontalMoveSpeed.Rotated(Vector3.Up, CharacterDoll.Rotation.Y);
 
-		var horizontalLinearVelocity = new Vector3(CharacterBody.LinearVelocity.X, 0.0f, CharacterBody.LinearVelocity.Z);
+		var horizontalLinearVelocity = new Vector3(CharacterDoll.LinearVelocity.X, 0.0f, CharacterDoll.LinearVelocity.Z);
 		var horizontalSpeed = horizontalLinearVelocity.Length();
-		var moveDot = horizontalMoveSpeed.Normalized().Dot(CharacterBody.LinearVelocity.Normalized());
-		var stopForce = (CharacterBody.Mass * horizontalSpeed) * 1000.0f + 10000.0f;
+		var moveDot = horizontalMoveSpeed.Normalized().Dot(CharacterDoll.LinearVelocity.Normalized());
+		var stopForce = (CharacterDoll.Mass * horizontalSpeed) * 1000.0f + 10000.0f;
 		
 		if ((horizontalMoveSpeed.Length() <= 0.0f || moveDot <= 0.0f) && horizontalSpeed > 0.0f)
 		{
-			CharacterBody.ApplyCentralForce(-horizontalLinearVelocity.Normalized() * (stopForce * (float) delta * (1.0f - moveDot)));
+			CharacterDoll.ApplyCentralForce(-horizontalLinearVelocity.Normalized() * (stopForce * (float) delta * (1.0f - moveDot)));
 		}
 		if (horizontalSpeed >= MoveMaxSpeed)
 		{
-			CharacterBody.ApplyCentralForce(-horizontalLinearVelocity.Normalized() * (stopForce * (float) delta));
+			CharacterDoll.ApplyCentralForce(-horizontalLinearVelocity.Normalized() * (stopForce * (float) delta));
 		}
 
-		CharacterBody.ApplyCentralForce(horizontalMoveSpeed);
+		CharacterDoll.ApplyCentralForce(horizontalMoveSpeed);
 		//_characterBody.LinearVelocity += horizontalMoveSpeed * (float) delta;
 	}
 
 	public virtual void HitReceive()
 	{
 		
+	}
+
+
+	public virtual void CollectSyncData(Dictionary syncData)
+	{
+		syncData["GlobalPosition"] = CharacterDoll.GlobalPosition;
+		syncData["GlobalRotation"] = CharacterDoll.GlobalRotation;
+	}
+
+	public virtual void ApplySyncData(Dictionary syncData)
+	{
+		CharacterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
+		CharacterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
 	}
 }

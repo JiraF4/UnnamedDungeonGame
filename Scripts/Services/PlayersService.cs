@@ -31,13 +31,17 @@ public partial class PlayersService : Node
         ExistedPlayers[peerId] = true;
         
         // TODO: More elegant
-        var newPlayer = playerScene.Instantiate<Node3D>();
+        var newPlayer = playerScene.Instantiate<CharacterDoll>();
         newPlayer.Name = "Player" + peerId;
         GD.Print("SpawnNewPlayer: " + newPlayer.Name);
+        newPlayer.SetMultiplayerAuthority((int) peerId);
         GetTree().Root.GetNode("World").AddChild(newPlayer);
         newPlayer.GlobalPosition = position;
+        newPlayer.SetAnimationActive(peerId == Multiplayer.MultiplayerPeer.GetUniqueId());
         if (peerId == Multiplayer.MultiplayerPeer.GetUniqueId())
+        {
             GetTree().Root.GetNode<PlayerController>("World/PlayerController").GetInput(newPlayer.GetPath());
-        newPlayer.SetMultiplayerAuthority((int) peerId);
+        }
+            
     }
 }

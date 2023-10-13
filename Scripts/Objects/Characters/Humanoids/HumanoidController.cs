@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Diagnostics;
 using Dungeon.Tools;
+using Godot.Collections;
 
 
 public partial class HumanoidController : CharacterController
@@ -27,8 +28,8 @@ public partial class HumanoidController : CharacterController
 		if (vector == Vector3.Zero) return;
 		var angleY = Mathf.Atan2(vector.X, vector.Z);
 		var angleX = XRotation;
-		var angleDeltaY = MathfExtensions.DeltaAngleRad(CharacterBody.GlobalRotation.Y, angleY);
-		var angleDeltaX = MathfExtensions.DeltaAngleRad(CharacterBody.GlobalRotation.X, angleX);
+		var angleDeltaY = MathfExtensions.DeltaAngleRad(CharacterDoll.GlobalRotation.Y, angleY);
+		var angleDeltaX = MathfExtensions.DeltaAngleRad(CharacterDoll.GlobalRotation.X, angleX);
 		var rotationYMaxSpeed = RotationSpeed.X * (float) delta * speed;
 		var rotationXMaxSpeed = RotationSpeed.Y * (float) delta * speed;
 		angleDeltaY = Math.Clamp(angleDeltaY, -rotationYMaxSpeed, rotationYMaxSpeed);
@@ -50,9 +51,9 @@ public partial class HumanoidController : CharacterController
 
 	private void ReadyItemsGrab()
 	{
-		var leftItem = (Item) CharacterBody.FindChild("LeftArmItem")?.GetChild(0);
+		var leftItem = (Item) CharacterDoll.FindChild("LeftArmItem")?.GetChild(0);
 		if (leftItem != null) Doll.LeftArm.ItemSlot.InsertItem(Vector2I.Zero, leftItem);
-		var rightItem = (Item) CharacterBody.FindChild("RightArmItem")?.GetChild(0);
+		var rightItem = (Item) CharacterDoll.FindChild("RightArmItem")?.GetChild(0);
 		if (rightItem != null) Doll.RightArm.ItemSlot.InsertItem(Vector2I.Zero, rightItem);
 	}
 
@@ -72,8 +73,8 @@ public partial class HumanoidController : CharacterController
 	void Die()
 	{
 		AnimationController.Die();
-		CharacterBody.Freeze = true;
-		CharacterBody.CollisionLayer = 0;
+		CharacterDoll.Freeze = true;
+		CharacterDoll.CollisionLayer = 0;
 		Dead = true;
 	}
 
@@ -142,7 +143,17 @@ public partial class HumanoidController : CharacterController
 	{
 		CombatController.HitReceive();
 	}
-
 	
+	public override void CollectSyncData(Dictionary syncData)
+	{
+		base.CollectSyncData(syncData);
+		CharacterDoll.CollectSyncData(syncData);
+	}
+
+	public override void ApplySyncData(Dictionary syncData)
+	{
+		base.ApplySyncData(syncData);
+		CharacterDoll.ApplySyncData(syncData);
+	}
 	
 }

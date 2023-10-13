@@ -38,7 +38,7 @@ public partial class HumanoidAnimationController : Node
     protected StringName _dropItem = new("parameters/ActionsStateMachine/conditions/DropItem");
     
     protected StringName _WalkSpace2D = new("parameters/WalkSpace2D/blend_position");
-    
+
     public override void _Ready()
     {
         Controller = GetParent<HumanoidController>();
@@ -49,8 +49,6 @@ public partial class HumanoidAnimationController : Node
         AnimationPlayer = Doll.GetNode<AnimationPlayer>("AnimationPlayer");
         AnimationTree = Doll.GetNode<AnimationTree>("AnimationTree");
         StateMachine = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/ActionsStateMachine/playback");
-
-        AnimationTree.Active = true;
         
         base._Ready();
     }
@@ -64,6 +62,8 @@ public partial class HumanoidAnimationController : Node
 
     public void UpdateConditions()
     {
+        if (!Doll.AnimationActive) return;
+        
         AnimationTree.Set(_primaryAction, CharacterControllerInputs.PrimaryAction);
         AnimationTree.Set(_notPrimaryAction, !CharacterControllerInputs.PrimaryAction);
         AnimationTree.Set(_secondAction, CharacterControllerInputs.SecondAction);

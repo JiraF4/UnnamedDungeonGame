@@ -78,7 +78,6 @@ blend_point_4/node = SubResource("AnimationNodeAnimation_bb1s4")
 blend_point_4/pos = Vector2(0, 1)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_87rxd"]
-graph_offset = Vector2(-547.349, -338.042)
 nodes/ActionsStateMachine/node = ExtResource("3_lh22k")
 nodes/ActionsStateMachine/position = Vector2(-720, -360)
 nodes/AddShake/node = SubResource("AnimationNodeAdd2_tv07t")
@@ -515,20 +514,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68569, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86124, 0)
 
 [node name="BodyAnimation" type="Node3D" parent="." index="4"]
-transform = Transform3D(0.998966, 0.0454299, 0.00174404, -0.0453295, 0.998235, -0.0383878, -0.00348491, 0.0382691, 0.999261, 0, 0, 0)
+transform = Transform3D(0.998966, 0.0454299, 0.00174404, -0.0453295, 0.998235, -0.0383878, -0.00348491, 0.0382691, 0.999261, -6.18923e-05, 0.0013623, -0.0354616)
 
 [node name="Body" type="Node3D" parent="BodyAnimation" index="0"]
 transform = Transform3D(1, 4.67116e-09, 0, -2.57569e-09, 1, 0, -4.65661e-10, 3.72529e-09, 1, 1.96451e-09, 0.479416, 1.86265e-09)
 
 [node name="BodyMesh" type="MeshInstance3D" parent="BodyAnimation/Body" index="0"]
-transform = Transform3D(0.709106, 0, -0.705102, 0, 1, 0, 0.705102, 0, 0.709106, 0, 0, 0)
+transform = Transform3D(0.819282, 0, -0.573391, 0, 1, 0, 0.573391, 0, 0.819282, 0, 0, 0)
 mesh = ExtResource("3_1ux3v")
 
 [node name="LeftShoulder" type="Node3D" parent="BodyAnimation/Body" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.231567, 0.41743, 0)
 
 [node name="LeftArm" type="Node3D" parent="BodyAnimation/Body/LeftShoulder" index="0"]
-transform = Transform3D(0.999993, -0.00375245, 0.000481054, 0.00375246, 0.999993, 1.80514e-06, -0.000481057, 3.63798e-12, 1, 0.35, 0.1232, 0.509)
+transform = Transform3D(0.882571, 0.0128657, 0.470004, 0.104184, 0.969425, -0.222172, -0.458492, 0.245049, 0.854246, 0.457234, -0.167392, 0.485495)
 script = ExtResource("4_2geo0")
 
 [node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="0"]
@@ -551,7 +550,7 @@ skeleton = NodePath("../../../../../..")
 transform = Transform3D(0.966286, -0.0687614, -0.248121, 0.126375, 0.966274, 0.224376, 0.224324, -0.248168, 0.942387, 0.157946, 0.432428, -0.0206431)
 
 [node name="RightArm" type="Node3D" parent="BodyAnimation/Body/RightShoulder" index="0"]
-transform = Transform3D(0.62038, -0.00487033, -0.78429, 0.00296145, 0.999988, -0.00386728, 0.784298, 7.65515e-05, 0.620387, -0.721, -0.057, -0.0155)
+transform = Transform3D(0.339646, 0.874934, -0.345155, -0.833506, 0.450018, 0.320552, 0.435788, 0.178814, 0.882111, -0.258704, 0.00679028, 0.396285)
 script = ExtResource("4_2geo0")
 
 [node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="0"]
@@ -574,7 +573,7 @@ skeleton = NodePath("../../../../../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.708, 0)
 
 [node name="HeadAnimation" type="Node3D" parent="BodyAnimation/Body/Neck" index="0"]
-transform = Transform3D(0.998971, -0.045363, -5.82076e-11, 0.0453296, 0.998234, 0.0383878, -0.00174139, -0.0383483, 0.999263, 0, 0, 0)
+transform = Transform3D(0.998971, -0.045363, -5.82077e-11, 0.0453296, 0.998234, 0.0383878, -0.00174139, -0.0383483, 0.999263, 0, 0, 0)
 
 [node name="Head" type="MeshInstance3D" parent="BodyAnimation/Body/Neck/HeadAnimation" index="0"]
 mesh = ExtResource("4_w3hy4")

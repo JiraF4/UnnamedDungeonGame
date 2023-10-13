@@ -13,6 +13,8 @@ public partial class AIController : Node
 	{
 		_character = GetParent<CharacterDoll>();
 		_characterControllerInputs = (CharacterControllerInputs) _character.FindChild("ControllerInputs");
+		
+		_character.SetAnimationActive(Network.IsServer);
 	}
 	
 	public override void _Process(double delta)

@@ -4,23 +4,23 @@ using Godot.Collections;
 
 public partial class CharacterSynchronizationController : SynchronizationController
 {
-    private CharacterDoll _characterDoll;
+    protected CharacterController CharacterController;
 
     public override void _Ready()
     {
-        _characterDoll = GetParent<CharacterDoll>();
+        CharacterController = GetParent<CharacterDoll>().GetNode<CharacterController>("CharacterController");
         base._Ready();
     }
 
     protected override void CollectSyncData(Dictionary syncData)
     {
-        syncData["GlobalPosition"] = _characterDoll.GlobalPosition;
-        syncData["GlobalRotation"] = _characterDoll.GlobalRotation;
+        CharacterController.CollectSyncData(syncData);
+        base.CollectSyncData(syncData);
     }
     
     protected override void ApplySyncData(Dictionary syncData)
     {
-        _characterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
-        _characterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
+        CharacterController.ApplySyncData(syncData);
+        base.ApplySyncData(syncData);
     }
 }

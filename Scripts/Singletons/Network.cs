@@ -78,7 +78,7 @@ public partial class Network : Node
         GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
         if (IsServer)
         {
-            RenderingServer.RenderLoopEnabled = false;
+            //RenderingServer.RenderLoopEnabled = false;
             Engine.MaxFps = MaxTPS;
             GD.Print("Run server");
             var error = Peer.CreateServer(Port, MaxPlayers);

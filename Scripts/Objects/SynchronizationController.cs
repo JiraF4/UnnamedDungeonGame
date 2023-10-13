@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Diagnostics;
+using Godot;
 using Godot.Collections;
 
 public partial class SynchronizationController : Node
@@ -7,9 +8,10 @@ public partial class SynchronizationController : Node
     {
         base._Ready();
     }
-
+    
     public override void _Process(double delta)
     {
+        DebugInfo.AddLine(_lastSyncData?.ToString().Replace(", \"", ",\n\""));
         if (GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) Sync();
         base._Process(delta);
     }
@@ -27,14 +29,15 @@ public partial class SynchronizationController : Node
         ApplySyncData(syncData);
     }
 
+    private Dictionary _lastSyncData;
+    
     protected virtual void CollectSyncData(Dictionary syncData)
     {
-        
     }
     
     protected virtual void ApplySyncData(Dictionary syncData)
     {
-        
+        _lastSyncData = syncData;
     }
 
 }

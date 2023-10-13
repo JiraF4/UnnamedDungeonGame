@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://5e2v27lnoo8d"]
+[gd_scene load_steps=10 format=3 uid="uid://5e2v27lnoo8d"]
 
 [ext_resource type="Script" path="res://Scripts/Services/CharactersService.cs" id="1_gl1fr"]
 [ext_resource type="PackedScene" uid="uid://dd6wke7puqws8" path="res://Scenes/MapHolder.tscn" id="1_xbsrr"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Services/PlayersService.cs" id="2_kaa0g"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="2_w508y"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="3_uuy7c"]
+[ext_resource type="PackedScene" uid="uid://ddr10px57mwmb" path="res://Scenes/Characters/AIController.tscn" id="7_d51ji"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_gkjlw"]
 
@@ -54,3 +55,15 @@ shape = SubResource("WorldBoundaryShape3D_gkjlw")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="UpBorder"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("WorldBoundaryShape3D_hekjq")
+
+[node name="Character" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 60.2719)
+
+[node name="AIController" parent="Character" node_paths=PackedStringArray("TempTarget") instance=ExtResource("7_d51ji")]
+TempTarget = NodePath("../../Character2")
+
+[node name="Character2" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 63)
+
+[node name="AIController" parent="Character2" node_paths=PackedStringArray("TempTarget") instance=ExtResource("7_d51ji")]
+TempTarget = NodePath("../../Character")
