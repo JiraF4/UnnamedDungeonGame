@@ -121,8 +121,8 @@ public partial class CharacterController : Node
 
 	public virtual void ApplySyncData(Dictionary syncData)
 	{
-		CharacterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
-		CharacterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
+		if (syncData.ContainsKey("GlobalPosition")) CharacterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
+		if (syncData.ContainsKey("GlobalRotation")) CharacterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
 		CharacterInfo.ApplySyncData(syncData);
 		CharacterDoll.ApplySyncData(syncData);
 	}

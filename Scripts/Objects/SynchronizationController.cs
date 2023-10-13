@@ -4,6 +4,9 @@ using Godot.Collections;
 
 public partial class SynchronizationController : Node
 {
+    private Dictionary _lastSendSyncData = new();
+    private Dictionary _lastSendSyncDataUnique = new();
+    
     public override void _Ready()
     {
         base._Ready();
@@ -11,16 +14,26 @@ public partial class SynchronizationController : Node
     
     public override void _Process(double delta)
     {
-        //DebugInfo.AddLine(_lastSyncData?.ToString().Replace(", \"", ",\n\""));
         if (GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) Sync();
         base._Process(delta);
     }
 
     void Sync()
     {
+        //DebugInfo.AddLine(_lastSendSyncDataUnique?.ToString().Replace(", \"", ",\n\""));
         var syncData = new Dictionary();
         CollectSyncData(syncData);
-        Rpc(nameof(SyncRemote), syncData);
+        
+        var syncDataUnique = new Dictionary();
+        foreach (var (key, value) in syncData)
+        {
+            if (!_lastSendSyncData.ContainsKey(key) || !value.Equals(_lastSendSyncData[key]))
+                syncDataUnique[key] = value;
+        }
+        _lastSendSyncData = syncData;
+        _lastSendSyncDataUnique = syncDataUnique;
+        
+        Rpc(nameof(SyncRemote), syncDataUnique);
     }
 
     [Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered)]
@@ -29,15 +42,15 @@ public partial class SynchronizationController : Node
         ApplySyncData(syncData);
     }
 
-    private Dictionary _lastSyncData;
     
     protected virtual void CollectSyncData(Dictionary syncData)
     {
+        
     }
     
     protected virtual void ApplySyncData(Dictionary syncData)
     {
-        _lastSyncData = syncData;
+        
     }
 
 }

@@ -36,11 +36,11 @@ public partial class CharacterInfo : Node
 
 	public virtual void ApplySyncData(Dictionary syncData)
 	{
-		AttackStance = (CombatStance) (int) syncData["AttackStance"];
-		BlockStance = (CombatStance) (int) syncData["BlockStance"];
-		CurrentTarget = (NodePath) syncData["CurrentTarget"];
-		MaxHealth = (float) syncData["MaxHealth"];
-		Health = (float) syncData["Health"];
+		if (syncData.ContainsKey("AttackStance")) AttackStance = (CombatStance) (int) syncData["AttackStance"];
+		if (syncData.ContainsKey("BlockStance")) BlockStance = (CombatStance) (int) syncData["BlockStance"];
+		if (syncData.ContainsKey("CurrentTarget")) CurrentTarget = (NodePath) syncData["CurrentTarget"];
+		if (syncData.ContainsKey("MaxHealth")) MaxHealth = (float) syncData["MaxHealth"];
+		if (syncData.ContainsKey("Health")) Health = (float) syncData["Health"];
 	}
 	
 	public CombatStance AttackStance { get; protected set; } = CombatStance.None;

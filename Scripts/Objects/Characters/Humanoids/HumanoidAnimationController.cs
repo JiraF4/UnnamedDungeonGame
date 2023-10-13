@@ -56,7 +56,6 @@ public partial class HumanoidAnimationController : Node
     public override void _Process(double delta)
     {
         UpdateConditions();
-        DebugInfo.AddLine("Animation: " + GetAnimation());
         base._Process(delta);
     }
 

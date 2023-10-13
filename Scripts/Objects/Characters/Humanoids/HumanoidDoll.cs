@@ -47,18 +47,18 @@ public partial class HumanoidDoll : CharacterDoll
 
 	public override void ApplySyncData(Dictionary syncData)
 	{
-		Body.GlobalPosition = (Vector3) syncData["DollBodyPosition"];
-		Head.GlobalPosition = (Vector3) syncData["DollHeadPosition"];
-		RightArm.GlobalPosition = (Vector3) syncData["DollRightArmPosition"];
-		LeftArm.GlobalPosition = (Vector3) syncData["DollLeftArmPosition"];
-		RightLeg.GlobalPosition = (Vector3) syncData["DollRightLegPosition"];
-		LeftLeg.GlobalPosition = (Vector3) syncData["DollLeftLegPosition"];
+		if (syncData.ContainsKey("DollBodyPosition")) Body.GlobalPosition = (Vector3) syncData["DollBodyPosition"];
+		if (syncData.ContainsKey("DollHeadPosition")) Head.GlobalPosition = (Vector3) syncData["DollHeadPosition"];
+		if (syncData.ContainsKey("DollRightArmPosition")) RightArm.GlobalPosition = (Vector3) syncData["DollRightArmPosition"];
+		if (syncData.ContainsKey("DollLeftArmPosition")) LeftArm.GlobalPosition = (Vector3) syncData["DollLeftArmPosition"];
+		if (syncData.ContainsKey("DollRightLegPosition")) RightLeg.GlobalPosition = (Vector3) syncData["DollRightLegPosition"];
+		if (syncData.ContainsKey("DollLeftLegPosition")) LeftLeg.GlobalPosition = (Vector3) syncData["DollLeftLegPosition"];
 		
-		Body.GlobalRotation = (Vector3) syncData["DollBodyRotation"];
-		Head.GlobalRotation = (Vector3) syncData["DollHeadRotation"];
-		RightArm.GlobalRotation = (Vector3) syncData["DollRightArmRotation"];
-		LeftArm.GlobalRotation = (Vector3) syncData["DollLeftArmRotation"];
-		RightLeg.GlobalRotation = (Vector3) syncData["DollRightLegRotation"];
-		LeftLeg.GlobalRotation = (Vector3) syncData["DollLeftLegRotation"];
+		if (syncData.ContainsKey("DollBodyRotation")) Body.GlobalRotation = (Vector3) syncData["DollBodyRotation"];
+		if (syncData.ContainsKey("DollHeadRotation")) Head.GlobalRotation = (Vector3) syncData["DollHeadRotation"];
+		if (syncData.ContainsKey("DollRightArmRotation")) RightArm.GlobalRotation = (Vector3) syncData["DollRightArmRotation"];
+		if (syncData.ContainsKey("DollLeftArmRotation")) LeftArm.GlobalRotation = (Vector3) syncData["DollLeftArmRotation"];
+		if (syncData.ContainsKey("DollRightLegRotation")) RightLeg.GlobalRotation = (Vector3) syncData["DollRightLegRotation"];
+		if (syncData.ContainsKey("DollLeftLegRotation")) LeftLeg.GlobalRotation = (Vector3) syncData["DollLeftLegRotation"];
 	}
 }

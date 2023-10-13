@@ -20,9 +20,6 @@ public partial class AIController : Node
 	
 	public override void _Process(double delta)
 	{
-		DebugInfo.AddLine("AI - InteractMode: " + _characterControllerInputs.InteractMode);
-		DebugInfo.AddLine("AI - ScreenPosition: " + _characterControllerInputs.ScreenPosition);
-		
 		base._Process(delta);
 	}
 
