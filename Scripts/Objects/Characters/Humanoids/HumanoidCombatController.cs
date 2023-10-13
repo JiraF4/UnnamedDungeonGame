@@ -86,6 +86,7 @@ public partial class HumanoidCombatController : Node
 
     public void Hit()
     {
+        if (CharacterTarget == null) return;
         if (CharacterTarget.Target.GlobalPosition.DistanceTo(Controller.Target.GlobalPosition) > 1.75f) return;
         var targetInfo = CharacterTarget.CharacterInfo;
         switch (targetInfo.BlockStance)
@@ -103,6 +104,13 @@ public partial class HumanoidCombatController : Node
 
     public void HitReceive()
     {
+        Rpc(nameof(HitReceiveRemote));
+    }
+    
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    public void HitReceiveRemote()
+    {
+        if (Controller.Dead) return;
         AnimationController.HitStun();
         Controller.Characteristics.Health -= 50.0f;
     }

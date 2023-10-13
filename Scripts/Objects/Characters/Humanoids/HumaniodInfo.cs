@@ -1,6 +1,10 @@
 ﻿public partial class HumaniodInfo : CharacterInfo
 {
-    public override CombatStance AttackStance => ((HumanoidController) Controller).CombatController.AttackStance;
-    public override CombatStance BlockStance => ((HumanoidController) Controller).CombatController.BlockStance;
-    public override CharacterController CurrentTarget => ((HumanoidController) Controller).CombatController.CharacterTarget;
+    public override void ReadInfo(double delta)
+    {
+        AttackStance = ((HumanoidController) Controller).CombatController.AttackStance;
+        BlockStance = ((HumanoidController) Controller).CombatController.BlockStance;
+        CurrentTarget = ((HumanoidController) Controller).CombatController.CharacterTarget?.GetPath();
+        base.ReadInfo(delta);
+    }
 }

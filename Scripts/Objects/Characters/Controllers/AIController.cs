@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using Dungeon.Tools;
 
 public partial class AIController : Node
@@ -27,7 +28,9 @@ public partial class AIController : Node
 
 	public override void _PhysicsProcess(double delta)
 	{
-		MoveToTarget(delta);
+		if (PlayersService.Instance.ExistedPlayers.Any())
+			TempTarget = PlayersService.Instance.ExistedPlayers.First().Value;
+		if (TempTarget != null) MoveToTarget(delta);
 		
 		base._PhysicsProcess(delta);
 	}
@@ -62,6 +65,8 @@ public partial class AIController : Node
 
 	void ChangeStanceDefence()
 	{
+		if (TempTarget == null) return;
+			
 		var targetInfo = TempTarget.CharacterInfo;
 		var info = _character.CharacterInfo;
 		
@@ -78,6 +83,8 @@ public partial class AIController : Node
 	
 	void Attack()
 	{
+		if (TempTarget == null) return;
+		
 		var targetInfo = TempTarget.CharacterInfo;
 		var info = _character.CharacterInfo;
 		

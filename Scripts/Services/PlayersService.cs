@@ -6,7 +6,7 @@ public partial class PlayersService : Node
     public static PlayersService Instance { get; private set; }
     [Export] public PackedScene playerScene;
     
-    protected Dictionary<long, bool> ExistedPlayers = new();
+    public readonly Dictionary<long, CharacterDoll> ExistedPlayers = new();
     
     public override void _Ready()
     {
@@ -28,7 +28,6 @@ public partial class PlayersService : Node
     public void SpawnNewPlayer(long peerId, Vector3 position)
     {
         if (ExistedPlayers.ContainsKey(peerId)) return;
-        ExistedPlayers[peerId] = true;
         
         // TODO: More elegant
         var newPlayer = playerScene.Instantiate<CharacterDoll>();
@@ -42,6 +41,7 @@ public partial class PlayersService : Node
         {
             GetTree().Root.GetNode<PlayerController>("World/PlayerController").GetInput(newPlayer.GetPath());
         }
+        ExistedPlayers[peerId] = newPlayer;
             
     }
 }

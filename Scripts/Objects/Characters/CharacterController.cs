@@ -31,6 +31,19 @@ public partial class CharacterController : Node
 		base._Process(delta);
 	}
 
+	protected void Die()
+	{
+		Rpc(nameof(DieRemote));
+	}
+	
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	protected virtual void DieRemote()
+	{
+		CharacterDoll.Freeze = true;
+		CharacterDoll.CollisionLayer = 0;
+		Dead = true;
+	}
+
 	public override void _Ready()
 	{
 		CharacterControllers.Add(this);
@@ -47,7 +60,12 @@ public partial class CharacterController : Node
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority()) return;
+		if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority())
+		{
+			CharacterDoll.AngularVelocity = Vector3.Zero;
+			CharacterDoll.LinearVelocity = Vector3.Zero;
+			return;
+		}
 		RotateInput = ControllerInputs.RotateInput;
 		MoveInput = ControllerInputs.MoveInput;
 		UpdateState(delta);
@@ -97,11 +115,15 @@ public partial class CharacterController : Node
 	{
 		syncData["GlobalPosition"] = CharacterDoll.GlobalPosition;
 		syncData["GlobalRotation"] = CharacterDoll.GlobalRotation;
+		CharacterInfo.CollectSyncData(syncData);
+		CharacterDoll.CollectSyncData(syncData);
 	}
 
 	public virtual void ApplySyncData(Dictionary syncData)
 	{
 		CharacterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
 		CharacterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
+		CharacterInfo.ApplySyncData(syncData);
+		CharacterDoll.ApplySyncData(syncData);
 	}
 }

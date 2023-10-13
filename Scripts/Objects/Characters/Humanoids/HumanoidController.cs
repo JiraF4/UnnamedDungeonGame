@@ -67,15 +67,12 @@ public partial class HumanoidController : CharacterController
 		//bodyPosition.Y += Mathf.Sin((Time.GetTicksMsec() + AnimationOffset) / 1000.0f) * 0.01f;
 		//bodyPosition.Y += Mathf.Sin((Time.GetTicksMsec() + AnimationOffset) / 100.0f) * CharacterBody.LinearVelocity.Length() * 0.01f;
 		//_body.Position = bodyPosition;
-        
 	}
-
-	void Die()
+	
+	protected override void DieRemote()
 	{
 		AnimationController.Die();
-		CharacterDoll.Freeze = true;
-		CharacterDoll.CollisionLayer = 0;
-		Dead = true;
+		base.DieRemote();
 	}
 
 	public override void UpdateState(double delta)
@@ -147,13 +144,11 @@ public partial class HumanoidController : CharacterController
 	public override void CollectSyncData(Dictionary syncData)
 	{
 		base.CollectSyncData(syncData);
-		CharacterDoll.CollectSyncData(syncData);
 	}
 
 	public override void ApplySyncData(Dictionary syncData)
 	{
 		base.ApplySyncData(syncData);
-		CharacterDoll.ApplySyncData(syncData);
 	}
 	
 }

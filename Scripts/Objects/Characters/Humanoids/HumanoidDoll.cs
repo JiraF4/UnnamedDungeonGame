@@ -30,35 +30,35 @@ public partial class HumanoidDoll : CharacterDoll
 
 	public override void CollectSyncData(Dictionary syncData)
 	{
-		syncData["DollBodyPosition"] = Body.Position;
-		syncData["DollHeadPosition"] = Head.Position;
-		syncData["DollRightArmPosition"] = RightArm.Position;
-		syncData["DollLeftArmPosition"] = LeftArm.Position;
-		syncData["DollRightLegPosition"] = RightLeg.Position;
-		syncData["DollLeftLegPosition"] = LeftLeg.Position;
+		syncData["DollBodyPosition"] = Body.GlobalPosition;
+		syncData["DollHeadPosition"] = Head.GlobalPosition;
+		syncData["DollRightArmPosition"] = RightArm.GlobalPosition;
+		syncData["DollLeftArmPosition"] = LeftArm.GlobalPosition;
+		syncData["DollRightLegPosition"] = RightLeg.GlobalPosition;
+		syncData["DollLeftLegPosition"] = LeftLeg.GlobalPosition;
 		
-		syncData["DollBodyRotation"] = Body.Rotation;
-		syncData["DollHeadRotation"] = Head.Rotation;
-		syncData["DollRightArmRotation"] = RightArm.Rotation;
-		syncData["DollLeftArmRotation"] = LeftArm.Rotation;
-		syncData["DollRightLegRotation"] = RightLeg.Rotation;
-		syncData["DollLeftLegRotation"] = LeftLeg.Rotation;
+		syncData["DollBodyRotation"] = Body.GlobalRotation;
+		syncData["DollHeadRotation"] = Head.GlobalRotation;
+		syncData["DollRightArmRotation"] = RightArm.GlobalRotation;
+		syncData["DollLeftArmRotation"] = LeftArm.GlobalRotation;
+		syncData["DollRightLegRotation"] = RightLeg.GlobalRotation;
+		syncData["DollLeftLegRotation"] = LeftLeg.GlobalRotation;
 	}
 
 	public override void ApplySyncData(Dictionary syncData)
 	{
-		Body.Position = (Vector3) syncData["DollBodyPosition"];
-		Head.Position = (Vector3) syncData["DollHeadPosition"];
-		RightArm.Position = (Vector3) syncData["DollRightArmPosition"];
-		LeftArm.Position = (Vector3) syncData["DollLeftArmPosition"];
-		RightLeg.Position = (Vector3) syncData["DollRightLegPosition"];
-		LeftLeg.Position = (Vector3) syncData["DollLeftLegPosition"];
+		Body.GlobalPosition = (Vector3) syncData["DollBodyPosition"];
+		Head.GlobalPosition = (Vector3) syncData["DollHeadPosition"];
+		RightArm.GlobalPosition = (Vector3) syncData["DollRightArmPosition"];
+		LeftArm.GlobalPosition = (Vector3) syncData["DollLeftArmPosition"];
+		RightLeg.GlobalPosition = (Vector3) syncData["DollRightLegPosition"];
+		LeftLeg.GlobalPosition = (Vector3) syncData["DollLeftLegPosition"];
 		
-		Body.Rotation = (Vector3) syncData["DollBodyRotation"];
-		Head.Rotation = (Vector3) syncData["DollHeadRotation"];
-		RightArm.Rotation = (Vector3) syncData["DollRightArmRotation"];
-		LeftArm.Rotation = (Vector3) syncData["DollLeftArmRotation"];
-		RightLeg.Rotation = (Vector3) syncData["DollRightLegRotation"];
-		LeftLeg.Rotation = (Vector3) syncData["DollLeftLegRotation"];
+		Body.GlobalRotation = (Vector3) syncData["DollBodyRotation"];
+		Head.GlobalRotation = (Vector3) syncData["DollHeadRotation"];
+		RightArm.GlobalRotation = (Vector3) syncData["DollRightArmRotation"];
+		LeftArm.GlobalRotation = (Vector3) syncData["DollLeftArmRotation"];
+		RightLeg.GlobalRotation = (Vector3) syncData["DollRightLegRotation"];
+		LeftLeg.GlobalRotation = (Vector3) syncData["DollLeftLegRotation"];
 	}
 }

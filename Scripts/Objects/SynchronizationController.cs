@@ -11,7 +11,7 @@ public partial class SynchronizationController : Node
     
     public override void _Process(double delta)
     {
-        DebugInfo.AddLine(_lastSyncData?.ToString().Replace(", \"", ",\n\""));
+        //DebugInfo.AddLine(_lastSyncData?.ToString().Replace(", \"", ",\n\""));
         if (GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) Sync();
         base._Process(delta);
     }

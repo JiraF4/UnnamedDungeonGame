@@ -59,11 +59,4 @@ shape = SubResource("WorldBoundaryShape3D_hekjq")
 [node name="Character" parent="." instance=ExtResource("1_xkyd3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 60.2719)
 
-[node name="AIController" parent="Character" node_paths=PackedStringArray("TempTarget") instance=ExtResource("7_d51ji")]
-TempTarget = NodePath("../../Character2")
-
-[node name="Character2" parent="." instance=ExtResource("1_xkyd3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 63)
-
-[node name="AIController" parent="Character2" node_paths=PackedStringArray("TempTarget") instance=ExtResource("7_d51ji")]
-TempTarget = NodePath("../../Character")
+[node name="AIController" parent="Character" instance=ExtResource("7_d51ji")]
