@@ -3,7 +3,7 @@ using System;
 
 public partial class PlayerController : Node
 {
-	[Export] private RigidBody3D _character;
+	private CharacterDoll _character;
 	private CharacterControllerInputs _characterControllerInputs;
 	[Export] private TextureRect MapRect;
 	
@@ -61,19 +61,35 @@ public partial class PlayerController : Node
 	}
 	public override void _Ready()
 	{
+		base._Ready();
+	}
+	
+	public void SetInput(long peerID, NodePath characterPath)
+	{
+		RpcId(peerID, nameof(GetInput), characterPath);
+		Console.WriteLine("Generating");
+	}
+	
+	[Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void GetInput(NodePath characterPath)
+	{
+		_character = GetTree().Root.GetNode<CharacterDoll>(characterPath);
+			
 		RenderingServer.SetDebugGenerateWireframes(true);
-		_characterControllerInputs = (CharacterControllerInputs) _character.FindChild("CharacterControllerInputs");
+		_characterControllerInputs = (CharacterControllerInputs) _character.FindChild("ControllerInputs");
 		((Camera3D)_character.FindChild("Camera3D")).Current = true;
 		
 		_character.GetNode<Node3D>("BodyAnimation/Body/Neck/HeadAnimation/Head").Visible = false;
 		_characterControllerInputs.UIControl = true;
 		
 		Input.MouseMode = Input.MouseModeEnum.Captured;
-		
-		base._Ready();
 	}
+	
+	
 	public override void _Process(double delta)
 	{
+		if (_character == null) return;
+		
 		_moveVector = Vector3.Zero;
 		_moveVector.X += Input.IsActionPressed("Right") ? -1.0f : 0.0f;
 		_moveVector.X += Input.IsActionPressed("Left") ? 1.0f : 0.0f;
@@ -118,6 +134,8 @@ public partial class PlayerController : Node
 	}
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_character == null) return;
+		
 		UpdateCursorRayCast();
 		base._PhysicsProcess(delta);
 	}

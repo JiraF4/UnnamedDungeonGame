@@ -24,7 +24,9 @@ public partial class HumanoidUIController : Node
     {
         DebugInfo.AddLine(Controller.StateController.State.ToString());
         Controller.StanceIndicator.ShowIndicator();
-        Controller.StanceIndicator.SetStance(CombatController.Stance);
+        Controller.StanceIndicator.SetStance(CombatController.AttackStance);
+
+        CombatController.CharacterTarget?.InfoBar.Show();
         
         if (Controller.StateController.State != HumanoidState.Interact)
         {

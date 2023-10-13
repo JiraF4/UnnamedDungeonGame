@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://papevgd8dnoh"]
+
+[ext_resource type="Script" path="res://Scripts/UI/MainMenu.cs" id="1_mwds6"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mwds6")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 167.0
+offset_top = 106.0
+offset_right = 568.0
+offset_bottom = 230.0
+text = "Connect
+"
+
+[node name="IpTextEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 231.0
+offset_top = 260.0
+offset_right = 506.0
+offset_bottom = 315.0
+text = "127.0.0.1"
+
+[connection signal="pressed" from="Button" to="." method="Connect"]

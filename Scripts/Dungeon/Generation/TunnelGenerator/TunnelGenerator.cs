@@ -40,9 +40,6 @@ public partial class TunnelGenerator : MapGenerator
             }
         );
         
-        
-        Random = new Random(7);
-
         var maxDistance = (MapHolder.Map.Size / 2).Length() + 1;
         for (var x = 0; x < MapHolder.Map.Size.X; x++)
         {

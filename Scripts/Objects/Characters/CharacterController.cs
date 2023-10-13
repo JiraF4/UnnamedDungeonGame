@@ -11,12 +11,15 @@ public partial class CharacterController : Node
 	[Export] public float MoveForce = 1350.0f;
 	[Export] public float MoveMaxSpeed = 5.0f;
 	
-	[Export] public CharacterControllerInputs CharacterControllerInputs { get; protected set; }
+	public CharacterControllerInputs ControllerInputs { get; protected set; }
+	public CharacterCharacteristics Characteristics { get; protected set; }
 	protected RigidBody3D CharacterBody;
 	public StanceIndicator StanceIndicator;
+	public InfoBar3D InfoBar { get; protected set; }
 	
 	protected Vector3 RotateInput;
 	protected Vector3 MoveInput;
+	public bool Dead { get; protected set; } = false;
 
 	public Node3D Target;
 	
@@ -33,19 +36,22 @@ public partial class CharacterController : Node
 		CharacterBody = GetParent<RigidBody3D>();
 		Target = CharacterBody.GetNode<Node3D>("Target");
 		StanceIndicator = CharacterBody.GetNode<StanceIndicator>("StanceIndicator");
-		CharacterControllerInputs = GetNode<CharacterControllerInputs>("CharacterControllerInputs");
+		ControllerInputs = GetNode<CharacterControllerInputs>("ControllerInputs");
 		CharacterInfo = GetNode<CharacterInfo>("CharacterInfo");
+		Characteristics = GetNode<CharacterCharacteristics>("Characteristics");
+		InfoBar = CharacterBody.GetNode<InfoBar3D>("InfoBar3D");
+		
 		base._Ready();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		RotateInput = CharacterControllerInputs.RotateInput;
-		MoveInput = CharacterControllerInputs.MoveInput;
+		RotateInput = ControllerInputs.RotateInput;
+		MoveInput = ControllerInputs.MoveInput;
 		UpdateState(delta);
 		base._PhysicsProcess(delta);
-		CharacterControllerInputs.PrimaryActionJustPressed = false;
-		CharacterControllerInputs.PrimaryActionJustReleased = false;
+		ControllerInputs.PrimaryActionJustPressed = false;
+		ControllerInputs.PrimaryActionJustReleased = false;
 	}
 
 

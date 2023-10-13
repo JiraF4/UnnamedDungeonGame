@@ -11,6 +11,9 @@ public partial class CharacterInfo : Node
 		base._Ready();
 	}
 
-	public virtual CombatStance CombatStance => CombatStance.None;
+	public virtual CombatStance AttackStance => CombatStance.None;
+	public virtual CombatStance BlockStance => CombatStance.None;
 	public virtual CharacterController CurrentTarget => null;
+	public virtual float MaxHealth => Controller.Characteristics.MaxHealth;
+	public virtual float Health => Controller.Characteristics.Health;
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://bnpka4m4iqnd5"]
+[gd_scene load_steps=63 format=3 uid="uid://bnpka4m4iqnd5"]
 
 [ext_resource type="PackedScene" uid="uid://cshg5vun327t5" path="res://Scenes/Characters/Character.tscn" id="1_4114j"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidController.cs" id="1_hv5ql"]
@@ -32,11 +32,15 @@
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidCombatController.cs" id="13_bpayf"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidUIController.cs" id="13_ow5ua"]
 [ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Bitmaps/Items/Usable/HealPotion.png" id="14_4pee4"]
+[ext_resource type="Animation" uid="uid://d3xc7kfyahf24" path="res://Animations/Character/Humanoid/WalkForward.res" id="15_btw3a"]
+[ext_resource type="Animation" uid="uid://d2ejtveh5jcpj" path="res://Animations/Character/Humanoid/WalkStand.res" id="16_5udyb"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumaniodInfo.cs" id="21_54v1h"]
 [ext_resource type="Script" path="res://Scripts/UI/StanceIndicator.cs" id="32_a0scy"]
 [ext_resource type="Texture2D" uid="uid://cjiq6jjrd24wm" path="res://Bitmaps/UI/Combat/StanceIndicator.png" id="32_gm6y3"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_tv07t"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_gj4ou"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0fb32"]
 animation = &"ShakeSoft"
@@ -46,16 +50,47 @@ blend_point_0/node = SubResource("AnimationNodeAnimation_0fb32")
 blend_point_0/pos = 0.0
 value_label = "0"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f1vb0"]
+animation = &"Walking/WalkStand"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_78yrt"]
+animation = &"Walking/WalkForward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pfwku"]
+animation = &"Walking/WalkBackward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_frdh8"]
+animation = &"Walking/WalkRight"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bb1s4"]
+animation = &"Walking/WalkLeft"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_u6idh"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_f1vb0")
+blend_point_0/pos = Vector2(0, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_78yrt")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_pfwku")
+blend_point_2/pos = Vector2(-1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_frdh8")
+blend_point_3/pos = Vector2(0, -1)
+blend_point_4/node = SubResource("AnimationNodeAnimation_bb1s4")
+blend_point_4/pos = Vector2(0, 1)
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_87rxd"]
-graph_offset = Vector2(-668.027, -231.986)
+graph_offset = Vector2(-547.349, -338.042)
 nodes/ActionsStateMachine/node = ExtResource("3_lh22k")
-nodes/ActionsStateMachine/position = Vector2(-760, -340)
-nodes/Add2/node = SubResource("AnimationNodeAdd2_tv07t")
-nodes/Add2/position = Vector2(-260, -340)
+nodes/ActionsStateMachine/position = Vector2(-720, -360)
+nodes/AddShake/node = SubResource("AnimationNodeAdd2_tv07t")
+nodes/AddShake/position = Vector2(-260, -360)
+nodes/AddWalk/node = SubResource("AnimationNodeAdd2_gj4ou")
+nodes/AddWalk/position = Vector2(40, -340)
 nodes/ShakeBlend/node = SubResource("AnimationNodeBlendSpace1D_xvp7v")
-nodes/ShakeBlend/position = Vector2(-520, -220)
-nodes/output/position = Vector2(-80, -320)
-node_connections = [&"output", 0, &"Add2", &"Add2", 0, &"ActionsStateMachine", &"Add2", 1, &"ShakeBlend"]
+nodes/ShakeBlend/position = Vector2(-500, -220)
+nodes/WalkSpace2D/node = SubResource("AnimationNodeBlendSpace2D_u6idh")
+nodes/WalkSpace2D/position = Vector2(-260, -160)
+nodes/output/position = Vector2(320, -340)
+node_connections = [&"output", 0, &"AddWalk", &"AddShake", 0, &"ActionsStateMachine", &"AddShake", 1, &"ShakeBlend", &"AddWalk", 0, &"AddShake", &"AddWalk", 1, &"WalkSpace2D"]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_d62tw"]
 
@@ -149,6 +184,88 @@ resource_name = "CombatBlock"
 [sub_resource type="Animation" id="Animation_cxxt8"]
 resource_name = "CombatRepost"
 
+[sub_resource type="Animation" id="Animation_366rw"]
+resource_name = "Die"
+length = 0.5
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodyAnimation/Body/LeftShoulder/LeftArm")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.35, 0.123, 0.509, 0.24, 1, 0.661853, 0.0855832, 0.246463, 0.5, 1, 0.64457, 0.0840424, 0.218299)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BodyAnimation/Body/LeftShoulder/LeftArm")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, -0.210938, 0.055368, -0.247774, 0.943953, 0.5, 1, 1.11759e-07, -3.0268e-09, -1.86265e-09, 1)
+tracks/2/type = "position_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BodyAnimation/Body/RightShoulder/RightArm")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.722, -0.058, -0.016, 0.18, 1, -0.666426, 0.108924, 0.0788313, 0.5, 1, -0.521303, 0.02849, 0.416893)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BodyAnimation/Body/RightShoulder/RightArm")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, -0.439414, 0, 0.898284, 0.18, 1, -0.136769, -0.5086, 0.220753, 0.820909, 0.5, 1, -4.14711e-08, -0.439415, 5.18389e-08, 0.898285)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BodyAnimation/Body/BodyMesh")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0, -0.382683, 0, 0.92388, 0.14, 1, 0, -0.113445, -1.19369e-09, 0.993544, 0.5, 1, 1.86265e-09, 5.66302e-07, -1.46247e-09, 1)
+tracks/5/type = "position_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BodyAnimation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.18, 1, 0, 0, 0, 0.5, 1, 0, 0.962611, -0.251241)
+tracks/6/type = "position_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.2, 1, 0, 0, 0, 0.5, 1, -0.00190161, 0.0317056, -0.0674235)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("BodyAnimation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, 0.0191727, 0.00130782, -0.0226999, 0.999558, 0.24, 1, -0.0550341, 0.00298825, -0.0225403, 0.998226, 0.5, 1, 0.945995, -0.0173091, -0.0147442, 0.323382)
+tracks/8/type = "rotation_3d"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = PackedFloat32Array(0, 1, -0.0191925, 0.000435539, 0.0226832, 0.999558, 0.18, 1, -0.146546, -0.00246163, 0.0225534, 0.988944, 0.5, 1, -0.439854, 0.0194907, 0.0370951, 0.897091)
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("CharacterController/ItemManipulationController")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"DropItems"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_msinc"]
 resource_name = "ShakeSoft"
 length = 2.0
@@ -172,6 +289,7 @@ _data = {
 "CombatStanceSwordLeft": ExtResource("8_020en"),
 "CombatStanceSwordRight": ExtResource("9_83vhp"),
 "CombatStanceSwordUp": ExtResource("10_piiic"),
+"Die": SubResource("Animation_366rw"),
 "ShakeSoft": SubResource("Animation_msinc"),
 "StunnedCombat": ExtResource("5_b0s8w")
 }
@@ -182,6 +300,176 @@ _data = {
 "InteractionGrabbing": ExtResource("8_hp0hr"),
 "InteractionIdle": ExtResource("7_w32x3"),
 "InteractionPrepareGrabbing": ExtResource("9_27eon")
+}
+
+[sub_resource type="Animation" id="Animation_md22a"]
+length = 0.6
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftLeg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.24, 0.0134441, 0.299816, 0.1, 1, 0.24, 0.213079, 0.32977, 0.2, 1, 0.24, 0.254019, -0.211548, 0.3, 1, 0.24, 0.0629653, -0.287363, 0.5, 1, 0.24, 0.00534596, 0.000733495, 0.6, 1, 0.24, 0.00534596, 0.291863)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightLeg")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.24, 0.0535626, -0.26067, 0.2, 1, -0.24, 0.00505082, 0.0197126, 0.3, 1, -0.24, 0.0111159, 0.322972, 0.4, 1, -0.24, 0.211267, 0.33207, 0.5, 1, -0.24, 0.241593, -0.2047, 0.6, 1, -0.24, 0.0427666, -0.299367)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftLeg")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.0124875, 0, 0, 0.999922, 0.1, 1, -0.21799, 0, 0, 0.975951, 0.2, 1, 0.43571, 0, 0, 0.900087, 0.3, 1, 0.200155, 0, 0, 0.979764, 0.5, 1, 0, 0, 0, 1, 0.6, 1, 0, 0, 0, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RightLeg")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.187741, 0, 0, 0.982219, 0.2, 1, -0.00951192, 0, 0, 0.999955, 0.3, 1, -0.00788011, 0, 0, 0.999969, 0.4, 1, -0.207143, 0, 0, 0.978311, 0.5, 1, 0.443188, 0, 0, 0.896428, 0.6, 1, 0.15727, 0, 0, 0.987556)
+tracks/4/type = "position_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BodyAnimation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.2, 1, 0, 0.09, 0, 0.3, 1, 0, 0, 0, 0.5, 1, 0, 0.09, 0, 0.6, 1, 0, 0, 0)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BodyAnimation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, 0, 0, -0.01, 1, 0.3, 1, 0, 0, 0, 1, 0.5, 1, 0, 0, 0.01, 1, 0.6, 1, 0, 0, 0, 1)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, 0, 0, 0.00959917, 0.999954, 0.3, 1, 0, 0, 0, 1, 0.5, 1, 0, 0, -0.00959917, 0.999954, 0.6, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_u3wdj"]
+length = 0.3
+loop_mode = 1
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftLeg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.24, 0, 0, 0.1, 1, 0.311098, 0.121882, 0, 0.15, 1, 0.293323, -0.00507833, 0, 0.2, 1, 0.140971, -0.0203136, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightLeg")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.24, 0, 0, 0.1, 1, -0.356803, 0, 0, 0.15, 1, -0.246348, 0.142195, 0, 0.2, 1, -0.124466, -0.0203136, 0)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftLeg")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0.0533294, 0.998577, 0.15, 1, 0, 0, 0, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RightLeg")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, -0.00678928, 0.999977)
+tracks/4/type = "position_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BodyAnimation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.15, 1, 0, 0.140124, 0, 0.25, 1, 0, -0.0405159, 0)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BodyAnimation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0.0133077, 0.999911)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, -0.0130896, 0.999914)
+
+[sub_resource type="Animation" id="Animation_3v327"]
+length = 0.3
+loop_mode = 1
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftLeg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.24, 0, 0, 0.1, 1, 0.357, 0, 0, 0.15, 1, 0.246, 0.142, 0, 0.2, 1, 0.124, -0.02, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightLeg")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.24, 0, 0, 0.1, 1, -0.311, 0.122, 0, 0.15, 1, -0.293, -0.005, 0, 0.2, 1, -0.141, -0.02, 0)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftLeg")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0.007, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RightLeg")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, -0.053, 0.999, 0.15, 1, 0, 0, 0, 1)
+tracks/4/type = "position_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BodyAnimation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.15, 1, 0, 0.140124, 0, 0.25, 1, 0, -0.0405159, 0)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("BodyAnimation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, -0.013, 1)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BodyAnimation/Body/Neck/HeadAnimation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0.013, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ehoo4"]
+_data = {
+"WalkBackward": SubResource("Animation_md22a"),
+"WalkForward": ExtResource("15_btw3a"),
+"WalkLeft": SubResource("Animation_u3wdj"),
+"WalkRight": SubResource("Animation_3v327"),
+"WalkStand": ExtResource("16_5udyb")
 }
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_g6lxf"]
@@ -207,20 +495,99 @@ parameters/ActionsStateMachine/conditions/StanceNone = false
 parameters/ActionsStateMachine/conditions/StanceRight = false
 parameters/ActionsStateMachine/conditions/StanceUp = false
 parameters/ActionsStateMachine/CombatBlock/playback = SubResource("AnimationNodeStateMachinePlayback_r0clx")
-parameters/Add2/add_amount = 1.0
+parameters/AddShake/add_amount = 1.0
+parameters/AddWalk/add_amount = 1.0
 parameters/ShakeBlend/blend_position = 0.0
+parameters/WalkSpace2D/blend_position = Vector2(0, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
 libraries = {
 "": SubResource("AnimationLibrary_ju6my"),
-"Interaction": SubResource("AnimationLibrary_rif6f")
+"Interaction": SubResource("AnimationLibrary_rif6f"),
+"Walking": SubResource("AnimationLibrary_ehoo4")
 }
-blend_times = [&"CombatAttackUpSword", &"CombatRepost", 0.1, &"CombatAttackUpSword", &"CombatIdle", 0.1, &"CombatAttackUpSword", &"CombatAttackUpSword", 0.1, &"CombatAttackUpSword", &"StunnedCombat", 0.1]
+blend_times = [&"CombatAttackUpSword", &"StunnedCombat", 0.1, &"CombatAttackUpSword", &"CombatAttackUpSword", 0.1, &"CombatAttackUpSword", &"CombatIdle", 0.1, &"CombatAttackUpSword", &"CombatRepost", 0.1]
 
-[node name="Target" parent="." index="2"]
+[node name="InfoBar3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68569, 0)
+
+[node name="Target" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86124, 0)
 
-[node name="CharacterController" parent="." index="3"]
+[node name="BodyAnimation" type="Node3D" parent="." index="4"]
+transform = Transform3D(0.998966, 0.0454299, 0.00174404, -0.0453295, 0.998235, -0.0383878, -0.00348491, 0.0382691, 0.999261, 0, 0, 0)
+
+[node name="Body" type="Node3D" parent="BodyAnimation" index="0"]
+transform = Transform3D(1, 4.67116e-09, 0, -2.57569e-09, 1, 0, -4.65661e-10, 3.72529e-09, 1, 1.96451e-09, 0.479416, 1.86265e-09)
+
+[node name="BodyMesh" type="MeshInstance3D" parent="BodyAnimation/Body" index="0"]
+transform = Transform3D(0.709106, 0, -0.705102, 0, 1, 0, 0.705102, 0, 0.709106, 0, 0, 0)
+mesh = ExtResource("3_1ux3v")
+
+[node name="LeftShoulder" type="Node3D" parent="BodyAnimation/Body" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.231567, 0.41743, 0)
+
+[node name="LeftArm" type="Node3D" parent="BodyAnimation/Body/LeftShoulder" index="0"]
+transform = Transform3D(0.999993, -0.00375245, 0.000481054, 0.00375246, 0.999993, 1.80514e-06, -0.000481057, 3.63798e-12, 1, 0.35, 0.1232, 0.509)
+script = ExtResource("4_2geo0")
+
+[node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="0"]
+transform = Transform3D(0.5, 0.866026, 3.78552e-08, 0, -4.37114e-08, 1, 0.866026, -0.5, -2.18557e-08, -0.0807939, 0, 0.0445577)
+mesh = ExtResource("6_ekled")
+skeleton = NodePath("../../../../..")
+
+[node name="ArmSlot" type="Node3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="1" node_paths=PackedStringArray("SlotRect")]
+transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0.012, 0)
+script = ExtResource("7_6h1r1")
+SlotRect = NodePath("../../../../../WeaponLeftRect")
+
+[node name="Shield" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm/ArmSlot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -3.38813e-21, 0, 1, 0.0146261, -0.20823, 0.0332574)
+visible = false
+mesh = ExtResource("8_y6oyg")
+skeleton = NodePath("../../../../../..")
+
+[node name="RightShoulder" type="Node3D" parent="BodyAnimation/Body" index="2"]
+transform = Transform3D(0.966286, -0.0687614, -0.248121, 0.126375, 0.966274, 0.224376, 0.224324, -0.248168, 0.942387, 0.157946, 0.432428, -0.0206431)
+
+[node name="RightArm" type="Node3D" parent="BodyAnimation/Body/RightShoulder" index="0"]
+transform = Transform3D(0.62038, -0.00487033, -0.78429, 0.00296145, 0.999988, -0.00386728, 0.784298, 7.65515e-05, 0.620387, -0.721, -0.057, -0.0155)
+script = ExtResource("4_2geo0")
+
+[node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="0"]
+transform = Transform3D(0.5, -0.866026, -3.78552e-08, 0, -4.37114e-08, 1, -0.866026, -0.5, -2.18557e-08, 0.081, 0, 0.045)
+mesh = ExtResource("9_dombv")
+skeleton = NodePath("../../../../..")
+
+[node name="ArmSlot" type="Node3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="1" node_paths=PackedStringArray("SlotRect")]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, -2.98023e-08, 1, -3.72529e-09, 0, -3.72529e-09, 1, -4.47035e-08, 0.0117928, 5.96046e-08)
+script = ExtResource("7_6h1r1")
+SlotRect = NodePath("../../../../../WeaponRightRect")
+
+[node name="Dagger" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm/ArmSlot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0120574, -0.104212, -0.0234121)
+visible = false
+mesh = ExtResource("10_sofcg")
+skeleton = NodePath("../../../../../..")
+
+[node name="Neck" type="Node3D" parent="BodyAnimation/Body" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.708, 0)
+
+[node name="HeadAnimation" type="Node3D" parent="BodyAnimation/Body/Neck" index="0"]
+transform = Transform3D(0.998971, -0.045363, -5.82076e-11, 0.0453296, 0.998234, 0.0383878, -0.00174139, -0.0383483, 0.999263, 0, 0, 0)
+
+[node name="Head" type="MeshInstance3D" parent="BodyAnimation/Body/Neck/HeadAnimation" index="0"]
+mesh = ExtResource("4_w3hy4")
+skeleton = NodePath("../../../../..")
+
+[node name="Camera3D2" type="Camera3D" parent="BodyAnimation/Body/Neck/HeadAnimation/Head" index="0"]
+transform = Transform3D(-1, 3.8012e-08, -7.87263e-08, 6.93889e-18, 0.900524, 0.434807, 8.74228e-08, 0.434807, -0.900524, -1.65211e-07, 0.731787, -1.82187)
+
+[node name="Camera3D" type="Camera3D" parent="BodyAnimation/Body/Neck/HeadAnimation/Head" index="1"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9.23157e-09, 0.238865, -0.0376767)
+fov = 85.0
+
+[node name="CharacterController" parent="." index="5"]
 script = ExtResource("1_hv5ql")
 RotationSpeed = Vector2(1.3, 1.3)
 MoveForce = 1550.0
@@ -244,85 +611,12 @@ script = ExtResource("13_bpayf")
 [node name="CharacterInfo" parent="CharacterController" index="6"]
 script = ExtResource("21_54v1h")
 
-[node name="BodyAnimation" type="Node3D" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 0.999243, 0.038911, 0, -0.038911, 0.999242, 0.0234122, 0.005853, 0)
-
-[node name="Body" type="Node3D" parent="BodyAnimation" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.479416, 0)
-
-[node name="BodyMesh" type="MeshInstance3D" parent="BodyAnimation/Body" index="0"]
-transform = Transform3D(0.68053, 0, -0.732721, 0, 1, 0, 0.732721, 0, 0.68053, 0, 0, 0)
-mesh = ExtResource("3_1ux3v")
-
-[node name="LeftShoulder" type="Node3D" parent="BodyAnimation/Body" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.231567, 0.41743, 0)
-
-[node name="LeftArm" type="Node3D" parent="BodyAnimation/Body/LeftShoulder" index="0"]
-transform = Transform3D(0.975673, 0.0201669, -0.218304, 0, 0.99576, 0.0919883, 0.219233, -0.0897504, 0.971536, 0.305614, 0.176979, 0.460927)
-script = ExtResource("4_2geo0")
-
-[node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="0"]
-transform = Transform3D(0.5, 0.866026, 3.78552e-08, 0, -4.37114e-08, 1, 0.866026, -0.5, -2.18557e-08, -0.0807939, 0, 0.0445577)
-mesh = ExtResource("6_ekled")
-skeleton = NodePath("../../../../..")
-
-[node name="ArmSlot" type="Node3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="1" node_paths=PackedStringArray("SlotRect")]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0.012, 0)
-script = ExtResource("7_6h1r1")
-SlotRect = NodePath("../../../../../WeaponLeftRect")
-
-[node name="Shield" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm/ArmSlot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, -3.38813e-21, 0, 1, 0.0146261, -0.20823, 0.0332574)
-visible = false
-mesh = ExtResource("8_y6oyg")
-skeleton = NodePath("../../../../../..")
-
-[node name="RightShoulder" type="Node3D" parent="BodyAnimation/Body" index="2"]
-transform = Transform3D(0.966286, -0.0687614, -0.248121, 0.126375, 0.966274, 0.224376, 0.224324, -0.248168, 0.942387, 0.157946, 0.432428, -0.0206431)
-
-[node name="RightArm" type="Node3D" parent="BodyAnimation/Body/RightShoulder" index="0"]
-transform = Transform3D(0.386471, -0.0371544, -0.921557, -0.111153, 0.990029, -0.0865294, 0.915582, 0.135874, 0.378488, -0.696504, 0.146311, -0.132531)
-script = ExtResource("4_2geo0")
-
-[node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="0"]
-transform = Transform3D(0.5, -0.866026, -3.78552e-08, 0, -4.37114e-08, 1, -0.866026, -0.5, -2.18557e-08, 0.081, 0, 0.045)
-mesh = ExtResource("9_dombv")
-skeleton = NodePath("../../../../..")
-
-[node name="ArmSlot" type="Node3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="1" node_paths=PackedStringArray("SlotRect")]
-transform = Transform3D(1, -2.98023e-08, -1.49012e-08, -2.98023e-08, 1, -3.72529e-09, 0, -3.72529e-09, 1, -4.47035e-08, 0.0117928, 5.96046e-08)
-script = ExtResource("7_6h1r1")
-SlotRect = NodePath("../../../../../WeaponRightRect")
-
-[node name="Dagger" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm/ArmSlot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0120574, -0.104212, -0.0234121)
-visible = false
-mesh = ExtResource("10_sofcg")
-skeleton = NodePath("../../../../../..")
-
-[node name="Neck" type="Node3D" parent="BodyAnimation/Body" index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.708, 0)
-
-[node name="HeadAnimation" type="Node3D" parent="BodyAnimation/Body/Neck" index="0"]
-transform = Transform3D(1, 0, 0, 0, 0.999263, -0.0383878, 0, 0.0383878, 0.999263, 0, 0, 0)
-
-[node name="Head" type="MeshInstance3D" parent="BodyAnimation/Body/Neck/HeadAnimation" index="0"]
-mesh = ExtResource("4_w3hy4")
-skeleton = NodePath("../../../../..")
-
-[node name="Camera3D2" type="Camera3D" parent="BodyAnimation/Body/Neck/HeadAnimation/Head" index="0"]
-transform = Transform3D(-1, 3.8012e-08, -7.87263e-08, 6.93889e-18, 0.900524, 0.434807, 8.74228e-08, 0.434807, -0.900524, -1.65211e-07, 0.731787, -1.82187)
-
-[node name="Camera3D" type="Camera3D" parent="BodyAnimation/Body/Neck/HeadAnimation/Head" index="1"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9.23157e-09, 0.238865, -0.0376767)
-fov = 85.0
-
 [node name="LeftLeg" type="MeshInstance3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0, 0)
 mesh = ExtResource("11_dc7i7")
 
 [node name="RightLeg" type="MeshInstance3D" parent="." index="7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.24, 0, 0)
 mesh = ExtResource("12_2ajt2")
 
 [node name="WeaponLeftRect" parent="." index="8" instance=ExtResource("13_63tmf")]

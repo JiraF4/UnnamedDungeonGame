@@ -21,7 +21,7 @@ public partial class HumanoidItemManipulationController : Node
     {
         Controller = GetParent<HumanoidController>();
         Doll = Controller.GetParent<HumanoidDoll>();
-        CharacterControllerInputs = Controller.GetNode<CharacterControllerInputs>("CharacterControllerInputs");
+        CharacterControllerInputs = Controller.GetNode<CharacterControllerInputs>("ControllerInputs");
         Doll.GetNode<TextureRect>("GrabbedItemTextureRect");
         GrabbingArm = Doll.LeftArm;
         
@@ -83,5 +83,11 @@ public partial class HumanoidItemManipulationController : Node
         Doll.LeftArm.ItemSlot.DropItem();
         CurrentStorage?.InsertItem(new Vector2I(), item);
         if (CurrentItem != null) Doll.LeftArm.ItemSlot.InsertItem(new Vector2I(), CurrentItem);
+    }
+
+    public void DropItems()
+    {
+        Doll.LeftArm.ItemSlot.DropItem();
+        Doll.RightArm.ItemSlot.DropItem();
     }
 }

@@ -4,7 +4,6 @@ using DeepDungeon.Dungeon;
 
 public partial class MapGenerator : Node
 {
-	[Export] public TextureRect DebugTextureRect;
 	public MapHolder MapHolder;
 	public Random Random;
 	
@@ -27,7 +26,7 @@ public partial class MapGenerator : Node
 		}
 		
 		var debugTexture = ImageTexture.CreateFromImage(debugImage);
-		DebugTextureRect.Texture = debugTexture;
-		DebugTextureRect.TextureFilter = CanvasItem.TextureFilterEnum.Nearest;
+		MapHolder.DebugTextureRect.Texture = debugTexture;
+		MapHolder.DebugTextureRect.TextureFilter = CanvasItem.TextureFilterEnum.Nearest;
 	}
 }

@@ -11,6 +11,7 @@ public partial class HumanoidController : CharacterController
 	public HumanoidItemManipulationController ItemManipulationController { get; protected set; }
 	public HumanoidCombatController CombatController { get; protected set; }
 	public HumanoidUIController UIController { get; protected set; }
+	public HumanoidAnimationController AnimationController { get; protected set; }
 	
 	protected float XRotation;
 	
@@ -43,6 +44,7 @@ public partial class HumanoidController : CharacterController
 		ItemManipulationController = GetNode<HumanoidItemManipulationController>("ItemManipulationController");
 		CombatController = GetNode<HumanoidCombatController>("CombatController");
 		UIController = GetNode<HumanoidUIController>("UIController");
+		AnimationController = GetNode<HumanoidAnimationController>("AnimationController");
         CallDeferred(nameof(ReadyItemsGrab)); // TODO: This should be done in a better way
 	}
 
@@ -57,7 +59,7 @@ public partial class HumanoidController : CharacterController
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		if (CharacterControllerInputs.UIControl) UIController.UpdateUI(delta);
+		if (ControllerInputs.UIControl) UIController.UpdateUI(delta);
 		
 		// TODO: Transfer to animation
 		//var bodyPosition = _bodyBasePosition;
@@ -67,19 +69,46 @@ public partial class HumanoidController : CharacterController
         
 	}
 
+	void Die()
+	{
+		AnimationController.Die();
+		CharacterBody.Freeze = true;
+		CharacterBody.CollisionLayer = 0;
+		Dead = true;
+	}
+
 	public override void UpdateState(double delta)
 	{
+		if (Characteristics.Health <= 0)
+		{
+			if (!Dead) Die();
+			return;
+		}
+		
 		StateController.UpdateState();
 		
 		ItemManipulationController.UpdateTarget();
-		if (CharacterControllerInputs.PrimaryActionJustPressed) ItemManipulationController.UpdateTargetFocus(); 
-		if (CharacterControllerInputs.PrimaryActionJustReleased) ItemManipulationController.ClearTargetFocus(); 
+		if (ControllerInputs.PrimaryActionJustPressed) ItemManipulationController.UpdateTargetFocus(); 
+		if (ControllerInputs.PrimaryActionJustReleased) ItemManipulationController.ClearTargetFocus(); 
 		
-		if (!CharacterControllerInputs.InteractMode) CombatController.UpdateState();
+		if (!ControllerInputs.InteractMode) CombatController.UpdateState();
 		CombatController.ChangeStance(delta);
 		if (StateController.State == HumanoidState.Combat) RotateInput *= 0.1f;
 		if (StateController.State == HumanoidState.Combat) CombatController.RotateToTarget(delta);
-		
+
+		if (StateController.Action == HumanoidAction.Attack)
+		{
+			var target = CombatController.CharacterTarget;
+			if (target != null)
+			{
+				var targetVectorHorizontal = target.Target.GlobalPosition - Target.GlobalPosition;
+				targetVectorHorizontal.Y = 0.0f;
+				
+				var speed = targetVectorHorizontal.Length() - 1.55f;
+				speed = Mathf.Clamp(speed*4.0f, -1.00f, 1.00f);
+				MoveInput = targetVectorHorizontal.Normalized().Rotated(Vector3.Up, -Doll.GlobalRotation.Y) * speed;
+			}
+		}
 		
 		/*
 		if (State == HumanoidState.Grabbing)

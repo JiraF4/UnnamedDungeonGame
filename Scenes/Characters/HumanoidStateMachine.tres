@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeStateMachine" load_steps=47 format=3 uid="uid://ccsascnl0fng6"]
+[gd_resource type="AnimationNodeStateMachine" load_steps=48 format=3 uid="uid://ccsascnl0fng6"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h2ehe"]
 animation = &"CombatAttackLeftSword"
@@ -25,6 +25,9 @@ animation = &"CombatStanceSwordUp"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gs7mn"]
 animation = &"StunnedCombat"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0ny5y"]
+animation = &"Die"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ocl0n"]
 animation = &"Interaction/InteractionIdle"
@@ -70,11 +73,6 @@ advance_condition = &"DropItem"
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_d5b72"]
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ww1e0"]
-xfade_time = 0.1
-switch_mode = 2
-advance_mode = 2
-
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xjmou"]
 xfade_time = 0.1
 advance_mode = 2
@@ -86,32 +84,32 @@ advance_mode = 2
 advance_condition = &"Idle"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tr16v"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceUp"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a72j6"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceUp"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u3n2n"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceRight"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_531tq"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceRight"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_73tto"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceLeft"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gs02d"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceLeft"
 
@@ -156,29 +154,32 @@ advance_mode = 2
 advance_condition = &"Combat"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qvlp4"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceUp"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pvcs5"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceRight"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nmkbe"]
-xfade_time = 0.1
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceLeft"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8a5eq"]
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceNone"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_q8i3d"]
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceNone"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bmqib"]
+xfade_time = 0.05
 advance_mode = 2
 advance_condition = &"StanceNone"
 
@@ -191,6 +192,10 @@ advance_condition = &"Interaction"
 xfade_time = 0.1
 advance_mode = 2
 advance_condition = &"Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dleqe"]
+switch_mode = 2
+advance_mode = 2
 
 [resource]
 states/CombatAttackLeft/node = SubResource("AnimationNodeAnimation_h2ehe")
@@ -210,7 +215,9 @@ states/CombatStanceRight/position = Vector2(657, 55)
 states/CombatStanceUp/node = SubResource("AnimationNodeAnimation_6vqga")
 states/CombatStanceUp/position = Vector2(631, -51)
 states/CombatStun/node = SubResource("AnimationNodeAnimation_gs7mn")
-states/CombatStun/position = Vector2(34, -51)
+states/CombatStun/position = Vector2(230, 55)
+states/Die/node = SubResource("AnimationNodeAnimation_0ny5y")
+states/Die/position = Vector2(94, -156)
 states/End/position = Vector2(1124, 49)
 states/Idle/node = SubResource("AnimationNodeAnimation_ocl0n")
 states/Idle/position = Vector2(216, -51)
@@ -223,5 +230,5 @@ states/InteractionIdle/position = Vector2(386, -51)
 states/InteractionPrepareGrabbing/node = SubResource("AnimationNodeAnimation_3hs0a")
 states/InteractionPrepareGrabbing/position = Vector2(386, -156)
 states/Start/position = Vector2(94, 55)
-transitions = ["InteractionIdle", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_sltah"), "InteractionPrepareGrabbing", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_lid5n"), "InteractionPrepareGrabbing", "InteractionGrabbing", SubResource("AnimationNodeStateMachineTransition_yxjxi"), "InteractionGrabbing", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_fjsus"), "InteractionDrop", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_c5qyw"), "InteractionPrepareGrabbing", "InteractionDrop", SubResource("AnimationNodeStateMachineTransition_sv3cv"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_d5b72"), "CombatStun", "Idle", SubResource("AnimationNodeStateMachineTransition_ww1e0"), "Idle", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_xjmou"), "InteractionIdle", "Idle", SubResource("AnimationNodeStateMachineTransition_fynr3"), "CombatStanceRight", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_tr16v"), "CombatStanceLeft", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_a72j6"), "CombatStanceUp", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_u3n2n"), "CombatStanceLeft", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_531tq"), "CombatStanceRight", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_73tto"), "CombatStanceUp", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_gs02d"), "CombatStanceUp", "CombatAttackUp", SubResource("AnimationNodeStateMachineTransition_wg4qr"), "CombatStanceRight", "CombatAttackRight", SubResource("AnimationNodeStateMachineTransition_du5om"), "CombatStanceLeft", "CombatAttackLeft", SubResource("AnimationNodeStateMachineTransition_qrv2s"), "CombatAttackLeft", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_s68xt"), "CombatAttackRight", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_g3o66"), "CombatAttackUp", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_sdllf"), "InteractionIdle", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_wjvp4"), "Idle", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_26w1o"), "CombatIdle", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_qvlp4"), "CombatIdle", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_pvcs5"), "CombatIdle", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_nmkbe"), "CombatStanceUp", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_8a5eq"), "CombatStanceRight", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_q8i3d"), "CombatStanceLeft", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_bmqib"), "CombatIdle", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_wxia6"), "CombatIdle", "Idle", SubResource("AnimationNodeStateMachineTransition_1qoe6")]
-graph_offset = Vector2(-80, -111.521)
+transitions = ["InteractionIdle", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_sltah"), "InteractionPrepareGrabbing", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_lid5n"), "InteractionPrepareGrabbing", "InteractionGrabbing", SubResource("AnimationNodeStateMachineTransition_yxjxi"), "InteractionGrabbing", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_fjsus"), "InteractionDrop", "InteractionPrepareGrabbing", SubResource("AnimationNodeStateMachineTransition_c5qyw"), "InteractionPrepareGrabbing", "InteractionDrop", SubResource("AnimationNodeStateMachineTransition_sv3cv"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_d5b72"), "Idle", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_xjmou"), "InteractionIdle", "Idle", SubResource("AnimationNodeStateMachineTransition_fynr3"), "CombatStanceRight", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_tr16v"), "CombatStanceLeft", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_a72j6"), "CombatStanceUp", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_u3n2n"), "CombatStanceLeft", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_531tq"), "CombatStanceRight", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_73tto"), "CombatStanceUp", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_gs02d"), "CombatStanceUp", "CombatAttackUp", SubResource("AnimationNodeStateMachineTransition_wg4qr"), "CombatStanceRight", "CombatAttackRight", SubResource("AnimationNodeStateMachineTransition_du5om"), "CombatStanceLeft", "CombatAttackLeft", SubResource("AnimationNodeStateMachineTransition_qrv2s"), "CombatAttackLeft", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_s68xt"), "CombatAttackRight", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_g3o66"), "CombatAttackUp", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_sdllf"), "InteractionIdle", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_wjvp4"), "Idle", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_26w1o"), "CombatIdle", "CombatStanceUp", SubResource("AnimationNodeStateMachineTransition_qvlp4"), "CombatIdle", "CombatStanceRight", SubResource("AnimationNodeStateMachineTransition_pvcs5"), "CombatIdle", "CombatStanceLeft", SubResource("AnimationNodeStateMachineTransition_nmkbe"), "CombatStanceUp", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_8a5eq"), "CombatStanceRight", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_q8i3d"), "CombatStanceLeft", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_bmqib"), "CombatIdle", "InteractionIdle", SubResource("AnimationNodeStateMachineTransition_wxia6"), "CombatIdle", "Idle", SubResource("AnimationNodeStateMachineTransition_1qoe6"), "CombatStun", "CombatIdle", SubResource("AnimationNodeStateMachineTransition_dleqe")]
+graph_offset = Vector2(-270, -210.521)

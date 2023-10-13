@@ -12,7 +12,8 @@ public enum HumanoidState
 public enum HumanoidAction
 {
 	Idle,
-	Grabbing
+	Grabbing,
+	Attack,
 }
 
 public partial class HumanoidStateController : Node
@@ -30,7 +31,7 @@ public partial class HumanoidStateController : Node
 	{
 		Controller = GetParent<HumanoidController>();
 		Doll = Controller.GetParent<HumanoidDoll>();
-		CharacterControllerInputs = Controller.GetNode<CharacterControllerInputs>("CharacterControllerInputs");
+		CharacterControllerInputs = Controller.GetNode<CharacterControllerInputs>("ControllerInputs");
 		AnimationController = Controller.GetNode<HumanoidAnimationController>("AnimationController");
 		CombatController = Controller.GetNode<HumanoidCombatController>("CombatController");
 		
@@ -62,6 +63,9 @@ public partial class HumanoidStateController : Node
 		if (animation.EndsWith("Grabbing"))
 		{
 			Action = HumanoidAction.Grabbing;
+		} if (animation.Contains("Attack"))
+		{
+			Action = HumanoidAction.Attack;
 		}
 		else Action = HumanoidAction.Idle;
 	}

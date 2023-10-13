@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Deep Dungeon"
-run/main_scene="res://Scenes/World.tscn"
+run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.0", "C#", "Forward Plus")
+
+[autoload]
+
+Network="*res://Scripts/Singletons/Network.cs"
 
 [display]
 

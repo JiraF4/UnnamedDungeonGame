@@ -7,9 +7,11 @@
   <ItemGroup>
     <Compile Remove="Objects\**" />
     <Compile Remove="Scripts\Objects\Items\Weapon\**" />
+    <Compile Remove="Singletons\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Objects\**" />
     <EmbeddedResource Remove="Scripts\Objects\Items\Weapon\**" />
+    <EmbeddedResource Remove="Singletons\**" />
   </ItemGroup>
 </Project>

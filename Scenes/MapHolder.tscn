@@ -17,9 +17,8 @@ MapGenerator = NodePath("MapGenerator")
 MapMeshBaker = NodePath("MapMeshBaker")
 TestMaterial = SubResource("ShaderMaterial_af4ex")
 
-[node name="MapGenerator" type="Node" parent="." node_paths=PackedStringArray("DebugTextureRect")]
+[node name="MapGenerator" type="Node" parent="."]
 script = ExtResource("4_e4iif")
-DebugTextureRect = NodePath("../../MapRect")
 
 [node name="MapMeshBaker" type="Node" parent="."]
 script = ExtResource("5_28lvs")
