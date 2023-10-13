@@ -6,6 +6,7 @@ public partial class HumanoidUIController : Node
     public HumanoidDoll Doll { get; protected set; }
     public HumanoidStateController StateController { get; protected set; }
     public HumanoidItemManipulationController ItemManipulationController { get; protected set; }
+    public HumanoidCombatController CombatController { get; protected set; }
     
     public TextureRect GrabbedItemTextureRect { get; protected set; }
     
@@ -16,13 +17,15 @@ public partial class HumanoidUIController : Node
         StateController = Controller.GetNode<HumanoidStateController>("StateController");
         ItemManipulationController = Controller.GetNode<HumanoidItemManipulationController>("ItemManipulationController");
         GrabbedItemTextureRect = Doll.GetNode<TextureRect>("GrabbedItemTextureRect");
+        CombatController = Controller.GetNode<HumanoidCombatController>("CombatController");
     }
     
     public void UpdateUI(double delta)
     {
         DebugInfo.AddLine(Controller.StateController.State.ToString());
+        Controller.StanceIndicator.ShowIndicator();
+        Controller.StanceIndicator.SetStance(CombatController.Stance);
         
-
         if (Controller.StateController.State != HumanoidState.Interact)
         {
             GrabbedItemTextureRect.Visible = false;

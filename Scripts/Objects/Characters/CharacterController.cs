@@ -13,15 +13,17 @@ public partial class CharacterController : Node
 	
 	[Export] public CharacterControllerInputs CharacterControllerInputs { get; protected set; }
 	protected RigidBody3D CharacterBody;
-
+	public StanceIndicator StanceIndicator;
+	
 	protected Vector3 RotateInput;
 	protected Vector3 MoveInput;
 
 	public Node3D Target;
 	
+	public CharacterInfo CharacterInfo { get; protected set; }
+	
 	public override void _Process(double delta)
 	{
-		DebugInfo.AddLine("MoveSpeed: " + CharacterBody.LinearVelocity.Length().ToString());
 		base._Process(delta);
 	}
 
@@ -30,7 +32,9 @@ public partial class CharacterController : Node
 		CharacterControllers.Add(this);
 		CharacterBody = GetParent<RigidBody3D>();
 		Target = CharacterBody.GetNode<Node3D>("Target");
+		StanceIndicator = CharacterBody.GetNode<StanceIndicator>("StanceIndicator");
 		CharacterControllerInputs = GetNode<CharacterControllerInputs>("CharacterControllerInputs");
+		CharacterInfo = GetNode<CharacterInfo>("CharacterInfo");
 		base._Ready();
 	}
 

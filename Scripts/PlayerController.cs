@@ -155,6 +155,10 @@ public partial class PlayerController : Node
 		}
 
 		//if (Input.IsActionPressed("OpenMenu")) GetTree().Quit();
-		if (Input.IsActionPressed("OpenMenu")) Input.MouseMode = Input.MouseModeEnum.Visible;
+		if (Input.IsActionJustPressed("OpenMenu"))
+		{
+			if (Input.MouseMode == Input.MouseModeEnum.Captured) Input.MouseMode = Input.MouseModeEnum.Visible;
+			else if (Input.MouseMode == Input.MouseModeEnum.Visible) Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
 	}
 }

@@ -74,10 +74,10 @@ public partial class HumanoidAnimationController : Node
         AnimationTree.Set(_combat, CombatController.HasTarget() && CharacterControllerInputs.InteractMode);
         AnimationTree.Set(_idle, !CharacterControllerInputs.InteractMode);
         
-        AnimationTree.Set(_stanceNone, CombatController.Stance == HumanoidCombatStance.None || !CharacterControllerInputs.InteractMode);
-        AnimationTree.Set(_stanceUp, CombatController.Stance == HumanoidCombatStance.Up);
-        AnimationTree.Set(_stanceLeft, CombatController.Stance == HumanoidCombatStance.Left);
-        AnimationTree.Set(_stanceRight, CombatController.Stance == HumanoidCombatStance.Right);
+        AnimationTree.Set(_stanceNone, CombatController.Stance == CombatStance.None || !CharacterControllerInputs.InteractMode);
+        AnimationTree.Set(_stanceUp, CombatController.Stance == CombatStance.Up);
+        AnimationTree.Set(_stanceLeft, CombatController.Stance == CombatStance.Left);
+        AnimationTree.Set(_stanceRight, CombatController.Stance == CombatStance.Right);
         AnimationTree.Set(_attack, CharacterControllerInputs.PrimaryActionJustPressed);
         
         AnimationTree.Set(_grabItem, CharacterControllerInputs.PrimaryActionJustPressed && ItemManipulationController.CurrentItem != null && Doll.LeftArm.ItemSlot.Item == null);

@@ -78,7 +78,6 @@ public partial class Inventory : Storage
 			}
 			else _inventoryRect.Visible = false;
 		}
-		DebugInfo.AddLine("InventoryVisible: " + _inventoryVisible.ToString());
 		_inventoryVisible = false;
 		base._Process(delta);
 	}

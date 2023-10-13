@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://bnpka4m4iqnd5"]
+[gd_scene load_steps=49 format=3 uid="uid://bnpka4m4iqnd5"]
 
 [ext_resource type="PackedScene" uid="uid://cshg5vun327t5" path="res://Scenes/Characters/Character.tscn" id="1_4114j"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidController.cs" id="1_hv5ql"]
@@ -32,6 +32,9 @@
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidCombatController.cs" id="13_bpayf"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidUIController.cs" id="13_ow5ua"]
 [ext_resource type="Texture2D" uid="uid://cr2ktrka7lkfr" path="res://Bitmaps/Items/Usable/HealPotion.png" id="14_4pee4"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumaniodInfo.cs" id="21_54v1h"]
+[ext_resource type="Script" path="res://Scripts/UI/StanceIndicator.cs" id="32_a0scy"]
+[ext_resource type="Texture2D" uid="uid://cjiq6jjrd24wm" path="res://Bitmaps/UI/Combat/StanceIndicator.png" id="32_gm6y3"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_tv07t"]
 
@@ -44,6 +47,7 @@ blend_point_0/pos = 0.0
 value_label = "0"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_87rxd"]
+graph_offset = Vector2(-668.027, -231.986)
 nodes/ActionsStateMachine/node = ExtResource("3_lh22k")
 nodes/ActionsStateMachine/position = Vector2(-760, -340)
 nodes/Add2/node = SubResource("AnimationNodeAdd2_tv07t")
@@ -237,21 +241,24 @@ script = ExtResource("13_ow5ua")
 [node name="CombatController" type="Node" parent="CharacterController" index="5"]
 script = ExtResource("13_bpayf")
 
+[node name="CharacterInfo" parent="CharacterController" index="6"]
+script = ExtResource("21_54v1h")
+
 [node name="BodyAnimation" type="Node3D" parent="." index="4"]
-transform = Transform3D(0.998966, 0.0454299, 0.00174404, -0.0453296, 0.998235, -0.0383878, -0.00348491, 0.0382691, 0.999261, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999243, 0.038911, 0, -0.038911, 0.999242, 0.0234122, 0.005853, 0)
 
 [node name="Body" type="Node3D" parent="BodyAnimation" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.479416, 0)
 
 [node name="BodyMesh" type="MeshInstance3D" parent="BodyAnimation/Body" index="0"]
-transform = Transform3D(0.707108, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707108, 0, 0, 0)
+transform = Transform3D(0.68053, 0, -0.732721, 0, 1, 0, 0.732721, 0, 0.68053, 0, 0, 0)
 mesh = ExtResource("3_1ux3v")
 
 [node name="LeftShoulder" type="Node3D" parent="BodyAnimation/Body" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.231567, 0.41743, 0)
 
 [node name="LeftArm" type="Node3D" parent="BodyAnimation/Body/LeftShoulder" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0.123, 0.509)
+transform = Transform3D(0.975673, 0.0201669, -0.218304, 0, 0.99576, 0.0919883, 0.219233, -0.0897504, 0.971536, 0.305614, 0.176979, 0.460927)
 script = ExtResource("4_2geo0")
 
 [node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm" index="0"]
@@ -274,7 +281,7 @@ skeleton = NodePath("../../../../../..")
 transform = Transform3D(0.966286, -0.0687614, -0.248121, 0.126375, 0.966274, 0.224376, 0.224324, -0.248168, 0.942387, 0.157946, 0.432428, -0.0206431)
 
 [node name="RightArm" type="Node3D" parent="BodyAnimation/Body/RightShoulder" index="0"]
-transform = Transform3D(0.613832, 0, -0.789441, 0, 1, 0, 0.78944, 0, 0.613832, -0.722, -0.058, -0.016)
+transform = Transform3D(0.386471, -0.0371544, -0.921557, -0.111153, 0.990029, -0.0865294, 0.915582, 0.135874, 0.378488, -0.696504, 0.146311, -0.132531)
 script = ExtResource("4_2geo0")
 
 [node name="ArmMesh" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm" index="0"]
@@ -297,7 +304,7 @@ skeleton = NodePath("../../../../../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.708, 0)
 
 [node name="HeadAnimation" type="Node3D" parent="BodyAnimation/Body/Neck" index="0"]
-transform = Transform3D(0.998971, -0.045363, -3.49246e-10, 0.0453296, 0.998234, 0.0383878, -0.00174139, -0.0383483, 0.999263, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999263, -0.0383878, 0, 0.0383878, 0.999263, 0, 0, 0)
 
 [node name="Head" type="MeshInstance3D" parent="BodyAnimation/Body/Neck/HeadAnimation" index="0"]
 mesh = ExtResource("4_w3hy4")
@@ -340,7 +347,7 @@ offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="." index="10"]
+[node name="StanceIndicator" type="TextureRect" parent="." index="10"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -353,57 +360,66 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("CanvasTexture_g6lxf")
+script = ExtResource("32_a0scy")
 
-[node name="StanceLeftRect" type="TextureRect" parent="." index="11"]
+[node name="StanceLeftRect" type="TextureRect" parent="StanceIndicator" index="0"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -6.0
-offset_top = 3.0
-offset_right = -4.0
-offset_bottom = 5.0
+offset_left = -56.0
+offset_top = -25.0
+offset_right = 40.0
+offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("CanvasTexture_g6lxf")
+rotation = -2.0944
+pivot_offset = Vector2(48, 32)
+texture = ExtResource("32_gm6y3")
 
-[node name="StanceRightRect" type="TextureRect" parent="." index="12"]
+[node name="StanceRightRect" type="TextureRect" parent="StanceIndicator" index="1"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 4.0
-offset_top = 3.0
-offset_right = 6.0
-offset_bottom = 5.0
+offset_left = -40.0
+offset_top = -25.0
+offset_right = 56.0
+offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("CanvasTexture_g6lxf")
+rotation = 2.0944
+pivot_offset = Vector2(48, 32)
+texture = ExtResource("32_gm6y3")
 
-[node name="StanceUpRect" type="TextureRect" parent="." index="13"]
+[node name="StanceUpRect" type="TextureRect" parent="StanceIndicator" index="2"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -1.0
-offset_top = -7.0
-offset_right = 1.0
-offset_bottom = -5.0
+offset_left = -48.0
+offset_top = -42.0
+offset_right = 48.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("CanvasTexture_g6lxf")
+pivot_offset = Vector2(48, 32)
+texture = ExtResource("32_gm6y3")
 
-[node name="GrabbedItemTextureRect" type="TextureRect" parent="." index="14"]
+[node name="GrabbedItemTextureRect" type="TextureRect" parent="." index="11"]
 visible = false
 modulate = Color(1, 1, 1, 0.501961)
 offset_right = 2.0
 offset_bottom = 2.0
 texture = ExtResource("14_4pee4")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="16"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.442765, 0.897497)
 visible = false
 mesh = ExtResource("3_1ux3v")

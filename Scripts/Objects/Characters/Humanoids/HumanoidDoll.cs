@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class HumanoidDoll : RigidBody3D
+public partial class HumanoidDoll : CharacterDoll
 {
 	public Node3D Body { get; protected set; }
 	public Node3D Head { get; protected set; }
@@ -23,5 +23,7 @@ public partial class HumanoidDoll : RigidBody3D
 
         LeftShoulderPosition = new Vector3(0.3f, 0.2f, 0.0f);
         RightShoulderPosition = new Vector3(-0.3f, 0.2f, 0.0f);
+        
+        base._Ready();
 	}
 }

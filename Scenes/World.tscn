@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://5e2v27lnoo8d"]
+[gd_scene load_steps=12 format=3 uid="uid://5e2v27lnoo8d"]
 
 [ext_resource type="Script" path="res://Scripts/Services/CharactersService.cs" id="1_gl1fr"]
 [ext_resource type="PackedScene" uid="uid://bnpka4m4iqnd5" path="res://Scenes/Characters/Humanoid.tscn" id="1_xkyd3"]
 [ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="2_w508y"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="3_uuy7c"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/Controllers/AIController.cs" id="5_tcavx"]
 [ext_resource type="PackedScene" uid="uid://dvrbqc15ce0ia" path="res://Scenes/Items/Weapon/Dagger.tscn" id="9_kajuk"]
 [ext_resource type="PackedScene" uid="uid://rpq0m35ewjn4" path="res://Scenes/Items/Shield/shield.tscn" id="10_lun7p"]
 [ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scenes/Items/Usable/Potion.tscn" id="10_se5vu"]
@@ -16,17 +17,28 @@ plane = Plane(0, -1, 0, 0)
 
 [node name="World" type="Node3D"]
 
+[node name="Debug info" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("2_w508y")
+
 [node name="CharactersService" type="Node" parent="."]
 script = ExtResource("1_gl1fr")
 
 [node name="Character2" parent="." instance=ExtResource("1_xkyd3")]
 transform = Transform3D(-0.955726, 0, 0.294257, 0, 1, 0, -0.294257, 0, -0.955726, 29.2092, 0, 41.6167)
 
-[node name="Character3" parent="." instance=ExtResource("1_xkyd3")]
-transform = Transform3D(0.269138, 0, 0.963101, 0, 1, 0, -0.963101, 0, 0.269138, 28.9229, 9.53674e-07, 36.2067)
+[node name="RightArmItem" type="Node" parent="Character2"]
 
-[node name="Character4" parent="." instance=ExtResource("1_xkyd3")]
-transform = Transform3D(0.789288, 0, -0.614023, 0, 1, 0, 0.614023, 0, 0.789288, 33.7156, 9.53674e-07, 36.7431)
+[node name="Item" parent="Character2/RightArmItem" instance=ExtResource("9_kajuk")]
+
+[node name="LeftArmItem" type="Node" parent="Character2"]
+
+[node name="Shield" parent="Character2/LeftArmItem" instance=ExtResource("10_lun7p")]
+
+[node name="AIController" type="Node" parent="Character2" node_paths=PackedStringArray("TempTarget")]
+script = ExtResource("5_tcavx")
+TempTarget = NodePath("../../Character")
 
 [node name="MapRect" type="TextureRect" parent="."]
 clip_contents = true
@@ -39,11 +51,6 @@ offset_bottom = 256.0
 grow_horizontal = 0
 expand_mode = 5
 
-[node name="Debug info" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("2_w508y")
-
 [node name="DownBorder" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DownBorder"]
@@ -55,11 +62,6 @@ shape = SubResource("WorldBoundaryShape3D_gkjlw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("WorldBoundaryShape3D_hekjq")
 
-[node name="PlayerController" type="Node" parent="." node_paths=PackedStringArray("_character", "MapRect")]
-script = ExtResource("3_uuy7c")
-_character = NodePath("../Character")
-MapRect = NodePath("../MapRect")
-
 [node name="Character" parent="." instance=ExtResource("1_xkyd3")]
 transform = Transform3D(-0.983054, 0, -0.183317, 0, 1, 0, 0.183317, 0, -0.983054, 32.1523, 0, 41.5594)
 
@@ -70,6 +72,11 @@ transform = Transform3D(-0.983054, 0, -0.183317, 0, 1, 0, 0.183317, 0, -0.983054
 [node name="LeftArmItem" type="Node" parent="Character"]
 
 [node name="Shield" parent="Character/LeftArmItem" instance=ExtResource("10_lun7p")]
+
+[node name="PlayerController" type="Node" parent="Character" node_paths=PackedStringArray("_character", "MapRect")]
+script = ExtResource("3_uuy7c")
+_character = NodePath("..")
+MapRect = NodePath("../../MapRect")
 
 [node name="Item" parent="." instance=ExtResource("10_se5vu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.459, -1.19209e-07, 39.4477)

@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cshg5vun327t5"]
+[gd_scene load_steps=7 format=3 uid="uid://cshg5vun327t5"]
 
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterDoll.cs" id="1_a7dhm"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterController.cs" id="1_iq0oo"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterControllerInputs.cs" id="2_buxug"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterCharacteristics.cs" id="3_e7i10"]
+[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterInfo.cs" id="3_j0fng"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0r38w"]
 radius = 0.25
@@ -14,6 +16,7 @@ collision_mask = 5
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 mass = 90.0
+script = ExtResource("1_a7dhm")
 
 [node name="Target" type="Node3D" parent="."]
 
@@ -22,6 +25,9 @@ script = ExtResource("1_iq0oo")
 
 [node name="CharacterControllerInputs" type="Node" parent="CharacterController"]
 script = ExtResource("2_buxug")
+
+[node name="CharacterInfo" type="Node" parent="CharacterController"]
+script = ExtResource("3_j0fng")
 
 [node name="CharacterCharacteristics" type="Node" parent="."]
 script = ExtResource("3_e7i10")
