@@ -64,9 +64,10 @@ public partial class Inventory : Storage
 	private void AddRect()
 	{
 		GetParent().AddChild(_inventoryRect);
+		RegenerateMatrix();
 	}
 
-	private void RegenerateClientMatrix()
+	private void RegenerateMatrix()
 	{
 		for (var x = 0; x < InventorySize.X; x++)
 		{
@@ -96,7 +97,7 @@ public partial class Inventory : Storage
 		if (_inventoryVisible)
 		{
 			if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority())
-				RegenerateClientMatrix();
+				RegenerateMatrix();
 			var camera3D = GetViewport().GetCamera3D();
 			var inventoryScreenPosition = camera3D.UnprojectPosition(GlobalPosition);
 			if (!camera3D.IsPositionBehind(GlobalPosition))

@@ -11,14 +11,13 @@ public partial class ItemSynchronizationController : SynchronizationController
         Item = GetParent<Item>();
         base._Ready();
     }
-
-    public override void _Process(double delta)
+    
+    public override void _PhysicsProcess(double delta)
     {
-        //DebugInfo.AddLine(Item.GetPath());
-        //DebugInfo.AddLine(_temp?.ToString().Replace(", \"", ",\n\""));
-        base._Process(delta);
+        if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) Item.Freeze = true;
+        base._PhysicsProcess(delta);
     }
-
+    
     protected override void CollectSyncData(Dictionary syncData)
     {
         syncData["Position"] = Item.Position;
@@ -28,10 +27,8 @@ public partial class ItemSynchronizationController : SynchronizationController
     }
 
 
-    private Dictionary _temp;
     protected override void ApplySyncData(Dictionary syncData)
     {
-        _temp = syncData;
         if (syncData.ContainsKey("Position")) Item.Position = (Vector3) syncData["Position"];
         if (syncData.ContainsKey("Rotation")) Item.Quaternion = (Quaternion) syncData["Rotation"];
         if (syncData.ContainsKey("ItemInventoryPosition")) Item.ItemInventoryPosition = (Vector2I) syncData["ItemInventoryPosition"];

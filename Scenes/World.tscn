@@ -51,18 +51,6 @@ shape = SubResource("WorldBoundaryShape3D_gkjlw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("WorldBoundaryShape3D_hekjq")
 
-[node name="Item2" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 60.9222)
-
-[node name="Item3" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 60.9222)
-
-[node name="Item4" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5549, 0, 60.9222)
-
-[node name="Item5" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 61.182)
-
 [node name="Item6" parent="." instance=ExtResource("9_402xu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 61.182)
 
@@ -77,6 +65,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 61.4312)
 
 [node name="Item10" parent="." instance=ExtResource("9_402xu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5549, 0, 61.4312)
+
+[node name="Item2" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 60.9222)
+
+[node name="Item3" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 60.9222)
+
+[node name="Item4" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5549, 0, 60.9222)
+
+[node name="Item5" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 61.182)
 
 [node name="Furniture" parent="." instance=ExtResource("7_mhdpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5352, -2.38419e-07, 59.5774)
