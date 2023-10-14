@@ -6,6 +6,9 @@ public partial class SynchronizationController : Node
 {
     private Dictionary _lastSendSyncData = new();
     private Dictionary _lastSendSyncDataUnique = new();
+    private ulong _lastPackedTime = 0;
+    private ulong _lastSendPackedTime = 0;
+    private ulong _minimumSendPackedTime = 25; 
     
     public override void _Ready()
     {
@@ -21,6 +24,9 @@ public partial class SynchronizationController : Node
     void Sync()
     {
         //DebugInfo.AddLine(_lastSendSyncDataUnique?.ToString().Replace(", \"", ",\n\""));
+        if (Time.GetTicksMsec() - _lastSendPackedTime < _minimumSendPackedTime) return;
+        _lastSendPackedTime = Time.GetTicksMsec();
+        
         var syncData = new Dictionary();
         CollectSyncData(syncData);
         
@@ -36,16 +42,20 @@ public partial class SynchronizationController : Node
         Rpc(nameof(SyncRemote), syncDataUnique);
     }
 
-    [Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered)]
+    [Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
     void SyncRemote(Dictionary syncData)
     {
+        var syncTime = (ulong) syncData["SyncTime"];
+        if (_lastPackedTime > syncTime) return;
+        syncData["SyncDelay"] = (syncTime - _lastPackedTime) / 1000.0f;
+        _lastPackedTime = syncTime;
         ApplySyncData(syncData);
     }
 
     
     protected virtual void CollectSyncData(Dictionary syncData)
     {
-        
+        syncData["SyncTime"] = Time.GetTicksMsec();
     }
     
     protected virtual void ApplySyncData(Dictionary syncData)

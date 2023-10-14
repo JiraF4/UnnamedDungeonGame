@@ -7,7 +7,7 @@ script = ExtResource("1_7u4ku")
 TempTarget = NodePath("")
 
 [node name="ChangeStanceTimer" type="Timer" parent="."]
-wait_time = 1.2
+wait_time = 0.2
 autostart = true
 
 [node name="AttackTimer" type="Timer" parent="."]

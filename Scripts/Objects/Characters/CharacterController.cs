@@ -24,10 +24,13 @@ public partial class CharacterController : Node
 
 	public Node3D Target;
 	
+	protected SynchronizationInterpolator SynchronizationInterpolator;
+	
 	public CharacterInfo CharacterInfo { get; protected set; }
 	
 	public override void _Process(double delta)
 	{
+		if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) SynchronizationInterpolator.Interpolate(delta);
 		base._Process(delta);
 	}
 
@@ -54,6 +57,8 @@ public partial class CharacterController : Node
 		CharacterInfo = GetNode<CharacterInfo>("CharacterInfo");
 		Characteristics = GetNode<CharacterCharacteristics>("Characteristics");
 		InfoBar = CharacterDoll.GetNode<InfoBar3D>("InfoBar3D");
+
+		SynchronizationInterpolator = new SynchronizationInterpolator(CharacterDoll);
 		
 		base._Ready();
 	}
@@ -110,7 +115,6 @@ public partial class CharacterController : Node
 		
 	}
 
-
 	public virtual void CollectSyncData(Dictionary syncData)
 	{
 		syncData["GlobalPosition"] = CharacterDoll.GlobalPosition;
@@ -123,6 +127,7 @@ public partial class CharacterController : Node
 	{
 		if (syncData.ContainsKey("GlobalPosition")) CharacterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
 		if (syncData.ContainsKey("GlobalRotation")) CharacterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
+		SynchronizationInterpolator.Next(CharacterDoll.Position, CharacterDoll.Quaternion, (float) syncData["SyncDelay"]);
 		CharacterInfo.ApplySyncData(syncData);
 		CharacterDoll.ApplySyncData(syncData);
 	}

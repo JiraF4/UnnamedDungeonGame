@@ -67,8 +67,8 @@ public partial class AIController : Node
 		var targetInfo = TempTarget.CharacterInfo;
 		var info = _character.CharacterInfo;
 		
-		if (targetInfo.BlockStance != info.AttackStance)
-			if (GD.Randi() % 8 == 0) _characterControllerInputs.PrimaryActionJustPressed = true;
+		//if (targetInfo.BlockStance != info.AttackStance)
+			//if (GD.Randi() % 8 == 0) _characterControllerInputs.PrimaryActionJustPressed = true;
 		_characterControllerInputs.ScreenPositionMove = targetInfo.AttackStance switch
 		{
 			CombatStance.Left => new Vector2(150.0f, 150.0f),

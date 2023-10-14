@@ -17,7 +17,7 @@ public partial class Network : Node
     }
     
     // global settings
-    public const int MaxTPS = 60;
+    public const int MaxTPS = 40;
     private const int Port = 3333;
     private const int MaxPlayers = 2;
 
