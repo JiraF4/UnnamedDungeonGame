@@ -12,8 +12,8 @@ public partial class Inventory : Storage
 	private NinePatchRect _inventoryRect;
 
 	private Item[,] _itemsMatrix;
-	private readonly List<Item> _items = new();
-	
+	protected List<Item> Items => GetChildren().Cast<Item>().ToList();
+
 	[Export] public Vector2I InventorySize = new(6, 6);
 	private bool _inventoryVisible;
 
@@ -58,7 +58,36 @@ public partial class Inventory : Storage
 		_inventoryRect = (NinePatchRect) InventoryRectScene.Instantiate();
 		_inventoryRect.Size = InventorySize*InventoryCellSize + new Vector2(InventoryBorderSize, InventoryBorderSize);
 		_itemsMatrix = new Item[InventorySize.X, InventorySize.Y];
-		AddChild(_inventoryRect);
+		CallDeferred(nameof(AddRect));
+	}
+
+	private void AddRect()
+	{
+		GetParent().AddChild(_inventoryRect);
+	}
+
+	private void RegenerateClientMatrix()
+	{
+		for (var x = 0; x < InventorySize.X; x++)
+		{
+			for (var y = 0; y < InventorySize.Y; y++)
+			{
+				_itemsMatrix[x, y] = null;
+			}	
+		}
+
+		foreach (var item in Items)
+		{
+			var inventoryPosition = item.ItemInventoryPosition;
+			for (var x = 0; x < item.ItemInventoryMatrixSize.X; x++)
+			{
+				for (var y = 0; y < item.ItemInventoryMatrixSize.Y; y++)
+				{
+					var inventoryPositionSet = new Vector2I(inventoryPosition.X + x, inventoryPosition.Y + y);
+					if (item.ItemInventoryMatrix[x, y]) _itemsMatrix[inventoryPositionSet.X, inventoryPositionSet.Y] = item;
+				}	
+			}
+		}
 	}
 
 	public override void _Process(double delta)
@@ -66,12 +95,14 @@ public partial class Inventory : Storage
 		_inventoryRect.Visible = _inventoryVisible;
 		if (_inventoryVisible)
 		{
+			if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority())
+				RegenerateClientMatrix();
 			var camera3D = GetViewport().GetCamera3D();
 			var inventoryScreenPosition = camera3D.UnprojectPosition(GlobalPosition);
 			if (!camera3D.IsPositionBehind(GlobalPosition))
 			{
 				_inventoryRect.Position = inventoryScreenPosition - _inventoryRect.Size / 2;
-				foreach (var item in _items)
+				foreach (var item in Items)
 				{
 					item.InsideInventoryDraw(_inventoryRect.Position);
 				}
@@ -111,12 +142,7 @@ public partial class Inventory : Storage
         return _itemsMatrix[inventoryRectPosition.X, inventoryRectPosition.Y];
 	}
 	
-	public bool InsertItemScreenPosition(Vector2 screenPosition, Item holdItem)
-	{
-		return InsertItem(GetInventoryPosition(screenPosition), holdItem);
-	}
-	
-	public override bool InsertItem(Vector2I inventoryPosition, Item item)
+	public override bool InsertItemServer(Vector2I inventoryPosition, Item item)
 	{
 		if (!IsItemFit(inventoryPosition, item)) inventoryPosition = _randomPosition;
 		if (!IsItemFit(inventoryPosition, item)) return false;
@@ -129,7 +155,6 @@ public partial class Inventory : Storage
 				if (item.ItemInventoryMatrix[x, y]) _itemsMatrix[inventoryPositionSet.X, inventoryPositionSet.Y]= item;
 			}	
 		}
-		_items.Add(item);
 		
 		item.Store(this, inventoryPosition);
 		
@@ -157,11 +182,22 @@ public partial class Inventory : Storage
 		return (Vector2I) ((screenPosition + new Vector2(InventoryCellSize, InventoryCellSize) - _inventoryRect.Position - InventoryBorderVector) / InventoryCellSize) - new Vector2I(1, 1);
 	}
 	
+	public override Vector2I GetInventoryPositionOrRandomFree(Vector2 screenPosition, Item item)
+	{
+		if (item == null) return new Vector2I(-1, -1);
+		var inventoryPosition = GetInventoryPosition(screenPosition);
+		if (!IsItemFit(inventoryPosition, item))
+		{
+			inventoryPosition = GetRandomFreePosition(item);
+		}
+		return inventoryPosition;
+	}
+	
 	public Vector2 GetScreenPosition(Vector2I inventoryPosition)
 	{
 		return _inventoryRect.Position + InventoryBorderVector + inventoryPosition * InventoryCellSize;
 	}
-
+	
 	public Vector2 AlignPosition(Vector2 screenPosition)
 	{
 		return GetScreenPosition(GetInventoryPosition(screenPosition));
@@ -169,22 +205,14 @@ public partial class Inventory : Storage
 	
 	public override Vector2 AlignPositionItem(Vector2 screenPosition, Item item)
 	{
-		if (item != null && !IsItemFit(GetInventoryPosition(screenPosition), item))
-		{
-			var randomPosition = GetRandomFreePosition(item);
-            if (randomPosition != new Vector2I(-1, -1))
-            {
-                return GetScreenPosition(randomPosition);
-            }
-
-            return screenPosition;
-		}
-		var inventoryPosition = GetInventoryPosition(screenPosition);
+		if (item == null) return screenPosition;
+		var inventoryPosition = GetInventoryPositionOrRandomFree(screenPosition, item);
+		if (inventoryPosition == new Vector2I(-1, -1)) return screenPosition;
 		_randomPosition = inventoryPosition;
 		return GetScreenPosition(inventoryPosition);
 	}
 
-	public override void ExtractItem(Item item)
+	public override void ExtractItemServer(Item item)
 	{
 		for (var x = 0; x < item.ItemInventoryMatrixSize.X; x++)
 		{
@@ -194,7 +222,6 @@ public partial class Inventory : Storage
                 if (item.ItemInventoryMatrix[x, y]) _itemsMatrix[inventoryPositionSet.X, inventoryPositionSet.Y] = null;
             }
 		}
-		_items.Remove(item);
-		item.Extract(GetTree().Root);
+		base.ExtractItemServer(item);
 	}
 }

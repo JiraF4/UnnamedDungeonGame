@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://bnpka4m4iqnd5"]
+[gd_scene load_steps=61 format=3 uid="uid://bnpka4m4iqnd5"]
 
 [ext_resource type="PackedScene" uid="uid://cshg5vun327t5" path="res://Scenes/Characters/Character.tscn" id="1_4114j"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidController.cs" id="1_hv5ql"]
@@ -17,7 +17,6 @@
 [ext_resource type="Animation" uid="uid://dsba4j2g527a7" path="res://Animations/Character/Humanoid/CombatStanceSwordLeft.res" id="8_020en"]
 [ext_resource type="Animation" uid="uid://brgtstu4ehvn" path="res://Animations/Character/Humanoid/InteractionGrabbing.res" id="8_hp0hr"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidAnimationController.cs" id="8_mcoms"]
-[ext_resource type="ArrayMesh" uid="uid://d107b5b7e2bes" path="res://Models/Items/Shield.vox" id="8_y6oyg"]
 [ext_resource type="Animation" uid="uid://dxxwnteahcwpl" path="res://Animations/Character/Humanoid/InteractionPrepareGrabbing.res" id="9_27eon"]
 [ext_resource type="Animation" uid="uid://d18qaw47k7qqb" path="res://Animations/Character/Humanoid/CombatStanceSwordRight.res" id="9_83vhp"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidItemManipulationController.cs" id="9_ciu6x"]
@@ -25,7 +24,6 @@
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/Humanoids/HumanoidStateController.cs" id="10_b8hiu"]
 [ext_resource type="Animation" uid="uid://cl0mge8sm1dq3" path="res://Animations/Character/Humanoid/CombatStanceSwordUp.res" id="10_piiic"]
 [ext_resource type="Animation" uid="uid://dvkhswhnr2kwa" path="res://Animations/Character/Humanoid/InteractionDrop.res" id="10_r3gyd"]
-[ext_resource type="ArrayMesh" uid="uid://dhkf15pbxgipd" path="res://Models/Items/Dagger.vox" id="10_sofcg"]
 [ext_resource type="ArrayMesh" uid="uid://cmy6jucg8qtpo" path="res://Models/Characters/Goblin/GoblinLL.vox" id="11_dc7i7"]
 [ext_resource type="ArrayMesh" uid="uid://drysav07mu4fy" path="res://Models/Characters/Goblin/GoblinLR.vox" id="12_2ajt2"]
 [ext_resource type="PackedScene" uid="uid://w1ulq8p6qvng" path="res://Scenes/Inventory/InventoryRect.tscn" id="13_63tmf"]
@@ -505,7 +503,7 @@ libraries = {
 "Interaction": SubResource("AnimationLibrary_rif6f"),
 "Walking": SubResource("AnimationLibrary_ehoo4")
 }
-blend_times = [&"CombatAttackUpSword", &"CombatRepost", 0.1, &"CombatAttackUpSword", &"CombatIdle", 0.1, &"CombatAttackUpSword", &"CombatAttackUpSword", 0.1, &"CombatAttackUpSword", &"StunnedCombat", 0.1]
+blend_times = [&"CombatAttackUpSword", &"CombatIdle", 0.1, &"CombatAttackUpSword", &"StunnedCombat", 0.1, &"CombatAttackUpSword", &"CombatAttackUpSword", 0.1, &"CombatAttackUpSword", &"CombatRepost", 0.1]
 
 [node name="InfoBar3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68569, 0)
@@ -540,12 +538,6 @@ transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0.012
 script = ExtResource("7_6h1r1")
 SlotRect = NodePath("../../../../../WeaponLeftRect")
 
-[node name="Shield" type="MeshInstance3D" parent="BodyAnimation/Body/LeftShoulder/LeftArm/ArmSlot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, -3.38813e-21, 0, 1, 0.0146261, -0.20823, 0.0332574)
-visible = false
-mesh = ExtResource("8_y6oyg")
-skeleton = NodePath("../../../../../..")
-
 [node name="RightShoulder" type="Node3D" parent="BodyAnimation/Body" index="2"]
 transform = Transform3D(0.966286, -0.0687614, -0.248121, 0.126375, 0.966274, 0.224376, 0.224324, -0.248168, 0.942387, 0.157946, 0.432428, -0.0206431)
 
@@ -562,12 +554,6 @@ skeleton = NodePath("../../../../..")
 transform = Transform3D(1, -2.98023e-08, -1.49012e-08, -2.98023e-08, 1, -3.72529e-09, 0, -3.72529e-09, 1, -4.47035e-08, 0.0117928, 5.96046e-08)
 script = ExtResource("7_6h1r1")
 SlotRect = NodePath("../../../../../WeaponRightRect")
-
-[node name="Dagger" type="MeshInstance3D" parent="BodyAnimation/Body/RightShoulder/RightArm/ArmSlot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0120574, -0.104212, -0.0234121)
-visible = false
-mesh = ExtResource("10_sofcg")
-skeleton = NodePath("../../../../../..")
 
 [node name="Neck" type="Node3D" parent="BodyAnimation/Body" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.708, 0)

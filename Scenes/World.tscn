@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://dd6wke7puqws8" path="res://Scenes/MapHolder.tscn" id="1_xbsrr"]
 [ext_resource type="PackedScene" uid="uid://bnpka4m4iqnd5" path="res://Scenes/Characters/Humanoid.tscn" id="1_xkyd3"]
 [ext_resource type="Script" path="res://Scripts/Services/PlayersService.cs" id="2_kaa0g"]
-[ext_resource type="Script" path="res://Scripts/DebugInfo.cs" id="2_w508y"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="3_uuy7c"]
-[ext_resource type="PackedScene" uid="uid://ddr10px57mwmb" path="res://Scenes/Characters/AIController.tscn" id="7_d51ji"]
+[ext_resource type="PackedScene" uid="uid://t4dhjm8j2122" path="res://Scenes/Furniture/Chest.tscn" id="7_mhdpl"]
+[ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scenes/Items/Usable/Potion.tscn" id="9_402xu"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_gkjlw"]
 
@@ -28,11 +28,6 @@ DebugTextureRect = NodePath("../MapRect")
 
 [node name="CharactersService" type="Node" parent="."]
 script = ExtResource("1_gl1fr")
-
-[node name="Debug info" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("2_w508y")
 
 [node name="MapRect" type="TextureRect" parent="."]
 clip_contents = true
@@ -56,7 +51,32 @@ shape = SubResource("WorldBoundaryShape3D_gkjlw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("WorldBoundaryShape3D_hekjq")
 
-[node name="Character" parent="." instance=ExtResource("1_xkyd3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 60.2719)
+[node name="Item2" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 60.9222)
 
-[node name="AIController" parent="Character" instance=ExtResource("7_d51ji")]
+[node name="Item3" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 60.9222)
+
+[node name="Item4" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5549, 0, 60.9222)
+
+[node name="Item5" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 61.182)
+
+[node name="Item6" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 61.182)
+
+[node name="Item7" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5549, 0, 61.182)
+
+[node name="Item8" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0966, 0, 61.4312)
+
+[node name="Item9" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.8171, 0, 61.4312)
+
+[node name="Item10" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5549, 0, 61.4312)
+
+[node name="Furniture" parent="." instance=ExtResource("7_mhdpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5352, -2.38419e-07, 59.5774)

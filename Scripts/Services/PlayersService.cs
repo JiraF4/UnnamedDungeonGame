@@ -20,14 +20,18 @@ public partial class PlayersService : Node
 
         foreach (var peerId in Multiplayer.GetPeers())
         {
-            Rpc(nameof(SpawnNewPlayer), peerId, position);    
+            SpawnNewPlayer(peerId, position);
         }
     }
     
-    [Rpc(CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    [Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     public void SpawnNewPlayer(long peerId, Vector3 position)
     {
-        if (ExistedPlayers.ContainsKey(peerId)) return;
+        if (ExistedPlayers.ContainsKey(peerId))
+        {
+            if (Network.IsServer) Rpc(nameof(SpawnNewPlayer), peerId, position);
+            return;
+        }
         
         // TODO: More elegant
         var newPlayer = playerScene.Instantiate<CharacterDoll>();
@@ -42,6 +46,7 @@ public partial class PlayersService : Node
             GetTree().Root.GetNode<PlayerController>("World/PlayerController").GetInput(newPlayer.GetPath());
         }
         ExistedPlayers[peerId] = newPlayer;
-            
+        
+        if (Network.IsServer) Rpc(nameof(SpawnNewPlayer), peerId, position);
     }
 }

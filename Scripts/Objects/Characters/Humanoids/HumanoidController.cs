@@ -52,9 +52,9 @@ public partial class HumanoidController : CharacterController
 	private void ReadyItemsGrab()
 	{
 		var leftItem = (Item) CharacterDoll.FindChild("LeftArmItem")?.GetChild(0);
-		if (leftItem != null) Doll.LeftArm.ItemSlot.InsertItem(Vector2I.Zero, leftItem);
+		//if (leftItem != null) Doll.LeftArm.ItemSlot.InsertItem(Vector2I.Zero, leftItem);
 		var rightItem = (Item) CharacterDoll.FindChild("RightArmItem")?.GetChild(0);
-		if (rightItem != null) Doll.RightArm.ItemSlot.InsertItem(Vector2I.Zero, rightItem);
+		//if (rightItem != null) Doll.RightArm.ItemSlot.InsertItem(Vector2I.Zero, rightItem);
 	}
 
 	public override void _Process(double delta)

@@ -11,8 +11,16 @@ public partial class Item : RigidBody3D
     public Vector2I ItemInventoryMatrixSize;
     
     [Export] public Vector2I ItemInventoryPosition;
-    public Storage Storage;
-    
+    public Storage Storage
+    {
+        get
+        {
+            var parent = GetParent();
+            if (parent is Storage storage) return storage;
+            return null;
+        }
+    }
+
     private bool _itemVisible;
     
     public override void _Ready()
@@ -41,11 +49,6 @@ public partial class Item : RigidBody3D
         _itemVisible = true;
     }
 
-    private void ExtractFromInventory()
-    {
-        Storage.ExtractItem(this);
-    }
-
     public void SetRectPosition(Vector2 position)
     {
         ItemRect.Position = position;
@@ -54,9 +57,14 @@ public partial class Item : RigidBody3D
     public override void _Process(double delta)
     {
         base._Process(delta);
-        
         ItemRect.Visible = _itemVisible;
         _itemVisible = false;
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) Freeze = true;
+        base._PhysicsProcess(delta);
     }
 
     public void Store(Storage storage, Vector2I inventoryPosition)
@@ -69,7 +77,6 @@ public partial class Item : RigidBody3D
         CollisionLayer = 0;
     
         ItemInventoryPosition = inventoryPosition;
-        Storage = storage;
     }
     
     public void Extract(Node space)
@@ -82,6 +89,18 @@ public partial class Item : RigidBody3D
         CollisionLayer = (uint) CollisionLayers.Items | (uint) CollisionLayers.All;
         
         ItemInventoryPosition = Vector2I.Zero;
-        Storage = null;
+    }
+    
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    public void TransferServer(NodePath storagePath, Vector2I inventoryPosition, bool replaceCurrent)
+    {
+        var storage = GetTree().Root.GetNodeOrNull<Storage>(storagePath);
+        Storage?.ExtractItemServer(this);
+        storage?.InsertItemServer(inventoryPosition, this);
+    }
+    
+    public void TransferClient(Storage storage, Vector2I inventoryPosition, bool replaceCurrent = true)
+    {
+        RpcId(1, nameof(TransferServer), storage?.GetPath(), inventoryPosition, replaceCurrent);
     }
 }

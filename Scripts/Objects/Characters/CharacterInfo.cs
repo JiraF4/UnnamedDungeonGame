@@ -15,6 +15,7 @@ public partial class CharacterInfo : Node
 	public override void _Process(double delta)
 	{
 		if (Multiplayer.GetUniqueId() == GetMultiplayerAuthority()) ReadInfo(delta);
+		
 		base._Process(delta);
 	}
 

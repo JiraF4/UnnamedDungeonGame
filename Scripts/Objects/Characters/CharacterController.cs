@@ -117,17 +117,21 @@ public partial class CharacterController : Node
 
 	public virtual void CollectSyncData(Dictionary syncData)
 	{
-		syncData["GlobalPosition"] = CharacterDoll.GlobalPosition;
-		syncData["GlobalRotation"] = CharacterDoll.GlobalRotation;
+		syncData["Position"] = CharacterDoll.Position;
+		syncData["Rotation"] = CharacterDoll.Quaternion;
 		CharacterInfo.CollectSyncData(syncData);
 		CharacterDoll.CollectSyncData(syncData);
 	}
 
 	public virtual void ApplySyncData(Dictionary syncData)
 	{
-		if (syncData.ContainsKey("GlobalPosition")) CharacterDoll.GlobalPosition = (Vector3) syncData["GlobalPosition"];
-		if (syncData.ContainsKey("GlobalRotation")) CharacterDoll.GlobalRotation = (Vector3) syncData["GlobalRotation"];
-		SynchronizationInterpolator.Next(CharacterDoll.Position, CharacterDoll.Quaternion, (float) syncData["SyncDelay"]);
+		Vector3? position = null;
+		if (syncData.ContainsKey("Position"))
+			position = (Vector3) syncData["Position"];
+		Quaternion? rotation = null;
+		if (syncData.ContainsKey("Rotation"))
+			rotation = (Quaternion) syncData["Rotation"];
+		SynchronizationInterpolator.Next(position, rotation, Multiplayer.GetRemoteSenderId());
 		CharacterInfo.ApplySyncData(syncData);
 		CharacterDoll.ApplySyncData(syncData);
 	}

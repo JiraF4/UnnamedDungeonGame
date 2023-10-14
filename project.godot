@@ -16,7 +16,9 @@ config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 
 [autoload]
 
+DebugInfo="*res://Scripts/DebugInfo.cs"
 Network="*res://Scripts/Singletons/Network.cs"
+Synchronizator="*res://Scripts/Singletons/Synchronizator.cs"
 
 [display]
 

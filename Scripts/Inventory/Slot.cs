@@ -4,8 +4,15 @@ using System;
 public partial class Slot : Storage
 {
 	[Export] protected NinePatchRect SlotRect;
-	[Export] public Item Item { get; set; }
-	
+	[Export] public Item Item
+	{
+		get
+		{
+			return GetChildOrNull<Item>(0);
+		}
+		set {}
+	}
+
 	public const int SlotCellSize = 24;
 	public const int SlotCellHalfSize = SlotCellSize/2;
 	public const int SlotBorderSize = 1;
@@ -25,12 +32,11 @@ public partial class Slot : Storage
 
 	public override void _Process(double delta)
 	{
-		/*
 		if (Item != null)
 		{
-			DebugInfo.AddLine("Rotation" + Item.GlobalRotationDegrees);
+			DebugInfo.AddLine(Item?.Name);
 		}
-		*/
+		
 		SlotRect.Visible = _slotVisible;
 		_slotVisible = false;
 		base._Process(delta);
@@ -51,27 +57,18 @@ public partial class Slot : Storage
 		return true;
 	}
 
-	public override bool InsertItem(Vector2I inventoryPosition, Item item)
+	public override bool InsertItemServer(Vector2I inventoryPosition, Item item)
 	{
 		if (item == null) return false;
 		if (Item != null) return false;
 		
 		item.Store(this, Vector2I.Zero);
 		
-		Item = item;
 		return true;
 	}
 	
-	public override void ExtractItem(Item item)
+	public override void ExtractItemServer(Item item)
 	{
-		if (Item != item) return;
-		Item.Extract(GetTree().Root);
-		Item = null;
-	}
-
-	public void DropItem()
-	{
-		Item?.Extract(GetTree().Root);
-		Item = null;
+		base.ExtractItemServer(item);
 	}
 }

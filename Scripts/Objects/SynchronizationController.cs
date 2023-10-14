@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
 
@@ -6,61 +7,82 @@ public partial class SynchronizationController : Node
 {
     private Dictionary _lastSendSyncData = new();
     private Dictionary _lastSendSyncDataUnique = new();
-    private ulong _lastPackedTime = 0;
-    private ulong _lastSendPackedTime = 0;
-    private ulong _minimumSendPackedTime = 25; 
+    
+    public NodePath InitialPath { get; private set; }
+    public ulong SUID { get; protected set; }
     
     public override void _Ready()
     {
+        InitialPath = GetPath();
+        
+        if (Network.IsServer)
+        {
+            SUID = Network.GetNextSUID();
+            Synchronizator.Instance.AddController(this);
+        }
+        else
+        {
+            GD.Print(InitialPath);
+            Synchronizator.Instance.GetControllerSUID(InitialPath);
+        } 
         base._Ready();
     }
-    
-    public override void _Process(double delta)
+
+    public void SetControllerSUID(ulong newSUID)
     {
-        if (GetMultiplayerAuthority() == Multiplayer.GetUniqueId()) Sync();
-        base._Process(delta);
+        SUID = newSUID;
+        Synchronizator.Instance.AddController(this);
+    }
+    
+    public Dictionary GetSyncData()
+    {
+        var syncData = new Dictionary();
+        if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority()) return syncData;
+        
+        _lastSendSyncData = syncData;
+        CollectSyncData(syncData);
+        return syncData;
     }
 
-    void Sync()
+    public Dictionary GetClearSyncData()
     {
-        //DebugInfo.AddLine(_lastSendSyncDataUnique?.ToString().Replace(", \"", ",\n\""));
-        if (Time.GetTicksMsec() - _lastSendPackedTime < _minimumSendPackedTime) return;
-        _lastSendPackedTime = Time.GetTicksMsec();
+        var syncDataUnique = new Dictionary();
+        if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority()) return syncDataUnique;
         
         var syncData = new Dictionary();
         CollectSyncData(syncData);
-        
-        var syncDataUnique = new Dictionary();
         foreach (var (key, value) in syncData)
         {
             if (!_lastSendSyncData.ContainsKey(key) || !value.Equals(_lastSendSyncData[key]))
-                syncDataUnique[key] = value;
+                syncDataUnique.Add(key, value);
         }
         _lastSendSyncData = syncData;
         _lastSendSyncDataUnique = syncDataUnique;
-        
-        Rpc(nameof(SyncRemote), syncDataUnique);
+        return syncDataUnique;
     }
-
-    [Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
-    void SyncRemote(Dictionary syncData)
+    
+    public void ApplySyncDataIfAuthority(Dictionary syncData)
     {
-        var syncTime = (ulong) syncData["SyncTime"];
-        if (_lastPackedTime > syncTime) return;
-        syncData["SyncDelay"] = (syncTime - _lastPackedTime) / 1000.0f;
-        _lastPackedTime = syncTime;
+        if (Multiplayer.GetUniqueId() == GetMultiplayerAuthority()) return;
         ApplySyncData(syncData);
     }
-
     
     protected virtual void CollectSyncData(Dictionary syncData)
     {
-        syncData["SyncTime"] = Time.GetTicksMsec();
+        syncData["ParentPath"] = GetParent().GetParent().GetPath();
+    }
+
+    void TransferNode(NodePath parentPath)
+    {
+        if (GetParent().GetParent().GetPath() == parentPath) return;
+        var newParent = GetTree().Root.GetNode(parentPath);
+        GetParent().GetParent().RemoveChild(GetParent());
+        newParent.AddChild(GetParent());
     }
     
     protected virtual void ApplySyncData(Dictionary syncData)
     {
-        
+        if (syncData.ContainsKey("ParentPath")) TransferNode((NodePath) syncData["ParentPath"]);
     }
 
 }

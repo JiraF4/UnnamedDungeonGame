@@ -4,7 +4,7 @@ public partial class HumanoidItemManipulationController : Node
 {
     public HumanoidController Controller { get; protected set; }
     public HumanoidDoll Doll { get; protected set; }
-    public CharacterControllerInputs CharacterControllerInputs { get; protected set; }
+    public CharacterControllerInputs ControllerInputs { get; protected set; }
     
     public Storage FocusTargetStorage { get; protected set; }
     public Item FocusTargetItem { get; protected set; }
@@ -21,7 +21,7 @@ public partial class HumanoidItemManipulationController : Node
     {
         Controller = GetParent<HumanoidController>();
         Doll = Controller.GetParent<HumanoidDoll>();
-        CharacterControllerInputs = Controller.GetNode<CharacterControllerInputs>("ControllerInputs");
+        ControllerInputs = Controller.GetNode<CharacterControllerInputs>("ControllerInputs");
         Doll.GetNode<TextureRect>("GrabbedItemTextureRect");
         GrabbingArm = Doll.LeftArm;
         
@@ -29,17 +29,17 @@ public partial class HumanoidItemManipulationController : Node
     }
     
     Storage GetTargetStorage() {
-        if (Doll.LeftArm.ItemSlot.IsScreenPositionInside(CharacterControllerInputs.ScreenPosition)) return Doll.LeftArm.ItemSlot;
-        if (Doll.RightArm.ItemSlot.IsScreenPositionInside(CharacterControllerInputs.ScreenPosition)) return Doll.RightArm.ItemSlot;
-        var targetNode = CharacterControllerInputs.TargetNode;
+        if (Doll.LeftArm.ItemSlot.IsScreenPositionInside(ControllerInputs.ScreenPosition)) return Doll.LeftArm.ItemSlot;
+        if (Doll.RightArm.ItemSlot.IsScreenPositionInside(ControllerInputs.ScreenPosition)) return Doll.RightArm.ItemSlot;
+        var targetNode = ControllerInputs.TargetNode;
         var inventory = (Inventory) targetNode?.FindChild("Inventory");
         return inventory;
     }
     
     Item GetTargetItem() {
-        if (CurrentStorage is Inventory inventory) return inventory.GetItemScreenPosition(CharacterControllerInputs.ScreenPosition);
+        if (CurrentStorage is Inventory inventory) return inventory.GetItemScreenPosition(ControllerInputs.ScreenPosition);
         if (CurrentStorage is Slot slot) return slot.Item;
-        var targetNode = CharacterControllerInputs.TargetNode;
+        var targetNode = ControllerInputs.TargetNode;
         if (targetNode is Item item) return item;
         return null;
     }
@@ -67,27 +67,20 @@ public partial class HumanoidItemManipulationController : Node
         if (CurrentItem != null)
         {
             var item = Doll.LeftArm.ItemSlot.Item;
-            if (item != null)
-            {
-                Doll.LeftArm.ItemSlot.DropItem();
-                if (item.Storage == null) item.GlobalPosition = CurrentItem.GlobalPosition;
-            }
-            CurrentItem.Storage?.ExtractItem(CurrentItem);
-            Doll.LeftArm.ItemSlot.InsertItem(new Vector2I(), CurrentItem);
+            item?.TransferClient(null, new Vector2I());
+            CurrentItem.TransferClient(Doll.LeftArm.ItemSlot, new Vector2I());
         }
     }
     
     public void DropItem()
     {
         var item = Doll.LeftArm.ItemSlot.Item;
-        Doll.LeftArm.ItemSlot.DropItem();
-        CurrentStorage?.InsertItem(new Vector2I(), item);
-        if (CurrentItem != null) Doll.LeftArm.ItemSlot.InsertItem(new Vector2I(), CurrentItem);
+        item?.TransferClient(CurrentStorage, CurrentStorage?.GetInventoryPositionOrRandomFree(ControllerInputs.ScreenPosition, item) ?? new Vector2I());
     }
 
     public void DropItems()
     {
-        Doll.LeftArm.ItemSlot.DropItem();
-        Doll.RightArm.ItemSlot.DropItem();
+        Doll.LeftArm.ItemSlot.Item?.TransferClient(null, new Vector2I());
+        Doll.RightArm.ItemSlot.Item?.TransferClient(null, new Vector2I());
     }
 }

@@ -19,14 +19,17 @@ public class SynchronizationInterpolator
     private Quaternion _oldRotation;
     private float _interpolateTime = 0.02f;
     private float _currentInterpolateTime;
+    private int _peerId;
 
-    public void Next(Vector3 newPosition, Quaternion newRotation, float interpolateTime)
+    public void Next(Vector3? newPosition, Quaternion? newRotation, int peerId)
     {
+        _peerId = peerId;
         _oldPosition = _newPosition;
         _oldRotation = _newRotation;
-        _newPosition = newPosition;
-        _newRotation = newRotation;
-        _interpolateTime = interpolateTime == 0.0f ? 0.02f : interpolateTime;
+        _newPosition = newPosition ?? _newPosition;
+        _newRotation = newRotation ?? _newRotation;
+        _interpolateTime = Synchronizator.Instance.GetDelay(_peerId);
+        if (_interpolateTime <= 0.0f) _interpolateTime = 0.01f;
         _currentInterpolateTime = 0.0f;
         Interpolate(0.0f);
     }

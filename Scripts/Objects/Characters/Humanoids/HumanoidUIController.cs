@@ -7,6 +7,7 @@ public partial class HumanoidUIController : Node
     public HumanoidStateController StateController { get; protected set; }
     public HumanoidItemManipulationController ItemManipulationController { get; protected set; }
     public HumanoidCombatController CombatController { get; protected set; }
+    public CharacterControllerInputs ControllerInputs { get; protected set; }
     
     public TextureRect GrabbedItemTextureRect { get; protected set; }
     
@@ -18,6 +19,7 @@ public partial class HumanoidUIController : Node
         ItemManipulationController = Controller.GetNode<HumanoidItemManipulationController>("ItemManipulationController");
         GrabbedItemTextureRect = Doll.GetNode<TextureRect>("GrabbedItemTextureRect");
         CombatController = Controller.GetNode<HumanoidCombatController>("CombatController");
+        ControllerInputs = Controller.GetNode<CharacterControllerInputs>("ControllerInputs");
     }
     
     public void UpdateUI(double delta)
@@ -45,8 +47,10 @@ public partial class HumanoidUIController : Node
             GrabbedItemTextureRect.Visible = true;
             GrabbedItemTextureRect.Texture = item.ItemRect.Texture;
             GrabbedItemTextureRect.Size = item.ItemRect.Size;
-            GrabbedItemTextureRect.Position = storage.AlignPositionItem(new Vector2(), item);
+            GrabbedItemTextureRect.Position = storage.AlignPositionItem(ControllerInputs.ScreenPosition, item);
+            DebugInfo.AddLine(storage.GetInventoryPositionOrRandomFree(ControllerInputs.ScreenPosition, item).ToString());
         } else GrabbedItemTextureRect.Visible = false;
+        
         
         /*
         var storage = ItemManipulationController.CurrentStorage;

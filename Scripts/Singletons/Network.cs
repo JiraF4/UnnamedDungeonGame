@@ -10,9 +10,10 @@ public partial class Network : Node
     public static Network Instance;
     
     // server unique ID 
-    private static ulong _suid = 0;
+    private static ulong _suid = 1;
     public static ulong GetNextSUID()
     {
+        if (!IsServer) return 0;
         return _suid++;
     }
     
@@ -69,13 +70,14 @@ public partial class Network : Node
 
     private void ConnectedToServer()
     {
+        GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
         GD.Print("ConnectedToServer");
+        IsConnected = true;
     }
     
     // base network
     public void Start(string ip)
     {
-        GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
         if (IsServer)
         {
             //RenderingServer.RenderLoopEnabled = false;
@@ -84,6 +86,7 @@ public partial class Network : Node
             var error = Peer.CreateServer(Port, MaxPlayers);
             GD.Print(error);
             DisplayServer.WindowSetTitle("Dungeon Server");
+            GetTree().ChangeSceneToFile("res://Scenes/World.tscn");
         } else {
             GD.Print("Run client");
             var error = Peer.CreateClient(ip, Port);
@@ -95,34 +98,20 @@ public partial class Network : Node
     }
     public void PeerConnected(long peerId)
     {
-        GD.Print("Peer " + peerId + " connected");
+        GD.Print("Peer " + peerId + " connected to " + Multiplayer.GetUniqueId());
         if (IsServer)
         {
             GetTree().Root.GetNode<MapHolder>("World/MapHolder").GenerateMapRemote(peerId);
+            PlayersService.Instance.SpawnPlayersServer(new Vector3(64.0f, 0, 64.0f));
         }
-        else
+        else 
         {
-            IsConnected = true;
+            
         }
-        PlayersService.Instance.SpawnPlayersServer(new Vector3(64.0f, 0, 64.0f));
     }
+    
     public void PeerDisconnected(long peerId)
     {
         GD.Print("Peer " + peerId + " disconnected");
     }
-    
-    // players scenes
-    public void SpawnExistPlayer(IEnumerable<int> players)
-    {
-        
-    }
-    public void SpawnPlayer(int id)
-    {
-        
-    }
-    public void RemovePlayer(int id)
-    {
-        
-    }
-
 }

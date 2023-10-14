@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://t4dhjm8j2122"]
+[gd_scene load_steps=3 format=3 uid="uid://t4dhjm8j2122"]
 
-[ext_resource type="Script" path="res://Scripts/Inventory/Inventory.cs" id="2_urwco"]
 [ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture/furniture.tscn" id="1_65oob"]
+[ext_resource type="Script" path="res://Scripts/Inventory/Inventory.cs" id="2_urwco"]
 
 [node name="Furniture" instance=ExtResource("1_65oob")]
 mass = 120.0
