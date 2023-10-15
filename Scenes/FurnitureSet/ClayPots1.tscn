@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://dse06c58pdurt"]
+
+[ext_resource type="Script" path="res://Scripts/FurnitureSet/FurnitureSet.cs" id="1_6hbux"]
+[ext_resource type="PackedScene" uid="uid://d20tbnqkomcsp" path="res://Scenes/Furniture/ClayPot1.tscn" id="2_ybb6s"]
+[ext_resource type="PackedScene" uid="uid://dsgotyy2qxvm1" path="res://Scenes/Furniture/ClayPot2.tscn" id="3_mo2v8"]
+[ext_resource type="PackedScene" uid="uid://oaj41u0r1bp4" path="res://Scenes/Furniture/ClayPot4.tscn" id="4_kln4y"]
+
+[node name="ClayPots1" type="Node3D"]
+script = ExtResource("1_6hbux")
+
+[node name="ClayPot1" parent="." instance=ExtResource("2_ybb6s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.898243, 0, 0.626908)
+
+[node name="ClayPot2" parent="." instance=ExtResource("3_mo2v8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54061, 0, 1.58033)
+
+[node name="ClayPot4" parent="." instance=ExtResource("4_kln4y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29495, 0, 1.27903)

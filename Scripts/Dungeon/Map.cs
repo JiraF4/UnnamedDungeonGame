@@ -73,6 +73,7 @@ namespace DeepDungeon.Dungeon
             if (rect.End.Y >= Size.Y) return false;
             return true;
         }
+        
         public bool IsAllCellsOfType(Rect2I rect, MapCellType type)
         {
             if (!IsRectInside(rect)) return false;
@@ -87,6 +88,53 @@ namespace DeepDungeon.Dungeon
 
             return true;
         }
+        
+        
+        public bool IsAllCellsOfTypeAdd(Rect2I rect, MapCellTypeAdd type)
+        {
+            if (!IsRectInside(rect)) return false;
+            for (var x = rect.Position.X; x < rect.End.X; x++)
+            {
+                for (var y = rect.Position.Y; y < rect.End.Y; y++)
+                {
+                    if (MapCells[x, y].MapCellTypeAdd != type)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+        
+        
+        public bool IsAllCellsFurnitureFree(Rect2I rect)
+        {
+            if (!IsRectInside(rect)) return false;
+            for (var x = rect.Position.X; x < rect.End.X; x++)
+            {
+                for (var y = rect.Position.Y; y < rect.End.Y; y++)
+                {
+                    if (MapCells[x, y].HasFurniture)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+        
+        public bool SetCellsFurniture(Rect2I rect)
+        {
+            if (!IsRectInside(rect)) return false;
+            for (var x = rect.Position.X; x < rect.End.X; x++)
+            {
+                for (var y = rect.Position.Y; y < rect.End.Y; y++)
+                {
+                    MapCells[x, y].HasFurniture = true;
+                }
+            }
+
+            return true;
+        }
+        
         public bool IsAnyCellsOfType(Rect2I rect, MapCellType type)
         {
             rect = FitRectInside(rect);
@@ -192,7 +240,8 @@ namespace DeepDungeon.Dungeon
                     .Where(c => c != null 
                                 && c.Flag != Flag 
                                 && c.MapCellType == MapCellType.Wall
-                                && GetMinDistanceForCellOfType(c.Position, MapCellType.Wall) > minWidth)
+                                && GetMinDistanceForCellOfType(c.Position, MapCellType.Wall) > minWidth
+                                && c.Neighbours.All(n => n.Neighbours.All(nn => nn != null)))
                     .ToList();
                 foreach (var mapCell in neighbours)
                 {

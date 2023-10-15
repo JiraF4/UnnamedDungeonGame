@@ -30,7 +30,7 @@ public partial class CharacterController : Node
 	
 	public override void _Process(double delta)
 	{
-		if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) SynchronizationInterpolator.Interpolate(delta);
+		//if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) SynchronizationInterpolator.Interpolate(delta);
 		base._Process(delta);
 	}
 

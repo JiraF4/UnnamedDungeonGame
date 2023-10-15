@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhvwel8lx57je"]
+
+[ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture.tscn" id="1_tbelx"]
+[ext_resource type="ArrayMesh" uid="uid://dd7c150ivyqj6" path="res://Models/Furniture/Table.vox" id="2_ujfld"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_krbv5"]
+size = Vector3(1.99237, 0.201273, 2.0036)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_epj88"]
+size = Vector3(0.174326, 0.796583, 0.206639)
+
+[node name="Table" instance=ExtResource("1_tbelx")]
+mass = 70.0
+
+[node name="Model" parent="." index="0"]
+mesh = ExtResource("2_ujfld")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.901134, 0)
+shape = SubResource("BoxShape3D_krbv5")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.80824, 0.398552, -0.812715)
+shape = SubResource("BoxShape3D_epj88")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.812439, 0.398552, -0.812715)
+shape = SubResource("BoxShape3D_epj88")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.80824, 0.398552, 0.812991)
+shape = SubResource("BoxShape3D_epj88")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.812439, 0.398552, 0.812991)
+shape = SubResource("BoxShape3D_epj88")

@@ -22,7 +22,6 @@ public partial class SynchronizationController : Node
         }
         else
         {
-            GD.Print(InitialPath);
             Synchronizator.Instance.GetControllerSUID(InitialPath);
         } 
         base._Ready();
@@ -38,6 +37,7 @@ public partial class SynchronizationController : Node
     {
         var syncData = new Dictionary();
         if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority()) return syncData;
+        if (GetParent() is RigidBody3D {Sleeping: true}) return syncData;
         
         _lastSendSyncData = syncData;
         CollectSyncData(syncData);
@@ -53,8 +53,18 @@ public partial class SynchronizationController : Node
         CollectSyncData(syncData);
         foreach (var (key, value) in syncData)
         {
-            if (!_lastSendSyncData.ContainsKey(key) || !value.Equals(_lastSendSyncData[key]))
+            if (!_lastSendSyncData.ContainsKey(key))
                 syncDataUnique.Add(key, value);
+            else if (!value.Equals(_lastSendSyncData[key]))
+            {
+                if ((string) key == "ParentPath")
+                {
+                    if ((NodePath) _lastSendSyncData[key] != (NodePath) value)
+                        syncDataUnique.Add(key, value);
+                }
+                else syncDataUnique.Add(key, value);
+            }
+                
         }
         _lastSendSyncData = syncData;
         _lastSendSyncDataUnique = syncDataUnique;

@@ -503,7 +503,7 @@ libraries = {
 "Interaction": SubResource("AnimationLibrary_rif6f"),
 "Walking": SubResource("AnimationLibrary_ehoo4")
 }
-blend_times = [&"CombatAttackUpSword", &"CombatIdle", 0.1, &"CombatAttackUpSword", &"StunnedCombat", 0.1, &"CombatAttackUpSword", &"CombatAttackUpSword", 0.1, &"CombatAttackUpSword", &"CombatRepost", 0.1]
+blend_times = [&"CombatAttackUpSword", &"CombatRepost", 0.1, &"CombatAttackUpSword", &"CombatAttackUpSword", 0.1, &"CombatAttackUpSword", &"CombatIdle", 0.1, &"CombatAttackUpSword", &"StunnedCombat", 0.1]
 
 [node name="InfoBar3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68569, 0)

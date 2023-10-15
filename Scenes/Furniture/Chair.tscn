@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://baojmjjpgmrxr"]
+
+[ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture.tscn" id="1_b8wg3"]
+[ext_resource type="ArrayMesh" uid="uid://2elvs160bx00" path="res://Models/Furniture/Chair.vox" id="2_is8ye"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mkbqf"]
+size = Vector3(0.822847, 0.162647, 0.796197)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tmj6w"]
+size = Vector3(0.163406, 1.01949, 0.782871)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yp2sq"]
+size = Vector3(0.172887, 0.523607, 0.172657)
+
+[node name="Chair" instance=ExtResource("1_b8wg3")]
+mass = 40.0
+
+[node name="Model" parent="." index="0"]
+mesh = ExtResource("2_is8ye")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00999379, 0.266804, -0.0199882)
+shape = SubResource("BoxShape3D_mkbqf")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339799, 0.844501, -0.0199883)
+shape = SubResource("BoxShape3D_tmj6w")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.338, -0.0853771, 0.288481)
+shape = SubResource("BoxShape3D_yp2sq")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31174, -0.0853771, 0.288481)
+shape = SubResource("BoxShape3D_yp2sq")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.338, -0.0853771, -0.312664)
+shape = SubResource("BoxShape3D_yp2sq")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31174, -0.0853771, -0.312664)
+shape = SubResource("BoxShape3D_yp2sq")

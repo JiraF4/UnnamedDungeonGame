@@ -10,6 +10,8 @@ namespace DeepDungeon.Dungeon
         public Color CellColor;
         public ulong Flag;
         public MapCell[] Neighbours;
-        public int textureOffset;
+        public int TextureOffset;
+        public MapCellTypeAdd MapCellTypeAdd = MapCellTypeAdd.Default;
+        public bool HasFurniture;
     }
 }

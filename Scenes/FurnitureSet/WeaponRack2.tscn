@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbg2l8upw3kyl"]
+
+[ext_resource type="Script" path="res://Scripts/FurnitureSet/FurnitureSet.cs" id="1_d80cx"]
+[ext_resource type="PackedScene" uid="uid://c6a43t1r4yhrh" path="res://Scenes/Furniture/WeaponRack2.tscn" id="2_u2r3p"]
+
+[node name="WeaponRack1" type="Node3D"]
+script = ExtResource("1_d80cx")
+
+[node name="WeaponRack2" parent="." instance=ExtResource("2_u2r3p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00281, 0, 0.970384)

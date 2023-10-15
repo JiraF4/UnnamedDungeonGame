@@ -128,12 +128,13 @@ public partial class TunnelGenerator : MapGenerator
                 var rect = new Rect2I(position - new Vector2I(1, 1), new Vector2I(3, 3));
                 if (MapHolder.Map.IsAllCellsOfType(rect, MapCellType.Wall))
                 {
-                    var roomCells = MapHolder.Map.GetEnclosedSpace(position, 7);
+                    var minWidth = 5;
+                    var roomCells = MapHolder.Map.GetEnclosedSpace(position, minWidth);
                     if (roomCells.Any())
                     {
                         foreach (var roomCell in roomCells)
                         {
-                            var roomRect = new Rect2I(roomCell.Position, new Vector2I(1, 1)).Grow(6);
+                            var roomRect = new Rect2I(roomCell.Position, new Vector2I(1, 1)).Grow(minWidth - 1);
                             MapHolder.Map.SetCells(roomRect, MapCellType.Unknown);
                             //MapHolder.Map.SetCellsColor(roomRect, new Color(0.0f, 0.0f, 1.0f, 0.5f));
                         }
@@ -152,7 +153,8 @@ public partial class TunnelGenerator : MapGenerator
                         {
                             roomCell.CellColor = Colors.Bisque;
                             roomCell.MapCellType = MapCellType.Empty;
-                            roomCell.textureOffset = 64;
+                            roomCell.MapCellTypeAdd = MapCellTypeAdd.Room;
+                            roomCell.TextureOffset = 64;
                         }
 
                         foreach (var roomEdge in roomEdges)
@@ -192,6 +194,27 @@ public partial class TunnelGenerator : MapGenerator
             }    
         }
         
+        for (var x = 1; x < MapHolder.Map.Size.X - 2; x++)
+        {
+            for (var y = 1; y < MapHolder.Map.Size.Y - 2; y++)
+            {
+                if (MapHolder.Map.MapCells[x, y].MapCellType == MapCellType.Empty)
+                {
+                    AddFurniture(MapHolder.Map.MapCells[x, y]);
+                }
+            }
+        }
+
         base.Generate();
+    }
+
+    void AddFurniture(MapCell cell)
+    {
+        var worldPosition = new Vector3(cell.Position.X * Map.CellRealSize, 0, cell.Position.Y * Map.CellRealSize);
+        if (cell.MapCellTypeAdd == MapCellTypeAdd.Room)
+        {
+            var furnitureSetId = FurnitureService.Instance.GetValidFurniture(MapHolder.Map, cell, Random.Next());
+            if (furnitureSetId != 0) SceneInstantiateService.Instance.SpawnById(furnitureSetId, worldPosition, Vector3.Zero);
+        }
     }
 }

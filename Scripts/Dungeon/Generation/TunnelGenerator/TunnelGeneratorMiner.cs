@@ -51,7 +51,7 @@ namespace DeepDungeon.Dungeon.Generation.TunnelGenerator
 
         public bool CanMine()
         {
-            var minDistance = 15;
+            var minDistance = 6;
             var mineRect = NextMineRect;
             if (Direction == 0 || Direction == 2)
             {

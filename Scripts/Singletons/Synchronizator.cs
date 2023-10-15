@@ -1,16 +1,18 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 
 public partial class Synchronizator : Node
 {
     public static Synchronizator Instance;
-    protected readonly Dictionary<ulong, SynchronizationController> Controllers = new();
-    protected readonly Dictionary<NodePath, SynchronizationController> InitialPathControllers = new();
+    protected readonly Godot.Collections.Dictionary<ulong, SynchronizationController> Controllers = new();
+    protected readonly Godot.Collections.Dictionary<NodePath, SynchronizationController> InitialPathControllers = new();
     
     private ulong _lastSendPackedTime = 0;
-    protected readonly Dictionary<int, ulong> LastPackedTime = new();
-    protected readonly Dictionary<int, float> PackedDelays = new();
+    protected readonly Godot.Collections.Dictionary<int, ulong> LastPackedTime = new();
+    protected readonly Godot.Collections.Dictionary<int, float> PackedDelays = new();
     private ulong _minimumSendPackedTime = 33;
     private int _forceSyncNumber = 0;
     
@@ -35,8 +37,17 @@ public partial class Synchronizator : Node
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, CallLocal = false)]
     protected void GetControllerSUIDServer(NodePath initialPath)
     {
-        var controller = InitialPathControllers[initialPath];
-        RpcId(Multiplayer.GetRemoteSenderId(), nameof(GetControllerSUIDClient), initialPath, controller.SUID);
+        try
+        {
+            var controller = InitialPathControllers[initialPath];
+            RpcId(Multiplayer.GetRemoteSenderId(), nameof(GetControllerSUIDClient), initialPath, controller.SUID);
+        }
+        catch (KeyNotFoundException e)
+        {
+            GD.Print("Lost controller: " + initialPath);
+            throw;
+        }
+        
     }
     
     [Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, CallLocal = false)]
@@ -59,7 +70,7 @@ public partial class Synchronizator : Node
         {
             DebugInfo.AddLine("Peer" + key + "Delay: " + value);
         }
-        //DebugInfo.AddLine("LastSentPacked: " + _lastSentPacked?.ToString().Replace(", \"", ",\n\""));
+        if (Network.IsServer) DebugInfo.AddLine("LastSentPacked: " + _lastSentPacked?.ToString().Replace(", \"", ",\n\"").Left(3000));
         
         if (Time.GetTicksMsec() - _lastSendPackedTime < _minimumSendPackedTime) return;
         _lastSendPackedTime = Time.GetTicksMsec();

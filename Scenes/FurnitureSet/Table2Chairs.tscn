@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://18f7ss1cf30h"]
+
+[ext_resource type="Script" path="res://Scripts/FurnitureSet/FurnitureSet.cs" id="1_4aayd"]
+[ext_resource type="PackedScene" uid="uid://dhvwel8lx57je" path="res://Scenes/Furniture/Table.tscn" id="1_af0lu"]
+[ext_resource type="PackedScene" uid="uid://baojmjjpgmrxr" path="res://Scenes/Furniture/Chair.tscn" id="2_8n4e1"]
+[ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scenes/Items/Usable/Potion.tscn" id="4_w53o4"]
+
+[node name="Table2Chairs" type="Node3D"]
+script = ExtResource("1_4aayd")
+
+[node name="Table" parent="." instance=ExtResource("1_af0lu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1591, 0.00745642, 1.53489)
+
+[node name="Chair" parent="." instance=ExtResource("2_8n4e1")]
+transform = Transform3D(0.968951, 0, -0.247253, 0, 1, 0, 0.247253, 0, 0.968951, 3.28401, 0.352593, 1.29559)
+
+[node name="Chair2" parent="." instance=ExtResource("2_8n4e1")]
+transform = Transform3D(-0.928751, 0, 0.370703, 0, 1, 0, -0.370703, 0, -0.928751, 0.713164, 0.352593, 1.19761)
+
+[node name="Item" parent="." instance=ExtResource("4_w53o4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.16282, 1.00439, 1.85647)

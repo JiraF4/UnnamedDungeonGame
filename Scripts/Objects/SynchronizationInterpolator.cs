@@ -34,6 +34,15 @@ public class SynchronizationInterpolator
         Interpolate(0.0f);
     }
 
+    public void Reset(Vector3 position, Quaternion quaternion)
+    {
+        _oldPosition = position;
+        _oldRotation = quaternion;
+        _newPosition = position;
+        _newRotation = quaternion;
+        _interpolateTime = 0.01f;
+    }
+
     public void Interpolate(double delta)
     {
         _currentInterpolateTime += (float) delta;

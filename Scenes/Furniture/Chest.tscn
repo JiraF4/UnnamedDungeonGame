@@ -1,15 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://t4dhjm8j2122"]
+[gd_scene load_steps=3 format=3 uid="uid://t4dhjm8j2122"]
 
-[ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture/furniture.tscn" id="1_65oob"]
+[ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture.tscn" id="1_whd5g"]
 [ext_resource type="Script" path="res://Scripts/Inventory/Inventory.cs" id="2_urwco"]
-[ext_resource type="Script" path="res://Scripts/Objects/Furniture/FurnitureSynchronizationController.cs" id="3_chn3c"]
 
-[node name="Furniture" instance=ExtResource("1_65oob")]
+[node name="Furniture" instance=ExtResource("1_whd5g")]
 mass = 120.0
 
 [node name="Inventory" type="Node3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 script = ExtResource("2_urwco")
-
-[node name="SynchronizationController" type="Node" parent="." index="3"]
-script = ExtResource("3_chn3c")

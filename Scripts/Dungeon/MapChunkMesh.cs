@@ -92,7 +92,7 @@ public partial class MapChunkMesh : MeshInstance3D
             {
                 var matrixPosition = new Vector3I(x, 0, z);
                 var cell = Map.MapCells[ChunkPosition.X * Map.ChunkSize + x, ChunkPosition.Y * Map.ChunkSize + z];
-                var textureOffset = cell.textureOffset;
+                var textureOffset = cell.TextureOffset;
                 if (cell.MapCellType == MapCellType.Empty)
                 {
                     _faces[x, 0, z, 4] = 0 + textureOffset;
@@ -112,7 +112,7 @@ public partial class MapChunkMesh : MeshInstance3D
                                 var neighbourCell2 = neighbourCell.Neighbours[(4 + (d + 2 - (4 * i))) % 4];
                                 if (neighbourCell != null && (
                                     neighbourCell.MapCellType == MapCellType.Empty
-                                    || (neighbourCell2 != null && (neighbourCell2.MapCellType != MapCellType.Empty || neighbourCell2.textureOffset != textureOffset)
+                                    || (neighbourCell2 != null && (neighbourCell2.MapCellType != MapCellType.Empty || neighbourCell2.TextureOffset != textureOffset)
                                 )))
                                 {
                                     var offset = i * 3;

@@ -4,12 +4,13 @@ using Godot;
 public partial class PlayersService : Node
 {
     public static PlayersService Instance { get; private set; }
-    [Export] public PackedScene playerScene;
+    public PackedScene playerScene;
     
     public readonly Dictionary<long, CharacterDoll> ExistedPlayers = new();
     
     public override void _Ready()
     {
+        playerScene = (PackedScene) ResourceLoader.Load("res://Scenes/Characters/Humanoid.tscn");
         Instance = this;
         base._Ready();
     }

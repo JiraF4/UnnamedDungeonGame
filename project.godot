@@ -16,8 +16,13 @@ config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 
 [autoload]
 
+CharactersService="*res://Scripts/Services/CharactersService.cs"
+PlayersService="*res://Scripts/Services/PlayersService.cs"
+SceneInstantiateService="*res://Scripts/Services/SceneInstantiateService.cs"
 DebugInfo="*res://Scripts/DebugInfo.cs"
+Registry="*res://Scripts/Singletons/Registry.cs"
 Network="*res://Scripts/Singletons/Network.cs"
+FurnitureService="*res://Scripts/Services/FurnitureService.cs"
 Synchronizator="*res://Scripts/Singletons/Synchronizator.cs"
 
 [display]

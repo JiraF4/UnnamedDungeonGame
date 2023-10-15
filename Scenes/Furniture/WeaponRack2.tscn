@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://c6a43t1r4yhrh"]
+
+[ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture.tscn" id="1_6c4ho"]
+[ext_resource type="ArrayMesh" uid="uid://cdvh1scvafhqk" path="res://Models/Furniture/WeaponRack2.vox" id="2_r3rwe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vbrdi"]
+size = Vector3(0.811366, 0.0916523, 1.45737)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ruqxd"]
+size = Vector3(0.269464, 1.31384, 0.0692579)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wppvu"]
+size = Vector3(0.12359, 0.116824, 1.39609)
+
+[node name="WeaponRack2" instance=ExtResource("1_6c4ho")]
+mass = 40.0
+
+[node name="Model" parent="." index="0"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.0040009, 0.20142, -0.000891328)
+mesh = ExtResource("2_r3rwe")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00850081, 0.0485185, -0.00144947)
+shape = SubResource("BoxShape3D_vbrdi")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00756764, 0.730591, 0.660398)
+shape = SubResource("BoxShape3D_ruqxd")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00756764, 0.730591, -0.663167)
+shape = SubResource("BoxShape3D_ruqxd")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00756764, 1.35966, 0.000106096)
+shape = SubResource("BoxShape3D_wppvu")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00756764, 0.736104, 0.000106096)
+shape = SubResource("BoxShape3D_wppvu")

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://oaj41u0r1bp4"]
+
+[ext_resource type="PackedScene" uid="uid://dge214whrcdc7" path="res://Scenes/Furniture.tscn" id="1_mq5hy"]
+[ext_resource type="ArrayMesh" uid="uid://csev6odc64acj" path="res://Models/Furniture/ClayPot4.vox" id="2_ieo8x"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vscyf"]
+height = 0.325286
+radius = 0.143892
+
+[node name="ClayPot4" instance=ExtResource("1_mq5hy")]
+mass = 40.0
+
+[node name="Model" parent="." index="0"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, -0.347633, 0)
+mesh = ExtResource("2_ieo8x")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0045942, 0.167626, -0.00639092)
+shape = SubResource("CylinderShape3D_vscyf")
