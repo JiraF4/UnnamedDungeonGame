@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dva7m7kcyyfbp" path="res://Bitmaps/Items/Weapon/Dagger.png" id="3_m5kc4"]
 [ext_resource type="PackedScene" uid="uid://bp02stuhmowll" path="res://Scenes/Items/item.tscn" id="4_yfg05"]
 
-[node name="Item" instance=ExtResource("4_yfg05")]
+[node name="Dagger" instance=ExtResource("4_yfg05")]
 script = ExtResource("1_vyqhy")
 
 [node name="ItemRect" parent="." index="0"]

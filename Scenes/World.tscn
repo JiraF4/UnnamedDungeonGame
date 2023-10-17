@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://5e2v27lnoo8d"]
 
-[ext_resource type="PackedScene" uid="uid://dd6wke7puqws8" path="res://Scenes/MapHolder.tscn" id="1_xbsrr"]
+[ext_resource type="PackedScene" uid="uid://d172gsxyswn44" path="res://Scenes/MapHolder.tscn" id="1_xbsrr"]
 [ext_resource type="PackedScene" uid="uid://bnpka4m4iqnd5" path="res://Scenes/Characters/Humanoid.tscn" id="1_xkyd3"]
 [ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="3_uuy7c"]
 [ext_resource type="PackedScene" uid="uid://ddr10px57mwmb" path="res://Scenes/Characters/AIController.tscn" id="7_d51ji"]
@@ -43,49 +43,41 @@ shape = SubResource("WorldBoundaryShape3D_gkjlw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("WorldBoundaryShape3D_hekjq")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.831111, 0.556107, 0, -0.556107, 0.831111, 69.0641, 11.0298, 65.1016)
-
-[node name="Character" parent="." instance=ExtResource("1_xkyd3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 0, 63)
-
-[node name="AIController" parent="Character" instance=ExtResource("7_d51ji")]
-
-[node name="Item" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.8231, 0, 63.9897)
-
-[node name="Item2" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5504, 0, 63.9897)
-
-[node name="Item3" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.2428, 0, 63.9897)
-
-[node name="Item4" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.8231, 0, 64.3215)
-
-[node name="Item5" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5504, 0, 64.3215)
-
-[node name="Item6" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.2428, 0, 64.3215)
-
-[node name="Item7" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.8231, 0, 64.7777)
-
-[node name="Item8" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5504, 0, 64.7777)
-
-[node name="Item9" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.2428, 0, 64.7777)
-
-[node name="Item10" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.8231, 0, 64.7777)
-
-[node name="Item11" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5504, 0, 64.7777)
-
-[node name="Item12" parent="." instance=ExtResource("9_402xu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.2428, 0, 64.7777)
-
 [node name="Furniture" parent="." instance=ExtResource("7_mhdpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.4446, 0, 63.1356)
+freeze_mode = 0
+
+[node name="Item" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.8297, -2.38419e-07, 64.6387)
+
+[node name="Item2" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.5272, -2.38419e-07, 64.6387)
+
+[node name="Item3" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.2055, -2.38419e-07, 64.6387)
+
+[node name="Item4" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.8297, -2.38419e-07, 64.9881)
+
+[node name="Item5" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.5272, -2.38419e-07, 64.9881)
+
+[node name="Item6" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.2055, -2.38419e-07, 64.9881)
+
+[node name="Item7" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.8297, -2.38419e-07, 65.2434)
+
+[node name="Item8" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.5272, -2.38419e-07, 65.2434)
+
+[node name="Item9" parent="." instance=ExtResource("9_402xu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.2055, -2.38419e-07, 65.2434)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 1.5, 65.989)
+
+[node name="Character" parent="." instance=ExtResource("1_xkyd3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.6494, 0, 64.9805)
+
+[node name="AIController" parent="Character" instance=ExtResource("7_d51ji")]

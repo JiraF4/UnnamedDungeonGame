@@ -6,16 +6,17 @@
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterControllerInputs.cs" id="2_buxug"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterCharacteristics.cs" id="3_e7i10"]
 [ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterInfo.cs" id="3_j0fng"]
-[ext_resource type="Script" path="res://Scripts/Objects/Characters/CharacterSynchronizationController.cs" id="7_a12u6"]
+[ext_resource type="Script" path="res://Scripts/Objects/SynchronizationController.cs" id="7_aq8rm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0r38w"]
 radius = 0.25
-height = 1.6
+height = 1.10905
 
 [node name="Character" type="RigidBody3D"]
 collision_layer = 5
 collision_mask = 5
 axis_lock_angular_x = true
+axis_lock_angular_y = true
 axis_lock_angular_z = true
 mass = 90.0
 script = ExtResource("1_a7dhm")
@@ -55,4 +56,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_0r38w")
 
 [node name="SynchronizationController" type="Node" parent="."]
-script = ExtResource("7_a12u6")
+script = ExtResource("7_aq8rm")

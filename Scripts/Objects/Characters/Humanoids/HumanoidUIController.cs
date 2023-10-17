@@ -24,6 +24,7 @@ public partial class HumanoidUIController : Node
     
     public void UpdateUI(double delta)
     {
+        DebugInfo.AddLine("Speed: " + Doll.LinearVelocity.Length().ToString());
         DebugInfo.AddLine(Controller.StateController.State.ToString());
         Controller.StanceIndicator.ShowIndicator();
         Controller.StanceIndicator.SetStance(CombatController.AttackStance);

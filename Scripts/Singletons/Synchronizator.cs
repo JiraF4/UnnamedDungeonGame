@@ -70,7 +70,9 @@ public partial class Synchronizator : Node
         {
             DebugInfo.AddLine("Peer" + key + "Delay: " + value);
         }
-        if (Network.IsServer) DebugInfo.AddLine("LastSentPacked: " + _lastSentPacked?.ToString().Replace(", \"", ",\n\"").Left(3000));
+        
+        //if (Network.IsServer) 
+            DebugInfo.AddLine("LastSentPacked: " + _lastSentPacked?.ToString().Replace(", \"", ",\n\"").Left(3000));
         
         if (Time.GetTicksMsec() - _lastSendPackedTime < _minimumSendPackedTime) return;
         _lastSendPackedTime = Time.GetTicksMsec();

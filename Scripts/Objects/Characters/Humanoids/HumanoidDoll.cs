@@ -11,10 +11,10 @@ public partial class HumanoidDoll : CharacterDoll
 	public HumanoidArm LeftArm { get; protected set; }
 	public Node3D RightLeg { get; protected set; }
 	public Node3D LeftLeg { get; protected set; }
-	public Node3D BodyAnimation { get; protected set; }
-	public Node3D HeadAnimation { get; protected set; }
+
+	public Vector3 BodyRotation;
 	
-	protected List<Node3D> Limbs = new();
+	protected HumanoidSynchronizationInterpolator SynchronizationInterpolator;
 	
 	public override void _Ready()
 	{
@@ -24,60 +24,73 @@ public partial class HumanoidDoll : CharacterDoll
 		LeftArm = Body.GetNode<HumanoidArm>("LeftShoulder/LeftArm");
 		RightLeg = GetNode<Node3D>("RightLeg");
 		LeftLeg = GetNode<Node3D>("LeftLeg");
-		BodyAnimation = GetNode<Node3D>("BodyAnimation");
-		HeadAnimation = GetNode<Node3D>("BodyAnimation/Body/Neck/HeadAnimation");
+		SynchronizationInterpolator = new HumanoidSynchronizationInterpolator(this);
 		
-		Limbs.Add(Body);
-		Limbs.Add(Head);
-		Limbs.Add(RightArm);
-		Limbs.Add(LeftArm);
-		Limbs.Add(RightLeg);
-		Limbs.Add(LeftLeg);
-		Limbs.Add(BodyAnimation);
-		Limbs.Add(HeadAnimation);
-		
-        SynchronizationInterpolators.Add(Body, new SynchronizationInterpolator(Body));
-        SynchronizationInterpolators.Add(Head, new SynchronizationInterpolator(Head));
-        SynchronizationInterpolators.Add(RightArm, new SynchronizationInterpolator(RightArm));
-        SynchronizationInterpolators.Add(LeftArm, new SynchronizationInterpolator(LeftArm));
-        SynchronizationInterpolators.Add(RightLeg, new SynchronizationInterpolator(RightLeg));
-        SynchronizationInterpolators.Add(LeftLeg, new SynchronizationInterpolator(LeftLeg));
-        SynchronizationInterpolators.Add(BodyAnimation, new SynchronizationInterpolator(BodyAnimation));
-        SynchronizationInterpolators.Add(HeadAnimation, new SynchronizationInterpolator(HeadAnimation));
-        
         base._Ready();
 	}
 
+	public override void _Process(double delta)
+	{
+		DebugInfo.AddLine("Rotation: " + Rotation);
+		
+		if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) SynchronizationInterpolator.Interpolate(delta);
+		
+		var headRotation = Head.Rotation;
+		var bodyRotation = Body.Rotation;
+		
+		headRotation.X = BodyRotation.X * 0.6f;
+		bodyRotation.X = BodyRotation.X * 0.4f;
+		headRotation.Y = BodyRotation.Y * 0.5f;
+		bodyRotation.Y = BodyRotation.Y * 0.5f;
+			
+		Head.Rotation = headRotation;
+		Body.Rotation = bodyRotation;
+		
+		base._Process(delta);
+	}
+	
 	public override void CollectSyncData(Dictionary syncData)
 	{
-		foreach (var limb in Limbs)
-		{
-			syncData["Doll" + limb.Name + "Position"] = limb.Position;
-			syncData["Doll" + limb.Name + "Rotation"] = limb.Quaternion;
-		}
-	}
-
-	private void ApplyLimbData(Node3D limb, Vector3? position, Quaternion? rotation)
-	{
-		SynchronizationInterpolators[limb].Next(
-				position,
-				rotation,
-				Multiplayer.GetRemoteSenderId()
-			);
+		syncData["BodyRotation"] = BodyRotation;
+		syncData["LinearVelocity"] = LinearVelocity;
+		syncData["Rotation"] = Quaternion;
+		syncData["Position"] = Position;
+		Controller.CollectSyncData(syncData);
+		CharacterInfo.CollectSyncData(syncData);
 	}
 
 	public override void ApplySyncData(Dictionary syncData)
 	{
-		foreach (var limb in Limbs)
-		{
-			Vector3? position = null;
-			if (syncData.ContainsKey("Doll" + limb.Name + "Position"))
-				position = (Vector3) syncData["Doll" + limb.Name + "Position"];
-			Quaternion? rotation = null;
-			if (syncData.ContainsKey("Doll" + limb.Name + "Rotation"))
-				rotation = (Quaternion) syncData["Doll" + limb.Name + "Rotation"];
-			
-			ApplyLimbData(limb, position, rotation);
-		}
+		SynchronizationInterpolator.Next(syncData, Multiplayer.GetRemoteSenderId());
+		Controller.ApplySyncData(syncData);
+		CharacterInfo.ApplySyncData(syncData);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

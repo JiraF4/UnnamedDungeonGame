@@ -58,7 +58,7 @@ public partial class HumanoidCombatController : Node
     public void RotateToTarget(double delta)
     {
         if (CharacterTarget == null) return;
-        Controller.LookTo(delta, CharacterTarget.Target.GlobalPosition, 4.5f);
+        Controller.LookTo(delta, CharacterTarget.Target.GlobalPosition, 0.5f);
     }
     
     public void ChangeStance(double delta)
@@ -112,6 +112,6 @@ public partial class HumanoidCombatController : Node
     {
         if (Controller.Dead) return;
         AnimationController.HitStun();
-        Controller.Characteristics.Health -= 50.0f;
+        Controller.Characteristics.Health -= 5.0f;
     }
 }

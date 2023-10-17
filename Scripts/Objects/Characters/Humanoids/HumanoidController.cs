@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using Dungeon.Tools;
 using Godot.Collections;
 
@@ -14,8 +15,7 @@ public partial class HumanoidController : CharacterController
 	public HumanoidUIController UIController { get; protected set; }
 	public HumanoidAnimationController AnimationController { get; protected set; }
 	
-	protected float XRotation;
-	
+	public RayCast3D LegsCast { get; protected set; }
 	
 	public void LookTo(double delta, Vector3 position, float speed)
 	{
@@ -26,15 +26,11 @@ public partial class HumanoidController : CharacterController
 	public void RotateTo(double delta, Vector3 vector, float speed)
 	{
 		if (vector == Vector3.Zero) return;
-		var angleY = Mathf.Atan2(vector.X, vector.Z);
-		var angleX = XRotation;
-		var angleDeltaY = MathfExtensions.DeltaAngleRad(CharacterDoll.GlobalRotation.Y, angleY);
-		var angleDeltaX = MathfExtensions.DeltaAngleRad(CharacterDoll.GlobalRotation.X, angleX);
-		var rotationYMaxSpeed = RotationSpeed.X * (float) delta * speed;
-		var rotationXMaxSpeed = RotationSpeed.Y * (float) delta * speed;
-		angleDeltaY = Math.Clamp(angleDeltaY, -rotationYMaxSpeed, rotationYMaxSpeed);
-		angleDeltaX = Math.Clamp(angleDeltaX, -rotationXMaxSpeed, rotationXMaxSpeed);
-		RotateInput = RotateInput.Lerp(new Vector3(angleDeltaX/rotationXMaxSpeed * 10.0f, angleDeltaY/rotationYMaxSpeed * 3.0f, 0), 0.9f);
+		var angleDeltaY = MathfExtensions.DeltaAngleRad(Doll.Head.GlobalRotation.Y, Mathf.Atan2(vector.X, vector.Z));
+		var angleDeltaX = MathfExtensions.DeltaAngleRad(Doll.Head.GlobalRotation.X, 0.0f);
+		var inputX = angleDeltaX * RotationSpeed.X / (float) delta * speed;
+		var inputY = angleDeltaY * RotationSpeed.Y / (float) delta * speed;
+		RotateInput = RotateInput.Lerp(new Vector3(inputX, inputY, 0.0f), 0.9f);
 	}
 	
 	public override void _Ready()
@@ -46,9 +42,10 @@ public partial class HumanoidController : CharacterController
 		CombatController = GetNode<HumanoidCombatController>("CombatController");
 		UIController = GetNode<HumanoidUIController>("UIController");
 		AnimationController = GetNode<HumanoidAnimationController>("AnimationController");
+		LegsCast = CharacterDoll.GetNode<RayCast3D>("LegsCast");
         CallDeferred(nameof(ReadyItemsGrab)); // TODO: This should be done in a better way
 	}
-
+	
 	private void ReadyItemsGrab()
 	{
 		var leftItem = (Item) CharacterDoll.FindChild("LeftArmItem")?.GetChild(0);
@@ -59,14 +56,8 @@ public partial class HumanoidController : CharacterController
 
 	public override void _Process(double delta)
 	{
-		base._Process(delta);
 		if (ControllerInputs.UIControl) UIController.UpdateUI(delta);
-		
-		// TODO: Transfer to animation
-		//var bodyPosition = _bodyBasePosition;
-		//bodyPosition.Y += Mathf.Sin((Time.GetTicksMsec() + AnimationOffset) / 1000.0f) * 0.01f;
-		//bodyPosition.Y += Mathf.Sin((Time.GetTicksMsec() + AnimationOffset) / 100.0f) * CharacterBody.LinearVelocity.Length() * 0.01f;
-		//_body.Position = bodyPosition;
+		base._Process(delta);
 	}
 	
 	protected override void DieRemote()
@@ -107,32 +98,23 @@ public partial class HumanoidController : CharacterController
 				MoveInput = targetVectorHorizontal.Normalized().Rotated(Vector3.Up, -Doll.GlobalRotation.Y) * speed;
 			}
 		}
-		
-		/*
-		if (State == HumanoidState.Grabbing)
-		{
-			var vectorToItem = (CurrentTargetStorage?.GlobalPosition ?? CurrentTargetItemFocus.GlobalPosition) - CharacterBody.GlobalPosition;
-			vectorToItem.Y = 0;
-			if (vectorToItem.Length() > 1.05f)
-			{
-				vectorToItem = vectorToItem.Normalized().Rotated(Vector3.Up, -CharacterBody.Rotation.Y);
-				vectorToItem.X += MoveInput.X;
-				vectorToItem.Y += MoveInput.Y;
-				vectorToItem = vectorToItem.Normalized();
-				MoveInput = new Vector3(vectorToItem.X, MoveInput.Y, vectorToItem.Z);
-			}
-		}
-		*/
-		
-		XRotation -= RotateInput.X * RotationSpeed.X * (float) delta;
-		XRotation = Mathf.Clamp(XRotation, -90.0f, 90.0f);
-		var headRotation = Doll.Head.RotationDegrees;
-		var bodyRotation = Doll.Body.RotationDegrees;
-		headRotation.X = XRotation * 0.3f;
-		bodyRotation.X = XRotation * 0.7f;
-		Doll.Head.RotationDegrees = headRotation;
-		Doll.Body.RotationDegrees = bodyRotation;
 
+		var legsDistance = LegsCast.GetCollisionPoint().DistanceTo(LegsCast.GlobalPosition);
+		var legsLength = -LegsCast.TargetPosition.Y;
+		if (!LegsCast.IsColliding()) legsDistance = legsLength;
+		if (legsDistance < legsLength) CharacterDoll.LinearVelocity += (Vector3.Up * Mathf.Max(((1.0f - (legsDistance / legsLength)) * 3f - CharacterDoll.LinearVelocity.Y), 0.0f));
+		else CharacterDoll.Sleeping = false;
+
+		var dollBodyRotation = Doll.BodyRotation;
+		dollBodyRotation.X += RotateInput.X * RotationSpeed.X * (float) delta;
+		dollBodyRotation.X = Mathf.Clamp(dollBodyRotation.X, Mathf.DegToRad(-85.0f), Mathf.DegToRad(85.0f));
+		dollBodyRotation.Y += RotateInput.Y * RotationSpeed.Y * (float) delta;
+		dollBodyRotation.Y = Mathf.Clamp(dollBodyRotation.Y, Mathf.DegToRad(-85.0f), Mathf.DegToRad(85.0f));
+		
+		dollBodyRotation.Y -= dollBodyRotation.Y * (float) delta * 6.0f;
+		CharacterDoll.Rotation += new Vector3(0.0f, dollBodyRotation.Y * (float) delta * 6.0f, 0.0f);
+		Doll.BodyRotation = dollBodyRotation;
+		
 		base.UpdateState(delta);
 	}
 	
@@ -143,12 +125,12 @@ public partial class HumanoidController : CharacterController
 	
 	public override void CollectSyncData(Dictionary syncData)
 	{
-		base.CollectSyncData(syncData);
+		AnimationController.CollectSyncData(syncData);
 	}
 
 	public override void ApplySyncData(Dictionary syncData)
 	{
-		base.ApplySyncData(syncData);
+		AnimationController.ApplySyncData(syncData);
 	}
 	
 }

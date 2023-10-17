@@ -1,4 +1,6 @@
-﻿using Godot;
+﻿using Dungeon.Tools;
+using Godot;
+using Godot.Collections;
 
 public partial class HumanoidAnimationController : Node
 {
@@ -12,32 +14,34 @@ public partial class HumanoidAnimationController : Node
     protected AnimationTree AnimationTree;
     protected AnimationNodeStateMachinePlayback StateMachine;
 
-    protected StringName _primaryAction = new("parameters/ActionsStateMachine/conditions/PrimaryAction");
-    protected StringName _notPrimaryAction = new("parameters/ActionsStateMachine/conditions/NotPrimaryAction");
+    protected readonly StringName PrimaryAction = new("parameters/ActionsStateMachine/conditions/PrimaryAction");
+    protected readonly StringName NotPrimaryAction = new("parameters/ActionsStateMachine/conditions/NotPrimaryAction");
     
-    protected StringName _secondAction = new("parameters/ActionsStateMachine/conditions/SecondAction");
-    protected StringName _notSecondAction = new("parameters/ActionsStateMachine/conditions/NotSecondAction");
+    protected readonly StringName SecondAction = new("parameters/ActionsStateMachine/conditions/SecondAction");
+    protected readonly StringName NotSecondAction = new("parameters/ActionsStateMachine/conditions/NotSecondAction");
     
-    protected StringName _combat = new("parameters/ActionsStateMachine/conditions/Combat");
-    protected StringName _interaction = new("parameters/ActionsStateMachine/conditions/Interaction");
-    protected StringName _idle = new("parameters/ActionsStateMachine/conditions/Idle");
+    protected readonly StringName Combat = new("parameters/ActionsStateMachine/conditions/Combat");
+    protected readonly StringName Interaction = new("parameters/ActionsStateMachine/conditions/Interaction");
+    protected readonly StringName Idle = new("parameters/ActionsStateMachine/conditions/Idle");
     
-    protected StringName _hasTargetItem = new("parameters/ActionsStateMachine/conditions/HasTargetItem");
-    protected StringName _notHasTargetItem = new("parameters/ActionsStateMachine/conditions/NotHasTargetItem");
+    protected readonly StringName HasTargetItem = new("parameters/ActionsStateMachine/conditions/HasTargetItem");
+    protected readonly StringName NotHasTargetItem = new("parameters/ActionsStateMachine/conditions/NotHasTargetItem");
     
-    protected StringName _attack = new("parameters/ActionsStateMachine/conditions/Attack");
+    protected readonly StringName Attack = new("parameters/ActionsStateMachine/conditions/Attack");
     
-    protected StringName _stanceNone = new("parameters/ActionsStateMachine/conditions/StanceNone");
-    protected StringName _stanceUp = new("parameters/ActionsStateMachine/conditions/StanceUp");
-    protected StringName _stanceLeft = new("parameters/ActionsStateMachine/conditions/StanceLeft");
-    protected StringName _stanceRight = new("parameters/ActionsStateMachine/conditions/StanceRight");
+    protected readonly StringName StanceNone = new("parameters/ActionsStateMachine/conditions/StanceNone");
+    protected readonly StringName StanceUp = new("parameters/ActionsStateMachine/conditions/StanceUp");
+    protected readonly StringName StanceLeft = new("parameters/ActionsStateMachine/conditions/StanceLeft");
+    protected readonly StringName StanceRight = new("parameters/ActionsStateMachine/conditions/StanceRight");
     
-    protected StringName _stunned = new("parameters/ActionsStateMachine/conditions/Stunned");
+    protected readonly StringName Stunned = new("parameters/ActionsStateMachine/conditions/Stunned");
     
-    protected StringName _grabItem = new("parameters/ActionsStateMachine/conditions/GrabItem");
-    protected StringName _dropItem = new("parameters/ActionsStateMachine/conditions/DropItem");
+    protected readonly StringName GrabItem = new("parameters/ActionsStateMachine/conditions/GrabItem");
+    protected readonly StringName DropItem = new("parameters/ActionsStateMachine/conditions/DropItem");
     
-    protected StringName _WalkSpace2D = new("parameters/WalkSpace2D/blend_position");
+    protected readonly StringName WalkSpace2D = new("parameters/WalkSpace2D/blend_position");
+    protected readonly StringName RotationDirectionSpace1D = new("parameters/RotationDirectionSpace1D/blend_position");
+    protected readonly StringName LegsBlend = new("parameters/LegsBlend/blend_amount");
 
     public override void _Ready()
     {
@@ -49,49 +53,61 @@ public partial class HumanoidAnimationController : Node
         AnimationPlayer = Doll.GetNode<AnimationPlayer>("AnimationPlayer");
         AnimationTree = Doll.GetNode<AnimationTree>("AnimationTree");
         StateMachine = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/ActionsStateMachine/playback");
+        AnimationTree.Active = true;
         
         base._Ready();
     }
 
     public override void _Process(double delta)
     {
+        DebugInfo.AddLine(Controller.Doll.LinearVelocity.ToString());
         UpdateConditions();
         base._Process(delta);
     }
 
+
     public void UpdateConditions()
     {
-        if (!Doll.AnimationActive) return;
-        
-        AnimationTree.Set(_primaryAction, CharacterControllerInputs.PrimaryAction);
-        AnimationTree.Set(_notPrimaryAction, !CharacterControllerInputs.PrimaryAction);
-        AnimationTree.Set(_secondAction, CharacterControllerInputs.SecondAction);
-        AnimationTree.Set(_notSecondAction, !CharacterControllerInputs.SecondAction);
-        
-        AnimationTree.Set(_hasTargetItem, ItemManipulationController.CurrentItem != null || ItemManipulationController.CurrentStorage != null);
-        AnimationTree.Set(_notHasTargetItem, ItemManipulationController.CurrentItem == null && ItemManipulationController.CurrentStorage == null);
-        
-        AnimationTree.Set(_interaction, !CombatController.HasTarget() && CharacterControllerInputs.InteractMode);
-        AnimationTree.Set(_combat, CombatController.HasTarget() && CharacterControllerInputs.InteractMode);
-        AnimationTree.Set(_idle, !CharacterControllerInputs.InteractMode);
-        
-        AnimationTree.Set(_stanceNone, CombatController.NextStance == CombatStance.None || !CharacterControllerInputs.InteractMode);
-        AnimationTree.Set(_stanceUp, CombatController.NextStance == CombatStance.Up);
-        AnimationTree.Set(_stanceLeft, CombatController.NextStance == CombatStance.Left);
-        AnimationTree.Set(_stanceRight, CombatController.NextStance == CombatStance.Right);
-        AnimationTree.Set(_attack, CharacterControllerInputs.PrimaryActionJustPressed);
-
-
-        var moveDotX = Controller.Doll.LinearVelocity.Normalized().Dot(Controller.Doll.GlobalTransform.Basis.Z);
-        var moveDotY = Controller.Doll.LinearVelocity.Normalized().Dot(Controller.Doll.GlobalTransform.Basis.X);
+        var forwardVelocity = Controller.Doll.LinearVelocity.Normalized().Rotated(Vector3.Up, -Controller.Doll.Rotation.Y);
         var walkVector = new Vector2(
-            Controller.Doll.LinearVelocity.Length() / Controller.MoveMaxSpeed * moveDotX,
-            Controller.Doll.LinearVelocity.Length() / Controller.MoveMaxSpeed * moveDotY
+            Controller.Doll.LinearVelocity.Length() / Controller.MoveMaxSpeed * forwardVelocity.Z,
+            Controller.Doll.LinearVelocity.Length() / Controller.MoveMaxSpeed * forwardVelocity.X
         );
-        AnimationTree.Set(_WalkSpace2D, walkVector);
+        if (Controller.Doll.LinearVelocity.Length() < 0.5f)
+        {
+            AnimationTree.Set(LegsBlend, 1);
+            AnimationTree.Set(WalkSpace2D, new Vector2());
+            AnimationTree.Set(RotationDirectionSpace1D, Doll.BodyRotation.Y / 1.0f);
+        }
+        else
+        {
+            AnimationTree.Set(WalkSpace2D, walkVector);
+            AnimationTree.Set(LegsBlend, 0);
+        }
+
+        if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority()) return;
         
-        AnimationTree.Set(_grabItem, CharacterControllerInputs.PrimaryActionJustPressed && ItemManipulationController.CurrentItem != null && Doll.LeftArm.ItemSlot.Item == null);
-        AnimationTree.Set(_dropItem, CharacterControllerInputs.PrimaryActionJustPressed && Doll.LeftArm.ItemSlot.Item != null);
+        AnimationTree.Set(PrimaryAction, CharacterControllerInputs.PrimaryAction);
+        AnimationTree.Set(NotPrimaryAction, !CharacterControllerInputs.PrimaryAction);
+        AnimationTree.Set(SecondAction, CharacterControllerInputs.SecondAction);
+        AnimationTree.Set(NotSecondAction, !CharacterControllerInputs.SecondAction);
+        
+        AnimationTree.Set(HasTargetItem, ItemManipulationController.CurrentItem != null || ItemManipulationController.CurrentStorage != null);
+        AnimationTree.Set(NotHasTargetItem, ItemManipulationController.CurrentItem == null && ItemManipulationController.CurrentStorage == null);
+        
+        AnimationTree.Set(Interaction, !CombatController.HasTarget() && CharacterControllerInputs.InteractMode);
+        AnimationTree.Set(Combat, CombatController.HasTarget() && CharacterControllerInputs.InteractMode);
+        AnimationTree.Set(Idle, !CharacterControllerInputs.InteractMode);
+        
+        AnimationTree.Set(StanceNone, CombatController.NextStance == CombatStance.None || !CharacterControllerInputs.InteractMode);
+        AnimationTree.Set(StanceUp, CombatController.NextStance == CombatStance.Up);
+        AnimationTree.Set(StanceLeft, CombatController.NextStance == CombatStance.Left);
+        AnimationTree.Set(StanceRight, CombatController.NextStance == CombatStance.Right);
+        AnimationTree.Set(Attack, CharacterControllerInputs.PrimaryActionJustPressed);
+
+        
+        AnimationTree.Set(GrabItem, CharacterControllerInputs.PrimaryActionJustPressed && ItemManipulationController.CurrentItem != null && Doll.LeftArm.ItemSlot.Item == null);
+        AnimationTree.Set(DropItem, CharacterControllerInputs.PrimaryActionJustPressed && Doll.LeftArm.ItemSlot.Item != null);
     }
 
     public string GetAnimation()
@@ -107,5 +123,15 @@ public partial class HumanoidAnimationController : Node
     public void Die()
     {
         StateMachine.Travel("Die");
+    }
+    
+    public virtual void CollectSyncData(Dictionary syncData)
+    {
+        syncData["ActionAnimation"] = StateMachine.GetCurrentNode();
+    }
+
+    public virtual void ApplySyncData(Dictionary syncData)
+    {
+        StateMachine.Travel((StringName) syncData["ActionAnimation"]);
     }
 }

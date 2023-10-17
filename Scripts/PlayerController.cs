@@ -107,7 +107,7 @@ public partial class PlayerController : Node
 		
 		_characterControllerInputs.MoveInput = _moveVector;
 		_characterControllerInputs.InteractMode = Input.IsActionPressed("InteractMode");
-		_characterControllerInputs.RotateInput = new Vector3(-_mouseMove.Y * 10.0f, -_mouseMove.X * 0.3f, 0);
+		_characterControllerInputs.RotateInput = new Vector3(_mouseMove.Y * 0.3f, -_mouseMove.X * 0.3f, 0);
 		_characterControllerInputs.ScreenPositionMove = _mouseMove;
 		
 		_characterControllerInputs.PrimaryAction = Input.IsActionPressed("PrimaryAction");

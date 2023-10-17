@@ -24,16 +24,8 @@ public partial class CharacterController : Node
 
 	public Node3D Target;
 	
-	protected SynchronizationInterpolator SynchronizationInterpolator;
-	
 	public CharacterInfo CharacterInfo { get; protected set; }
 	
-	public override void _Process(double delta)
-	{
-		//if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) SynchronizationInterpolator.Interpolate(delta);
-		base._Process(delta);
-	}
-
 	protected void Die()
 	{
 		Rpc(nameof(DieRemote));
@@ -57,23 +49,16 @@ public partial class CharacterController : Node
 		CharacterInfo = GetNode<CharacterInfo>("CharacterInfo");
 		Characteristics = GetNode<CharacterCharacteristics>("Characteristics");
 		InfoBar = CharacterDoll.GetNode<InfoBar3D>("InfoBar3D");
-
-		SynchronizationInterpolator = new SynchronizationInterpolator(CharacterDoll);
 		
 		base._Ready();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (Multiplayer.GetUniqueId() != GetMultiplayerAuthority())
-		{
-			CharacterDoll.AngularVelocity = Vector3.Zero;
-			CharacterDoll.LinearVelocity = Vector3.Zero;
-			return;
-		}
+		CharacterDoll.Freeze = Multiplayer.GetUniqueId() != GetMultiplayerAuthority();
 		RotateInput = ControllerInputs.RotateInput;
 		MoveInput = ControllerInputs.MoveInput;
-		UpdateState(delta);
+		if (Multiplayer.GetUniqueId() == GetMultiplayerAuthority()) UpdateState(delta);
 		base._PhysicsProcess(delta);
 		ControllerInputs.PrimaryActionJustPressed = false;
 		ControllerInputs.PrimaryActionJustReleased = false;
@@ -82,7 +67,6 @@ public partial class CharacterController : Node
 
 	public virtual void UpdateState(double delta)
 	{
-		CharacterDoll.AngularVelocity = new Vector3(0.0f, RotateInput.Y * RotationSpeed.Y, 0.0f);
 		UpdateMoveSpeed(delta);
 	}
 
@@ -106,7 +90,8 @@ public partial class CharacterController : Node
 			CharacterDoll.ApplyCentralForce(-horizontalLinearVelocity.Normalized() * (stopForce * (float) delta));
 		}
 
-		CharacterDoll.ApplyCentralForce(horizontalMoveSpeed);
+		var directionDot = horizontalMoveSpeed.Normalized().Dot(CharacterDoll.Basis.Z);
+		CharacterDoll.ApplyCentralForce(horizontalMoveSpeed * Mathf.Min(Mathf.Abs(directionDot + 0.4f), 1.0f) * Mathf.Min(1.6f + directionDot, 1.0f));
 		//_characterBody.LinearVelocity += horizontalMoveSpeed * (float) delta;
 	}
 
@@ -114,25 +99,14 @@ public partial class CharacterController : Node
 	{
 		
 	}
-
+	
 	public virtual void CollectSyncData(Dictionary syncData)
 	{
-		syncData["Position"] = CharacterDoll.Position;
-		syncData["Rotation"] = CharacterDoll.Quaternion;
-		CharacterInfo.CollectSyncData(syncData);
-		CharacterDoll.CollectSyncData(syncData);
+		
 	}
 
 	public virtual void ApplySyncData(Dictionary syncData)
 	{
-		Vector3? position = null;
-		if (syncData.ContainsKey("Position"))
-			position = (Vector3) syncData["Position"];
-		Quaternion? rotation = null;
-		if (syncData.ContainsKey("Rotation"))
-			rotation = (Quaternion) syncData["Rotation"];
-		SynchronizationInterpolator.Next(position, rotation, Multiplayer.GetRemoteSenderId());
-		CharacterInfo.ApplySyncData(syncData);
-		CharacterDoll.ApplySyncData(syncData);
+		
 	}
 }

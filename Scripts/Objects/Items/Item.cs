@@ -3,7 +3,7 @@ using System.Numerics;
 using Vector2 = Godot.Vector2;
 using Vector3 = Godot.Vector3;
 
-public partial class Item : RigidBody3D
+public partial class Item : InterpolatedRigidBody
 {
     public TextureRect ItemRect;
     
@@ -11,6 +11,8 @@ public partial class Item : RigidBody3D
     public Vector2I ItemInventoryMatrixSize;
     
     [Export] public Vector2I ItemInventoryPosition;
+    private bool _itemVisible;
+    
     public Storage Storage
     {
         get
@@ -21,13 +23,19 @@ public partial class Item : RigidBody3D
         }
     }
 
-    private bool _itemVisible;
     
     public override void _Ready()
     {
         ItemRect = (TextureRect) FindChild("ItemRect");
         CreateMatrix();
         base._Ready();
+    }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        ItemRect.Visible = _itemVisible;
+        _itemVisible = false;
     }
 
     void CreateMatrix()
@@ -52,19 +60,6 @@ public partial class Item : RigidBody3D
     public void SetRectPosition(Vector2 position)
     {
         ItemRect.Position = position;
-    }
-
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        ItemRect.Visible = _itemVisible;
-        _itemVisible = false;
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        if (GetMultiplayerAuthority() != Multiplayer.GetUniqueId()) Freeze = true;
-        base._PhysicsProcess(delta);
     }
 
     public void Store(Storage storage, Vector2I inventoryPosition)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/Objects/Furniture/Furniture.cs" id="1_d4qu2"]
 [ext_resource type="ArrayMesh" uid="uid://ha5xcx1qf5q3" path="res://Models/Furniture/Chest.vox" id="1_ms06b"]
-[ext_resource type="Script" path="res://Scripts/Objects/Furniture/FurnitureSynchronizationController.cs" id="2_0sar3"]
+[ext_resource type="Script" path="res://Scripts/Objects/SynchronizationController.cs" id="3_yhnap"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ylk5k"]
 
@@ -10,6 +10,7 @@
 mass = 100.0
 max_contacts_reported = 3
 contact_monitor = true
+freeze_mode = 1
 script = ExtResource("1_d4qu2")
 
 [node name="Model" type="MeshInstance3D" parent="."]
@@ -22,4 +23,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_ylk5k")
 
 [node name="SynchronizationController" type="Node" parent="."]
-script = ExtResource("2_0sar3")
+script = ExtResource("3_yhnap")

@@ -41,7 +41,6 @@ public partial class PlayersService : Node
         newPlayer.SetMultiplayerAuthority((int) peerId);
         GetTree().Root.GetNode("World").AddChild(newPlayer);
         newPlayer.GlobalPosition = position;
-        newPlayer.SetAnimationActive(peerId == Multiplayer.MultiplayerPeer.GetUniqueId());
         if (peerId == Multiplayer.MultiplayerPeer.GetUniqueId())
         {
             GetTree().Root.GetNode<PlayerController>("World/PlayerController").GetInput(newPlayer.GetPath());

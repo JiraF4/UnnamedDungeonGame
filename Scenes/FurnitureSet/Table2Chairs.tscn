@@ -12,7 +12,7 @@ script = ExtResource("1_4aayd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1591, 0.00745642, 1.53489)
 
 [node name="Chair" parent="." instance=ExtResource("2_8n4e1")]
-transform = Transform3D(0.968951, 0, -0.247253, 0, 1, 0, 0.247253, 0, 0.968951, 3.28401, 0.352593, 1.29559)
+transform = Transform3D(0.968951, 0, -0.247253, 0, 1, 0, 0.247253, 0, 0.968951, 3.28401, 0.352593, 1.62505)
 
 [node name="Chair2" parent="." instance=ExtResource("2_8n4e1")]
 transform = Transform3D(-0.928751, 0, 0.370703, 0, 1, 0, -0.370703, 0, -0.928751, 0.713164, 0.352593, 1.19761)

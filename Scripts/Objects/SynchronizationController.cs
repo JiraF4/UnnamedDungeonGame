@@ -1,15 +1,14 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using Godot;
+﻿using Godot;
 using Godot.Collections;
 
 public partial class SynchronizationController : Node
 {
     private Dictionary _lastSendSyncData = new();
     private Dictionary _lastSendSyncDataUnique = new();
-    
     public NodePath InitialPath { get; private set; }
     public ulong SUID { get; protected set; }
+    public SynchronizedRigidBody Body { get; private set; }
+    
     
     public override void _Ready()
     {
@@ -23,7 +22,9 @@ public partial class SynchronizationController : Node
         else
         {
             Synchronizator.Instance.GetControllerSUID(InitialPath);
-        } 
+        }
+
+        Body = GetParent<SynchronizedRigidBody>();
         base._Ready();
     }
 
@@ -80,6 +81,7 @@ public partial class SynchronizationController : Node
     protected virtual void CollectSyncData(Dictionary syncData)
     {
         syncData["ParentPath"] = GetParent().GetParent().GetPath();
+        Body.CollectSyncData(syncData);
     }
 
     void TransferNode(NodePath parentPath)
@@ -93,6 +95,7 @@ public partial class SynchronizationController : Node
     protected virtual void ApplySyncData(Dictionary syncData)
     {
         if (syncData.ContainsKey("ParentPath")) TransferNode((NodePath) syncData["ParentPath"]);
+        Body.ApplySyncData(syncData);
     }
 
 }

@@ -1,0 +1,108 @@
+[gd_scene load_steps=13 format=3 uid="uid://b7x10b2mbsmgr"]
+
+[ext_resource type="PackedScene" uid="uid://bnpka4m4iqnd5" path="res://Scenes/Characters/Humanoid.tscn" id="1_8bskf"]
+[ext_resource type="Script" path="res://Scripts/PlayerController.cs" id="1_bbr4s"]
+[ext_resource type="PackedScene" uid="uid://18f7ss1cf30h" path="res://Scenes/FurnitureSet/Table2Chairs.tscn" id="2_vtppu"]
+[ext_resource type="PackedScene" uid="uid://b3cjiafnu2q6q" path="res://Scenes/FurnitureSet/ClayPots5.tscn" id="3_n42ar"]
+[ext_resource type="PackedScene" uid="uid://bu3pp2e5lywd" path="res://Scenes/FurnitureSet/ClayPots3.tscn" id="4_xt5i0"]
+[ext_resource type="PackedScene" uid="uid://t4dhjm8j2122" path="res://Scenes/Furniture/Chest.tscn" id="5_smx48"]
+[ext_resource type="PackedScene" uid="uid://cqnypsnlorwix" path="res://Scenes/Items/Usable/Potion.tscn" id="6_hium0"]
+[ext_resource type="Script" path="res://Scripts/DebugNode.cs" id="8_4ccxy"]
+[ext_resource type="PackedScene" uid="uid://vhegsdu38vky" path="res://Scenes/Items/Weapon/Sword.tscn" id="10_m1joy"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_tflyv"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_6uy25"]
+plane = Plane(0, -1, 0, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ycd8v"]
+size = Vector2(20, 20)
+
+[node name="TestWorld" type="Node3D"]
+
+[node name="PlayerController" type="Node" parent="." node_paths=PackedStringArray("MapRect")]
+script = ExtResource("1_bbr4s")
+MapRect = NodePath("../MapRect")
+
+[node name="Character" parent="." instance=ExtResource("1_8bskf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0192579, -0.0173824, -0.006908)
+
+[node name="Table2Chairs" parent="." instance=ExtResource("2_vtppu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35785, 0, 3.26634)
+
+[node name="ClayPots5" parent="." instance=ExtResource("3_n42ar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.58218, 0, -4.6741)
+
+[node name="ClayPots3" parent="." instance=ExtResource("4_xt5i0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.11197, 0, -3.6257)
+
+[node name="DownBorder" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DownBorder"]
+shape = SubResource("WorldBoundaryShape3D_tflyv")
+
+[node name="UpBorder" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="UpBorder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("WorldBoundaryShape3D_6uy25")
+
+[node name="Furniture" parent="." instance=ExtResource("5_smx48")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.320194, 0, -4.47651)
+
+[node name="Item" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654866, 0, -3.43253)
+
+[node name="Item2" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.268616, 0, -3.43253)
+
+[node name="Item3" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.133559, 0, -3.43253)
+
+[node name="Item4" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654866, 0, -3.06324)
+
+[node name="Item5" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.268616, 0, -3.06324)
+
+[node name="Item6" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.133559, 0, -3.06324)
+
+[node name="Item7" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.654866, 0, -2.70774)
+
+[node name="Item8" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.268616, 0, -2.70774)
+
+[node name="Item9" parent="." instance=ExtResource("6_hium0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.133559, 0, -2.70774)
+
+[node name="DebugNode" type="Node" parent="."]
+script = ExtResource("8_4ccxy")
+
+[node name="MapRect" type="TextureRect" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(256, 256)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_bottom = 256.0
+grow_horizontal = 0
+expand_mode = 5
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0154781, 9.53674e-07, -0.0298567)
+mesh = SubResource("PlaneMesh_ycd8v")
+
+[node name="Character2" parent="." instance=ExtResource("1_8bskf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84508, 0, -1.14368)
+
+[node name="Character3" parent="." instance=ExtResource("1_8bskf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6274, 0, 0.917621)
+
+[node name="Character4" parent="." instance=ExtResource("1_8bskf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28649, 0, 3.31197)
+
+[node name="Item10" parent="." instance=ExtResource("10_m1joy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.830809, 0.181829, 1.14536)

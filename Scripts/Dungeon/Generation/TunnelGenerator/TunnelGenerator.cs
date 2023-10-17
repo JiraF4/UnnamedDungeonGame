@@ -213,8 +213,24 @@ public partial class TunnelGenerator : MapGenerator
         var worldPosition = new Vector3(cell.Position.X * Map.CellRealSize, 0, cell.Position.Y * Map.CellRealSize);
         if (cell.MapCellTypeAdd == MapCellTypeAdd.Room)
         {
-            var furnitureSetId = FurnitureService.Instance.GetValidFurniture(MapHolder.Map, cell, Random.Next());
-            if (furnitureSetId != 0) SceneInstantiateService.Instance.SpawnById(furnitureSetId, worldPosition, Vector3.Zero);
+            
+            var furnitureSet = FurnitureService.Instance.GetValidFurniture(MapHolder.Map, cell, Random.Next());
+            if (furnitureSet.ID != 0)
+            {
+                var offsets = new[]
+                {
+                    new Vector3(0.0f, 0.0f, 0.0f),
+                    new Vector3(0.0f, 0.0f, 1.0f),
+                    new Vector3(1.0f, 0.0f, 1.0f),
+                    new Vector3(1.0f, 0.0f, 0.0f),
+                };
+                
+                SceneInstantiateService.Instance.SpawnById(
+                    furnitureSet.ID, 
+                    worldPosition + offsets[furnitureSet.Rotation] * furnitureSet.Size.X * Map.CellRealSize, 
+                    new Vector3(0.0f, Mathf.DegToRad(90.0f) * furnitureSet.Rotation, 0.0f)
+                    );
+            }
         }
     }
 }
